@@ -25,7 +25,8 @@
           </div>
         </div>
         <div class="tab-pane" id="tab2">
-          @include('parts.form',['config'=>['url'=>'/']])
+          <h3 class="text-center">新規ログ</h3>
+          @include('parts.form',['config'=>['url'=>'/'],'forms'=>['text:タイトル:title::[placeholder=例〇〇への旅2017春]','text:シーン:scene::[placeholder=例〇〇寺でお参り]']])
         </div>
       </div>
     </div>
