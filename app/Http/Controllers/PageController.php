@@ -109,9 +109,6 @@ class PageController extends Controller
     public function showUserFavorites($id){
       return view('bodys.user_menu.favorites',['id'=>$id,]);
     }
-    public function createItems($id){
-      return view('bodys.user_menu.postitems',['id'=>$id,]);
-    }
     public function showUserMatching($id){
       return view('bodys.user_menu.matching',['id'=>$id,]);
     }
