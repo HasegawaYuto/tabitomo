@@ -1,55 +1,51 @@
-{{--
-  ~/composer.json
-    "require": {
-        "laravelcollective/html": "5.1.*"
-      }
-
-  $ composer update
-
-  ~/config/app.php
-    'providers' => [
-      Collective\Html\HtmlServiceProvider::class,
-      ],
-    'aliases' => [
-      'Form' => Collective\Html\FormFacade::class,
-      'Html' => Collective\Html\HtmlFacade::class,
-      ],
- --}}
-@if(isset($config))
-  {!! Form::open($config) !!}
-@else
-  {!! Form::open()!!}
-@endif
-@foreach($forms as $form)
-  <?php $temp = explode(":",$form); ?>
-  <div class="form-group">
-    @if($temp[0]=="text")
-      {!! Form::label($temp[2], $temp[1]) !!}
-      @if(!isset($temp[3]))
+@if(isset($text))
+    @if(!isset($text['default']))
         <?php $defaultval=null; ?>
-      @elseif($temp[3]=="old")
-        <?php $defaultval='old(\''. $temp[2] .'\')'; ?>
-      @else
-        <?php $defaultval=$temp[3]; ?>
-      @endif
-      @if(isset($temp[4]))
-        <?php
-          $arraystr = rtrim(ltrim($temp[4],"["),"]");
-          parse_str($arraystr,$option);
-          if(strpos($arraystr,"class=")){
-            $option['class'] = $option['class'] . " form-control";
-          }else{
-            $option['class'] = " form-control";
-          }
-        ?>
-      @else
-        <?php
-          $option['class']="form-control";
-        ?>
-      @endif
-      {!! Form::text($temp[2], $defaultval, $option) !!}
+    @elseif($text['default']=='*')
+        <?php $defaultval='old(\'' . $text['val'] . '\')'; ?>
+    @else
+        <?php $defaultval=$text['default']; ?>
     @endif
-    {!! Form::submit('Add Article', ['class' => 'btn btn-primary form-control']) !!}
-  </div>
-@endforeach
-{!! Form::close() !!}
+
+    @if(!isset($text['option']['class']))
+        <?php $text['option']['class']='form-control'; ?>
+    @else
+        <?php $text['option']['class']=$text['option']['class'] . ' form-control'; ?>
+    @endif
+    <div class="form-group">
+        @if(isset($text['style']))
+            <div class="{{$text['style']}}">
+        @endif
+            @if(isset($text['label']))
+                {!! Form::label($text['var'], $text['label']) !!}
+            @endif
+            {!! Form::text($text['var'], $defaultval, $text['option']) !!}
+        @if(isset($text['style']))
+            </div>
+        @endif
+    </div>
+@endif
+@if(isset($hidden))
+    @if(!isset($hidden['option']))
+        <?php $hidden['option']=[]; ?>
+    @endif
+    {!! Form::hidden($hidden['var'],$hidden['val'],$hidden['option']) !!}
+@endif
+@if(isset($textarea))
+    <div class="form-group">
+        @if(isset($textarea['label']))
+            {!! Form::label($textarea['var'], $textarea['label']) !!}
+        @endif
+        @if(!isset($textarea['default']))
+            <?php $textarea['default']=null; ?>
+        @elseif($textarea['default']=="*")
+            <?php $textarea['default']='old(\''. $textarea['var'] .'\)'; ?>
+        @endif
+        @if(!isset($textarea['option']['class']))
+            <?php $textarea['option']['class']='form-control'; ?>
+        @else
+            <?php $textarea['option']['class']=$textarea['option']['class'] . ' form-control'; ?>
+        @endif
+        {!! Form::textarea($textarea['var'],$textarea['default'],$textarea['option']) !!}
+    </div>
+@endif
