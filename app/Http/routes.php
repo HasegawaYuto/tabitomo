@@ -32,4 +32,5 @@ Route::get('message','PageController@showUserMessages')->name('show_user_message
 Route::get('favorite','PageController@showUserFavorites')->name('show_user_favorites');
 Route::get('matching','PageController@showUserMatching')->name('show_user_matching');
 Route::get('items','PageController@showUserItems')->name('show_user_items');
+Route::post('items/creating','PageController@createItems')->name('create_items');
 });

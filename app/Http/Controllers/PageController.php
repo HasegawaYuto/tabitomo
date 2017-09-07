@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App;
+
 class PageController extends Controller
 {
     /**
@@ -104,12 +106,28 @@ class PageController extends Controller
       return view('bodys.user_menu.messages',['id'=>$id,]);
     }
     public function showUserItems($id){
-      return view('bodys.user_menu.items',['id'=>$id,]);
+      return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'1','title_id'=>'X','scene_id'=>'1']);
     }
     public function showUserFavorites($id){
       return view('bodys.user_menu.favorites',['id'=>$id,]);
     }
     public function showUserMatching($id){
       return view('bodys.user_menu.matching',['id'=>$id,]);
+    }
+
+    public function createItems(Request $request,$id){
+      if($request->title_id==="X"){
+          $title_id = 1;
+      }else{
+          $title_id = $request->title_id;
+      }
+      if(\Input::get('fin')){
+          return redirect('/user/'. $id .'/items');
+          //return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'1','title_id'=>'1','scene_id'=>'1']);
+      }elseif(\Input::get('con')){
+          //return redirect()->back();
+          $scene_id = $request->scene_id+1;
+          return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'2','title_id'=>$title_id,'scene_id'=>$scene_id]);
+      }
     }
 }

@@ -33,6 +33,9 @@
 @endif
 @if(isset($textarea))
     <div class="form-group">
+      @if(isset($text['style']))
+          <div class="{{$text['style']}}">
+      @endif
         @if(isset($textarea['label']))
             {!! Form::label($textarea['var'], $textarea['label']) !!}
         @endif
@@ -47,5 +50,24 @@
             <?php $textarea['option']['class']=$textarea['option']['class'] . ' form-control'; ?>
         @endif
         {!! Form::textarea($textarea['var'],$textarea['default'],$textarea['option']) !!}
+        @if(isset($text['style']))
+            </div>
+        @endif
     </div>
+@endif
+@if(isset($file))
+    <div class="form-group">
+        @if(!isset($file['option']))
+            <?php $file['option']=[]; ?>
+        @endif
+        {!! Form::file($file['var'],$file['option']) !!}
+    </div>
+@endif
+@if(isset($submit))
+    @if(!isset($submit['option']['class']))
+        <?php $submit['option']['class']='btn'; ?>
+    @else
+        <?php $submit['option']['class']='btn ' . $submit['option']['class']; ?>
+    @endif
+        {!! Form::submit($submit['label'],$submit['option']) !!}
 @endif
