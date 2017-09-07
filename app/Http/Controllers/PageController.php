@@ -122,12 +122,15 @@ class PageController extends Controller
           $title_id = $request->title_id;
       }
       if(\Input::get('fin')){
-          return redirect('/user/'. $id .'/items');
+          return redirect('/user/'. $id .'/mylog');
           //return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'1','title_id'=>'1','scene_id'=>'1']);
       }elseif(\Input::get('con')){
           //return redirect()->back();
           $scene_id = $request->scene_id+1;
           return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'2','title_id'=>$title_id,'scene_id'=>$scene_id]);
       }
+    }
+    public function showTitle($id,$title_id){
+      return view('bodys.user_menu.show_title',['id'=>$id,'title_id'=>$title_id]);
     }
 }

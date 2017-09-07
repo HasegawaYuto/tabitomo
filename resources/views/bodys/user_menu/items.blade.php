@@ -14,7 +14,7 @@
                         ページネーション
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                旅のタイトル
+                                {!! Link_to_route('show_title','旅のタイトル',['id'=>1,'title_id'=>5],['style'=>'color:white;']) !!}
                             </div>
                             <div class="panel-body">
                                 <div class="col-xs-4" style="height:60px;">
