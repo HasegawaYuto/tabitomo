@@ -10,37 +10,34 @@
             </div>
                 @include('parts.tabs',['tab_names'=>['一覧','アップロード'],'class'=>'nav-tabs nav-justified','activetab'=>$activetab])
                 <div class="tab-content">
-                    <div class="tab-pane {{$activetab == 1 ? 'active' : ''}}" id="tab1">
+                    <div class="tab-pane {{$activetab == 1 ? 'active' : ''}}" id="tab1-1">
                         ページネーション
+                        @for($i=1;$i<10;$i++)
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                {!! Link_to_route('show_title','旅のタイトル',['id'=>1,'title_id'=>5],['style'=>'color:white;']) !!}
+                                {!! Link_to_route('show_title','旅のタイトル',['id'=>1,'title_id'=>$i],['style'=>'color:white;']) !!}
                             </div>
                             <div class="panel-body">
-                                <div class="col-xs-4" style="height:60px;">
+                                <div class="col-xs-3" style="height:60px;">
                                     サムネイル
                                 </div>
-                                <div class="col-xs-8">
-                                    bbbb
+                                <div class="col-xs-9">
+                                    <p>〇〇月△△日から〇〇月△△日</p>
+                                    <p>〇〇地方と寺社</p>
                                 </div>
                             </div>
                         </div>
+                        @endfor
                     </div>
-                    <div class="tab-pane {{$activetab == 2 ? 'active' : ''}}" id="tab2">
+                    <div class="tab-pane {{$activetab == 2 ? 'active' : ''}}" id="tab1-2">
                         <div class="panel panel-body">
                             <div class="col-xs-8 col-xs-offset-2">
                                 {!! Form::open(['route'=>['create_items',1],'files'=>true]) !!}
                                     {!! Form::hidden('title_id',$title_id) !!}
                                     {!! Form::hidden('scene_id',$scene_id) !!}
-                                    {{ Form::hidden('title_id',$title_id) }}
-                                    {{ Form::hidden('scene_id',$scene_id) }}
                                     <div class="form-group">
                                         {!! Form::label('title','タイトル') !!}
                                         {!! Form::text('title',null,['class'=>'form-control','placeholder'=>'例〇〇山への旅20XX春']) !!}
-                                    </div>
-                                    <div class="form-group">
-                                        {!! Form::label('date','期間') !!}
-                                    カレンダーとか呼び出せたらいいのに
                                     </div>
                                     <div class="form-group">
                                         {!! Form::label('scene','シーン') !!}
