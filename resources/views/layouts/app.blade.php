@@ -18,9 +18,12 @@
         <link rel="stylesheet" href="../common/css/bootstrap.css">
 -->
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="bootstrap-datepicker/css/bootstrap-datepicker.min.css">
-        <script type="text/javascript" src="bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-        <script type="text/javascript" src="bootstrap-datepicker/locales/bootstrap-datepicker.ja.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{asset('bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}">
+        <script type="text/javascript" src="{{asset('bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bootstrap-datepicker/locales/bootstrap-datepicker.ja.min.js')}}"></script>
+
+        <script src="{{asset('hammer/jquery.hammer.js')}}"></script>
+        <script src="{{asset('hammer/hammer.min.js')}}"></script>
 
     </head>
     <body>

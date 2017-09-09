@@ -112,7 +112,7 @@ class PageController extends Controller
       return view('bodys.user_menu.favorites',['id'=>$id,'activetab'=>'1',]);
     }
     public function showUserMatching($id){
-      return view('bodys.user_menu.matching',['id'=>$id,]);
+      return view('bodys.user_menu.matching',['id'=>$id,'activetab'=>'1',]);
     }
 
     public function createItems(Request $request,$id){

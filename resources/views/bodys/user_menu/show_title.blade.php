@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="row">
 @include('bodys.user_menu.contents_menu')
 <div class="col-xs-9">
     <div class="panel panel-info">
@@ -42,5 +43,6 @@
             @endfor
         </div>
     </div>
+</div>
 </div>
 @endsection

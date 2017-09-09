@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="text-center">
-        <h1>Log in</h1>
+        <h3>ログイン</h3>
     </div>
 
     <div class="row">
@@ -10,19 +10,20 @@
 
             {!! Form::open(['route' => 'login.post']) !!}
                 <div class="form-group">
-                    {!! Form::label('email', 'Email') !!}
+                    {!! Form::label('email', 'メールアドレス') !!}
                     {!! Form::email('email', old('email'), ['class' => 'form-control']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('password', 'Password') !!}
+                    {!! Form::label('password', 'パスワード') !!}
                     {!! Form::password('password', ['class' => 'form-control']) !!}
                 </div>
-
-                {!! Form::submit('Log in', ['class' => 'btn btn-primary btn-block']) !!}
+                {!! Form::checkbox('remember') !!}
+                {!! Form::label('remember', '次回から省略する') !!}
+                {!! Form::submit('ログイン', ['class' => 'btn btn-primary btn-block']) !!}
             {!! Form::close() !!}
 
-            <p>New user? {!! link_to_route('signup.get', 'Sign up now!') !!}</p>
+            <p>ユーザー登録がまだの人は {!! link_to_route('signup.get', 'こちら') !!}から</p>
         </div>
     </div>
 @endsection
