@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+@if(!isset($title_id))
+    <?php $title_id='1'; ?>
+@endif
+@if(!isset($scene_id))
+    <?php $scene_id='1'; ?>
+@endif
+@if(!isset($activetab))
+    <?php $activetab='1'; ?>
+@endif
 <div class="row">
     @include('bodys.user_menu.contents_menu',['id'=>$id])
     <div class="col-xs-6">
@@ -8,9 +17,13 @@
             <div class="panel panel-heading text-center">
                 マイログ
             </div>
-                @include('parts.tabs',['tab_names'=>['一覧','アップロード'],'class'=>'nav-tabs nav-justified','activetab'=>$activetab])
-                <div class="tab-content">
-                    <div class="tab-pane {{$activetab == 1 ? 'active' : ''}}" id="tab1-1">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="{{ $activetab == 1 ? 'active' : ''}}"><a href="#tab1-1" data-toggle="tab">一覧</a></li>
+                <li class="{{ $activetab == 2 ? 'active' : ''}}"><a href="#tab1-2" data-toggle="tab">アップロード</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane {{ $activetab == '1' ? 'active' : ''}}" id="tab1-1">
+                    <div class="panel-body">
                         ページネーション
                         @for($i=1;$i<10;$i++)
                         <div class="panel panel-primary">
@@ -29,12 +42,16 @@
                         </div>
                         @endfor
                     </div>
-                    <div class="tab-pane {{$activetab == 2 ? 'active' : ''}}" id="tab1-2">
+                    </div>
+                <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}}" id="tab1-2">
                         <div class="panel panel-body">
                             <div class="col-xs-8 col-xs-offset-2">
                                 {!! Form::open(['route'=>['create_items',1],'files'=>true]) !!}
                                     {!! Form::hidden('title_id',$title_id) !!}
                                     {!! Form::hidden('scene_id',$scene_id) !!}
+                                    {{ Form::hidden('title_id',$title_id) }}
+                                    {{ Form::hidden('scene_id',$scene_id) }}
+                                    {{ Form::hidden('activetab',$activetab) }}
                                     <div class="form-group">
                                         {!! Form::label('title','タイトル') !!}
                                         {!! Form::text('title',null,['class'=>'form-control','placeholder'=>'例〇〇山への旅20XX春']) !!}
@@ -60,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+            </div>
         </div>
     </div>
 </div>

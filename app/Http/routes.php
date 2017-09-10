@@ -13,25 +13,28 @@
 
 Route::get('/', 'PageController@showItems')->name('show_items');
 
-Route::get('/login',function(){
-  return view('auth.login');
-})->name('login.get');
+//ユーザー登録
 Route::get('signup','Auth\AuthController@getRegister')->name('signup.get');
 Route::post('signup','Auth\AuthController@postRegister')->name('signup.post');
-Route::post('/login',function(){
-  return redirect('/');
-})->name('login.post');
+Route::get('logout', 'Auth\AuthController@getLogout')->name('logout.get');
 
-Route::get('/guides','PageController@showGuides')->name('show_guides');
-Route::get('/travelers','PageController@showTravelers')->name('show_travelers');
+//ログイン認証
+Route::get('login','Auth\AuthController@getLogin')->name('login.get');
+Route::post('/login','Auth\AuthController@postLogin')->name('login.post');
 
-Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
-Route::group(['prefix' => 'user/{id}'], function () {
-Route::get('profile','PageController@showUserProfile')->name('show_user_profile');
-Route::get('message','PageController@showUserMessages')->name('show_user_messages');
-Route::get('favorite','PageController@showUserFavorites')->name('show_user_favorites');
-Route::get('matching','PageController@showUserMatching')->name('show_user_matching');
-Route::get('mylog','PageController@showUserItems')->name('show_user_items');
-Route::post('mylog/creating','PageController@createItems')->name('create_items');
-Route::get('mylog/{title_id}','PageController@showTitle')->name('show_title');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/guides','PageController@showGuides')->name('show_guides');
+    Route::get('/travelers','PageController@showTravelers')->name('show_travelers');
+
+    Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
+    Route::group(['prefix' => 'user/{id}'], function () {
+        Route::get('profile','PageController@showUserProfile')->name('show_user_profile');
+        Route::get('message','PageController@showUserMessages')->name('show_user_messages');
+        Route::get('favorite','PageController@showUserFavorites')->name('show_user_favorites');
+        Route::get('matching','PageController@showUserMatching')->name('show_user_matching');
+        Route::get('mylog','PageController@showUserItems')->name('show_user_items');
+        Route::post('mylog/creating','PageController@createItems')->name('create_items');
+        Route::get('mylog/{title_id}','PageController@showTitle')->name('show_title');
+      });
 });

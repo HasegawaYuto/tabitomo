@@ -18,8 +18,6 @@
                     {!! Form::label('password', 'パスワード') !!}
                     {!! Form::password('password', ['class' => 'form-control']) !!}
                 </div>
-                {!! Form::checkbox('remember') !!}
-                {!! Form::label('remember', '次回から省略する') !!}
                 {!! Form::submit('ログイン', ['class' => 'btn btn-primary btn-block']) !!}
             {!! Form::close() !!}
 

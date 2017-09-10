@@ -106,28 +106,29 @@ class PageController extends Controller
       return view('bodys.user_menu.messages',['id'=>$id,]);
     }
     public function showUserItems($id){
-      return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'1','title_id'=>'X','scene_id'=>'1']);
+      return view('bodys.user_menu.items',['id'=>$id,]);
     }
     public function showUserFavorites($id){
-      return view('bodys.user_menu.favorites',['id'=>$id,'activetab'=>'1',]);
+      return view('bodys.user_menu.favorites',['id'=>$id,]);
     }
     public function showUserMatching($id){
-      return view('bodys.user_menu.matching',['id'=>$id,'activetab'=>'1',]);
+      return view('bodys.user_menu.matching',['id'=>$id,]);
     }
 
     public function createItems(Request $request,$id){
-      if($request->title_id==="X"){
-          $title_id = 1;
-      }else{
-          $title_id = $request->title_id;
-      }
       if(\Input::get('fin')){
-          return redirect('/user/'. $id .'/mylog');
-          //return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'1','title_id'=>'1','scene_id'=>'1']);
+          return redirect()->back();
       }elseif(\Input::get('con')){
           //return redirect()->back();
           $scene_id = $request->scene_id+1;
-          return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'2','title_id'=>$title_id,'scene_id'=>$scene_id]);
+          $title_id = $request->title_id+1;
+          $data=[
+              'scene_id'=>$scene_id,
+              'activetab'=>'2',
+              'title_id'=>$title_id,
+          ];
+          //return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'2','title_id'=>$title_id,'scene_id'=>$scene_id]);
+          return redirect()->back()->withInput($data);
       }
     }
     public function showTitle($id,$title_id){

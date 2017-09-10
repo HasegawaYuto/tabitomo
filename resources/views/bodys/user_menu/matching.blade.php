@@ -9,13 +9,13 @@
                 マッチング
             </div>
             <div class="panel-body">
-                @include('parts.tabs',['tab_names'=>['ガイド','旅行者'],'class'=>'nav-tabs nav-justified','activetab'=>$activetab])
+                @include('parts.tabs',['tab_names'=>['ガイド','旅行者'],'class'=>'nav-tabs nav-justified','activetab'=>'1'])
                 <div class="tab-content">
-                    <div class="tab-pane {{$activetab == 1 ? 'active' : ''}}" id="tab1-1">
+                    <div class="tab-pane active" id="tab1-1">
                       <div class="nav-tabs-outer">
-                          <ul class="nav nav-tabs js-tabs">
+                          <ul class="nav nav-pills js-tabs js-swipe">
                               <li class="active text-center"><a href="#swipetab1" data-toggle="tab">TAB1</a></li>
-                              @for($i=2;$i<=10;$i++)
+                              @for($i=2;$i<=3;$i++)
                                   <li class="text-center"><a href="#swipetab{{$i}}" data-toggle="tab">TAB{{$i}}</a></li>
                               @endfor
                             </ul>
@@ -28,7 +28,7 @@
                             @endfor
                       </div>
                     </div>
-                    <div class="tab-pane {{$activetab == 2 ? 'active' : ''}}" id="tab1-2">
+                    <div class="tab-pane" id="tab1-2">
                         aaaaa
                     </div>
                 </div>
@@ -37,16 +37,15 @@
     </div>
 </div>
 
-
 <div class="form-group" id="datepicker-inline">
-    <label class="col-sm-3 control-label">Embedded / inline</label>
+
     <div class="col-sm-9 form-inline">
         <div class="in-line" data-date="2010年10月26日"></div>
         <input type="text" id="my_hidden_input">
     </div>
 </div>
 
-<script>
+<script>// detapicker
     $(function(){
         $('#datepicker-inline .in-line').datepicker({
             format: "yyyy年mm月dd日",
@@ -60,9 +59,9 @@
 });
 </script>
 
-<script>
+<script>//nav scroll
 $(function(){
-  var ACTIVE_SELECTOR = '.nav-tabs > .active';
+  var ACTIVE_SELECTOR = '.nav-pills > .active';
 
   var $jsTabs = $('.js-tabs');
   var $jsTabsLi = $('.js-tabs li');
@@ -75,10 +74,10 @@ $(function(){
 
   //タブエリアの横幅指定
   //$jsTabs.css('width',tabsLiWid * tabsLiLen);
-  $jsTabs.css('width','1000px');
-  $('.nav-tabs-outer').css('overflow-x','auto');
-  $('.nav-tabs-outer .nav-tabs li').css('display','block');
-  $('.nav-tabs-outer .nav-tabs li').css('width','100px');
+  $jsTabs.css('width','400px');
+  $('.nav-tabs-outer').css('overflow-x','scroll');
+  $('.nav-tabs-outer .nav-pills li').css('display','block');
+  $('.nav-tabs-outer .nav-pills li').css('width','100px');
 
   //スワイプイベント登録
   $jsSwipe.hammer().on('swipeleft',next);  //--------C
@@ -100,7 +99,6 @@ $(function(){
 
     }
   }
-
 });
 </script>
 @endsection
