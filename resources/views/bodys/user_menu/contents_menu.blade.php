@@ -7,6 +7,7 @@
     アバター
   </div>
   <div class="list-group">
+      <?php $id= Auth::user()->id ?>
       {!! Link_to_route('show_user_profile','プロフィール',['id'=>$id],['class'=>'list-group-item text-center']) !!}
       {!! Link_to_route('show_user_matching','マッチング',['id'=>$id],['class'=>'list-group-item text-center']) !!}
       {!! Link_to_route('show_user_messages','メッセージ',['id'=>$id],['class'=>'list-group-item text-center']) !!}

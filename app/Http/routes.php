@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
+        Route::post('profile/edit','UserOptionController@edit')->name('edit_user_profile');
         Route::get('profile','PageController@showUserProfile')->name('show_user_profile');
         Route::get('message','PageController@showUserMessages')->name('show_user_messages');
         Route::get('favorite','PageController@showUserFavorites')->name('show_user_favorites');

@@ -26,15 +26,16 @@
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{Auth::user()->name}}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li>{!! link_to_route('show_user_profile', 'プロフィール',['id' => 1]) !!}</li>
+                            <?php $id=AUth::user()->id ?>
+                            <li>{!! link_to_route('show_user_profile', 'プロフィール',['id' => $id]) !!}</li>
                             <li role="separator" class="divider"></li>
-                            <li>{!! link_to_route('show_user_matching', 'マッチング',['id' => 1]) !!}</li>
+                            <li>{!! link_to_route('show_user_matching', 'マッチング',['id' => $id]) !!}</li>
                             <li role="separator" class="divider"></li>
-                            <li>{!! link_to_route('show_user_messages', 'メッセージ',['id' => 1]) !!}</li>
+                            <li>{!! link_to_route('show_user_messages', 'メッセージ',['id' => $id]) !!}</li>
                             <li role="separator" class="divider"></li>
-                            <li>{!! link_to_route('show_user_items', 'マイログ',['id' => 1]) !!}</li>
+                            <li>{!! link_to_route('show_user_items', 'マイログ',['id' => $id]) !!}</li>
                             <li role="separator" class="divider"></li>
-                            <li>{!! link_to_route('show_user_favorites', 'お気に入り',['id' => 1]) !!}</li>
+                            <li>{!! link_to_route('show_user_favorites', 'お気に入り',['id' => $id]) !!}</li>
                             <li role="separator" class="divider"></li>
                             <li>{!! link_to_route('logout.get', 'ログアウト') !!}</li>
                         </ul>

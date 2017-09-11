@@ -18,8 +18,8 @@
                 マイログ
             </div>
             <ul class="nav nav-tabs nav-justified">
-                <li class="{{ $activetab == 1 ? 'active' : ''}}"><a href="#tab1-1" data-toggle="tab">一覧</a></li>
-                <li class="{{ $activetab == 2 ? 'active' : ''}}"><a href="#tab1-2" data-toggle="tab">アップロード</a></li>
+                <li class="{{ $activetab == '1' ? 'active' : ''}}"><a href="#tab1-1" data-toggle="tab">一覧</a></li>
+                <li class="{{ $activetab == '2' ? 'active' : ''}}"><a href="#tab1-2" data-toggle="tab">アップロード</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane {{ $activetab == '1' ? 'active' : ''}}" id="tab1-1">
@@ -28,7 +28,7 @@
                         @for($i=1;$i<10;$i++)
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                {!! Link_to_route('show_title','旅のタイトル',['id'=>1,'title_id'=>$i],['style'=>'color:white;']) !!}
+                                {!! Link_to_route('show_title','旅のタイトル',['id'=>$id,'title_id'=>$i],['style'=>'color:white;']) !!}
                             </div>
                             <div class="panel-body">
                                 <div class="col-xs-3" style="height:60px;">
@@ -46,12 +46,9 @@
                 <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}}" id="tab1-2">
                         <div class="panel panel-body">
                             <div class="col-xs-8 col-xs-offset-2">
-                                {!! Form::open(['route'=>['create_items',1],'files'=>true]) !!}
+                                {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>true]) !!}
                                     {!! Form::hidden('title_id',$title_id) !!}
                                     {!! Form::hidden('scene_id',$scene_id) !!}
-                                    {{ Form::hidden('title_id',$title_id) }}
-                                    {{ Form::hidden('scene_id',$scene_id) }}
-                                    {{ Form::hidden('activetab',$activetab) }}
                                     <div class="form-group">
                                         {!! Form::label('title','タイトル') !!}
                                         {!! Form::text('title',null,['class'=>'form-control','placeholder'=>'例〇〇山への旅20XX春']) !!}

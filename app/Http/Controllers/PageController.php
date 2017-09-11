@@ -8,6 +8,10 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App;
+use App\User;
+use Carbon\Carbon;
+use App\Location;
+use App\Pref;
 
 class PageController extends Controller
 {
@@ -16,6 +20,7 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         //
@@ -100,7 +105,14 @@ class PageController extends Controller
     }
 
     public function showUserProfile($id){
-      return view('bodys.user_menu.profile',['id'=>$id,]);
+      $user = User::find($id);
+      $locations = Location::all();
+      $prefs = Pref::all();
+      foreach($prefs as $pref){
+          $prefData["00"]="--都道府県--";
+          $prefData[$pref->pref_id]=$pref->pref_name;
+      }
+      return view('bodys.user_menu.profile',['id'=>$id,'user'=>$user,'thisyear'=>Carbon::now()->year,'prefs'=>$prefData,'locations'=>$locations,]);
     }
     public function showUserMessages($id){
       return view('bodys.user_menu.messages',['id'=>$id,]);
@@ -117,18 +129,16 @@ class PageController extends Controller
 
     public function createItems(Request $request,$id){
       if(\Input::get('fin')){
-          return redirect()->back();
+          return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
           //return redirect()->back();
           $scene_id = $request->scene_id+1;
-          $title_id = $request->title_id+1;
-          $data=[
-              'scene_id'=>$scene_id,
-              'activetab'=>'2',
-              'title_id'=>$title_id,
-          ];
-          //return view('bodys.user_menu.items',['id'=>$id,'activetab'=>'2','title_id'=>$title_id,'scene_id'=>$scene_id]);
-          return redirect()->back()->withInput($data);
+          return view('bodys.user_menu.items',[
+                'id'=>$id,
+                'activetab'=>'2',
+                'title_id'=>$request->title_id,
+                'scene_id'=>$scene_id]);
+          //return redirect()->back()->withInput($data);
       }
     }
     public function showTitle($id,$title_id){
