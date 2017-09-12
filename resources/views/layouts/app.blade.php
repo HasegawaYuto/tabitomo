@@ -22,8 +22,24 @@
         <script type="text/javascript" src="{{asset('bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('bootstrap-datepicker/locales/bootstrap-datepicker.ja.min.js')}}"></script>
 
-        <script src="{{asset('hammer/jquery.hammer.js')}}"></script>
-        <script src="{{asset('hammer/hammer.min.js')}}"></script>
+        <script>//都道府県選択
+        var $children = $('.city');
+        var original = $children.html();
+        $('.pref').change(function() {
+          var val1 = $(this).val();
+          $children.html(original).find('option').each(function() {
+            var val2 = $(this).data('val');
+            if (val1 != val2) {
+              $(this).not(':first-child').remove();
+            }
+          });
+          if ($(this).val() == "00") {
+            $children.attr('disabled', 'disabled');
+          } else {
+            $children.removeAttr('disabled');
+          }
+        });
+        </script>
 
     </head>
     <body>
