@@ -8,9 +8,9 @@
             <div class="panel panel-heading text-center">
                 お気に入り
             </div>
-                @include('parts.tabs',['tab_names'=>['シーン','ユーザー'],'class'=>'nav-tabs nav-justified','activetab'=>$activetab])
+                @include('parts.tabs',['tab_names'=>['シーン','ユーザー'],'class'=>'nav-tabs nav-justified','activetab'=>1])
                 <div class="tab-content">
-                    <div class="tab-pane {{$activetab == 1 ? 'active' : ''}}" id="tab1-1">
+                    <div class="tab-pane active" id="tab1-1">
                       <div class="panel-body">
                         @for($i=1;$i<6;$i++)
                             <div class="col-xs-4">
@@ -29,7 +29,7 @@
                         @endfor
                       </div>
                     </div>
-                    <div class="tab-pane {{$activetab == 2 ? 'active' : ''}}" id="tab1-2">
+                    <div class="tab-pane " id="tab1-2">
                         <div class="panel-body">
                               @include('parts.tabs',['tab_names'=>['ともだち','フォロー','フォロワー'],'activetab'=>'1','nest'=>'2'])
                               <div class="tab-content">
