@@ -78,14 +78,18 @@ class UserOptionController extends Controller
               ];
               if(array_search(mime_content_type($_FILES['avatar']['tmp_name']),$typearray)){
                   $file = \Input::file('avatar');
-                  $profile['data']=file_get_contents($file);
+                  $filename = public_path() . '/image/avatar' . $id . '.' . $file->getClientOriginalExtension();
+                  $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                      })->save($filename);
+                  $profile['data']=file_get_contents($filename);
                   $profile['mime']=$file->getMimeType();
                   //$profile['path']=
               }
             }
         }
-        if(\Input::get('userNickName')){
-            $profile['nickname']=$request->userNickName;
+        if(\Input::get('nickname')){
+            $profile['nickname']=$request->nickname;
         }
         if(\Input::get('year') && \Input::get('month') && \Input::get('day')){
             $birthday = $request->year . '-' . $request->month . '-' . $request->day;
@@ -102,6 +106,11 @@ class UserOptionController extends Controller
             $profile['area']=$pref->pref_name . $city->city_name;
         }
         $profile->save();
+        if(isset($filename)){
+          if (\File::exists($filename)) {
+                \File::delete($filename);
+            }
+        }
         return redirect()->back();
     }
 

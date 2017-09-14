@@ -1,13 +1,19 @@
 $(function(){
     $ABC = $('#avatarBeforeChangeArea');
     $AAC = $('#avatarAfterChangeArea');
+    $menuABC = $('#menuavatarBeforeChangeArea');
     $ABC.css('height',$ABC.css('width'));
+    $menuABC.css('height',$menuABC.css('width'));
     $ABC.css({'background-position':'center',
               'background-repeat':'no-repeat',
               'background-size':'cover'
         });
     $AAC.css('height',$ABC.css('width'));
     $AAC.css({'background-position':'center',
+              'background-repeat':'no-repeat',
+              'background-size':'cover'
+        });
+    $menuABC.css({'background-position':'center',
               'background-repeat':'no-repeat',
               'background-size':'cover'
         });

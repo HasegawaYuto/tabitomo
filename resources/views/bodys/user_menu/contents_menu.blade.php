@@ -1,10 +1,13 @@
 <div class="col-xs-3">
 <div class="text-left panel panel-info">
   <div class="panel-heading">
-    ニックネーム
+      {{$nickname}}
   </div>
-  <div class="panel panel-body text-center" style="height:80px">
-    アバター
+  <div class="panel-body text-center">
+    <div class="col-xs-offset-2 col-xs-8"  id="menuavatarBeforeChange">
+        <div id="menuavatarBeforeChangeArea" class="img-circle" style="background-image:{{$url}};">
+        </div>
+    </div>
   </div>
   <div class="list-group">
       <?php $id= Auth::user()->id ?>
