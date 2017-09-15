@@ -24,6 +24,7 @@ Route::post('/login','Auth\AuthController@postLogin')->name('login.post');
 
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/newprofilecreate','PageController@newProfileCreate');
     Route::get('/guides','PageController@showGuides')->name('show_guides');
     Route::get('/travelers','PageController@showTravelers')->name('show_travelers');
 

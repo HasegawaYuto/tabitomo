@@ -93,6 +93,16 @@ class PageController extends Controller
         //
     }
 
+    public function newProfileCreate(){
+        $profile =  new Profile;
+        $profile->user_id = \Auth::user()->id;
+        $profile->save();
+
+        return redirect('/');
+    }
+
+
+
     public function showGuides(){
       return view('bodys.show_guides');
     }
@@ -107,12 +117,12 @@ class PageController extends Controller
 
     public function showUserProfile($id){
       $user = App\Profile::where('user_id',$id)->first();
-      if(!isset($user)){
-          $profile = Profile::firstOrNew(['user_id'=> $id]);
-          $profile['user_id'] = $id;
-          $profile->save();
-      }
-      $user = App\Profile::where('user_id',$id)->first();
+      //if(!isset($user)){
+      //    $profile = Profile::firstOrNew(['user_id'=> $id]);
+      //    $profile['user_id'] = $id;
+      //    $profile->save();
+      //}
+      //$user = App\Profile::where('user_id',$id)->first();
       $data['user']=$user;
       $data['id']=$id;
 

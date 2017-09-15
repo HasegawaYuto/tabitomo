@@ -121,3 +121,26 @@ $(function(){
  
     mapInit();
 });
+
+$(function(){
+    var $month = $('#manthSelectBox');
+    var $day = $('#daySelectBox');
+    var $year = $('#yearSelectBox');
+    var originaldays = $day.html();
+
+    $month.change(function(){
+        var valy = $year.val();
+        var valm = $(this).val();
+        if(valm == "02" || valm == "04" || valm == "06" || valm == "09" || valm == "11"){
+          $day.html(originaldays).find('option').each(function() {
+              var vald = $(this).data('val');
+              if (vald == "31") {
+                  $(this).not(':first-child').remove();
+                }
+          });
+        };
+        //if(valy!="0000"){
+
+        //};
+    });
+});
