@@ -3,14 +3,14 @@
 @section('content')
 <div class="row">
   <?php
-      if($data == '未設定' && $mime =='未設定'){
+      if(!isset($user->data) && !isset($user->mime)){
           $src = 'http://placehold.it/640x640/27709b/ffffff';
       }else{
-          $src = 'data:' . $mime . ';base64,' . $data;
+          $src = 'data:' . $user->mime . ';base64,' . base64_encode($user->data);
       }
       $url = 'url("' . $src . '")';
   ?>
-@include('bodys.user_menu.contents_menu',['id'=>$id,'url'=>$url,'nickname'=>$nickname])
+@include('bodys.user_menu.contents_menu',['user'=>$user])
 
   <div class="text-center col-xs-6">
     <div class="panel panel-info">
@@ -45,12 +45,12 @@
             </td>
           </tr>
           <tr>
-            <td class="text-left"><p><b>ニックネーム</b><button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile1">編集</button></p>
-              <p class="text-center">{{$nickname}}</p>
-              <div id="userprofile1" class="collapse">
+            <td class="text-left"><p><b>ニックネーム</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile1">編集</button></p>
+              <p class="text-center">{{$user->nickname or '未設定'}}</p>
+              <div id="userprofile1" class="collapse text-center">
                   {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
                   <div class="form-group">
-                      {!! Form::text('nickname',$nickname,['class'=>'form-control']) !!}
+                      {!! Form::text('nickname',null,['class'=>'form-control']) !!}
                   </div>
                   {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
                   {!! Form::close() !!}
@@ -58,13 +58,52 @@
             </td>
           </tr>
           <tr>
-            <td class="text-left">生年月日（ダイヤル式）</td>
+            <td class="text-left"><p><b>年齢</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile2">編集</button></p>
+            <p class="text-center">{{isset($user->age) ? $user->age . '歳' : '未設定'}}{{$birthdayOfYear}}</p>
+            <div id="userprofile2" class="collapse text-center">
+                <label class="text-left">生年月日</label><br>
+                {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
+                <div class="form-group form-inline">
+                    <select name="year" class="form-control">
+                        <option value="0000" selected="{{ isset($birthdayOfYear) ? '':'selected'}}">----</option>
+                        @for($year=$thisyear;$year>=1900;$year--)
+                            <option value="{{$year}}" selected="{{ isset($birthdayOfYear) && $birthdayOfYear==$year ? 'selected':''}}">{{$year}}</option>
+                        @endfor
+                    </select>
+                    <label>年</label>
+                    <select name="month" class="form-control">
+                        <option value="0" selected="{{ isset($birthdayOfMonth) ? '':'selected'}}">--</option>
+                        @for($month=1;$month<=12;$month++)
+                            <?php
+                              $month0 = str_pad($month, 2, 0, STR_PAD_LEFT);
+                            ?>
+                            <option value="{{$month0}}" selected="{{ isset($birthdayOfMonth) && $birthdayOfMonth==$month ? 'selected':''}}">{{$month}}</option>
+                        @endfor
+                    </select>
+                    <label>月</label>
+                    <select name="day" class="form-control">
+                        <option value="0" selected="{{ isset($birthdayOfDay) ? '':'selected'}}">--</option>
+                        @for($day=1;$day<=31;$day++)
+                            <?php
+                                $day0 = str_pad($day, 2, 0, STR_PAD_LEFT);
+                            ?>
+                            <option value="{{$day0}}" selected="{{ isset($birthdayOfDay) && $birthdayOfDay==$day ? 'selected':''}}">{{$day}}</option>
+                        @endfor
+                    </select>
+                    <label>月</label>
+                </div>
+                {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
+                {!! Form::close() !!}
+            </div>
+          </td>
           </tr>
           <tr>
             <td class="text-left">性別ラジオ</td>
           </tr>
           <tr>
-            <td class="text-left">エリアドロップダウン</td>
+            <td class="text-left"><p>エリアドロップダウン</p>
+              <div id="mapSetArea" class="col-xs-12"></div>
+            </td>
           </tr>
         </table>
         @else

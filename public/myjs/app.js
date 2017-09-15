@@ -42,3 +42,82 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
             reader.readAsDataURL(file);
           });
 });
+
+////////////////////////////////////////////////////////////////////////
+
+$(function(){
+    $mapSetAreaHeight = $('#mapSetArea').width()  ;
+    $('#mapSetArea').css('height',$mapSetAreaHeight);
+    function mapInit() {
+    var centerPosition = new google.maps.LatLng(38.000, 138.000);
+    var option = {
+        zoom : 4,
+        center : centerPosition,
+        mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
+        mapTypeControl: false,
+        //fullscreenControl: false,
+        streetViewControl: false,
+        scrollwheel: true,
+        zoomControl: true,
+    };
+    //地図本体描画
+    var googlemap = new google.maps.Map(document.getElementById("mapSetArea"), option);
+
+    var styleOptions = [{
+        featureType: 'all',
+        elementType: 'labels',
+        stylers: [{ visibility: 'off' }]
+      },
+      {
+          featureType: 'road',
+          elementType: 'road.highway',
+          stylers: [{ visibility: 'off' }]
+        },
+      {
+          featureType: 'road',
+          elementType: 'road.local',
+          stylers: [{ visibility: 'off' }]
+        },
+      {
+          featureType: 'road',
+          elementType: 'road.arterial',
+          stylers: [{ visibility: 'off' }]
+        },
+      {
+          featureType: 'transit',
+          elementType: 'transit.line',
+          stylers: [{ visibility: 'off' }]
+        },
+      {
+          featureType: 'administrative',
+          elementType: 'geometry',
+          stylers: [{ visibility: 'on' },{ weight:2 }]
+        },
+      {
+          featureType: 'administrative',
+          elementType: 'labels',
+          stylers: [{ visibility: 'on' }]
+        }
+    ];
+    var styledMapOptions = { name: '文字なし' }
+    var lopanType = new google.maps.StyledMapType(styleOptions, styledMapOptions);
+    googlemap.mapTypes.set('noText', lopanType);
+    googlemap.setMapTypeId('noText');
+
+    //var marker = new google.maps.Marker({
+    //                position: googlemap.getCenter(),
+    //                map: googlemap
+    //            });
+
+    google.maps.event.addListener(googlemap, 'click', function (e) {
+                    //marker.position = e.latLng;
+                    //googlemap.getPosition(loc);
+                    $("#latitude").val(e.latLng.lat());
+                    $("#longitude").val(e.latLng.lng());
+                    //marker.setMap(googlemap);
+                });
+
+}
+ 
+    mapInit();
+});
