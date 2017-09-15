@@ -9,7 +9,7 @@
 <div class="col-xs-3">
 <div class="text-left panel panel-info">
   <div class="panel-heading">
-      {{$user->nickname or 未設定}}
+      {{$user->nickname or '未設定'}}
   </div>
   <div class="panel-body text-center">
     <div class="col-xs-offset-2 col-xs-8"  id="menuavatarBeforeChange">
