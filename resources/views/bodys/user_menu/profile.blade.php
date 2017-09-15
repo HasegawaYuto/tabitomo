@@ -11,7 +11,6 @@
       $url = 'url("' . $src . '")';
   ?>
 @include('bodys.user_menu.contents_menu',['user'=>$user])
-
   <div class="text-center col-xs-6">
     <div class="panel panel-info">
       <div class="panel panel-heading">

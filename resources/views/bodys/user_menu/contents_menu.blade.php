@@ -18,12 +18,11 @@
     </div>
   </div>
   <div class="list-group">
-      <?php $user->user_id= Auth::user()->id ?>
-      {!! Link_to_route('show_user_profile','プロフィール',['id'=>$id],['class'=>'list-group-item text-center']) !!}
-      {!! Link_to_route('show_user_matching','マッチング',['id'=>$id],['class'=>'list-group-item text-center']) !!}
-      {!! Link_to_route('show_user_messages','メッセージ',['id'=>$id],['class'=>'list-group-item text-center']) !!}
-      {!! Link_to_route('show_user_items','マイログ',['id'=>$id],['class'=>'list-group-item text-center']) !!}
-      {!! Link_to_route('show_user_favorites','お気に入り',['id'=>$id],['class'=>'list-group-item text-center']) !!}
+      {!! Link_to_route('show_user_profile','プロフィール',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
+      {!! Link_to_route('show_user_matching','マッチング',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
+      {!! Link_to_route('show_user_messages','メッセージ',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
+      {!! Link_to_route('show_user_items','マイログ',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
+      {!! Link_to_route('show_user_favorites','お気に入り',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
   </div>
 </div>
 </div>

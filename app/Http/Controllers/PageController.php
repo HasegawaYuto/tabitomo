@@ -12,6 +12,7 @@ use App\User;
 use Carbon\Carbon;
 use App\Location;
 use App\Pref;
+use App\Profile;
 
 class PageController extends Controller
 {
@@ -106,17 +107,27 @@ class PageController extends Controller
 
     public function showUserProfile($id){
       $user = App\Profile::where('user_id',$id)->first();
-      $locations = Location::all();
-      $prefs = Pref::all();
-      $data['id']=$id;
+      if(!isset($user)){
+          $profile = Profile::firstOrNew(['user_id'=> $id]);
+          $profile['user_id'] = $id;
+          $profile->save();
+      }
+      $user = App\Profile::where('user_id',$id)->first();
       $data['user']=$user;
-      $data['thisyear']=Carbon::now()->year;
+      $data['id']=$id;
+
+      $locations = Location::all();
       $data['locations']=$locations;
+
+      $prefs = Pref::all();
       foreach($prefs as $pref){
           $prefData["00"]="--都道府県--";
           $prefData[$pref->pref_id]=$pref->pref_name;
       }
       $data['prefs']=$prefData;
+
+      $data['thisyear']=Carbon::now()->year;
+
       if(!isset($user->birthday)){
           $data['birthday'] = '未設定';
           //$data['birthdayOfYear'] = null;
@@ -133,6 +144,7 @@ class PageController extends Controller
           $data['birthdayOfMonth'] = $birthday->month;
           $data['birthdayOfDay'] = $birthday->day;
       }
+
       if(!isset($user->nickname)){
           $data['nickname'] = '未設定';
           $data['nicknameDefault'] = '';
@@ -140,18 +152,21 @@ class PageController extends Controller
           $data['nickname'] = $user->nickname;
           $data['nicknameDefault'] = $user->nickname;
       }
+
       if(!isset($user->sex)){
           $data['sex'] = '未設定';
       }else{
           $data['sex'] = $user->sex;
       }
+
       if(!isset($user->area)){
           $data['area'] = '未設定';
       }else{
           $data['area'] = $user->area;
       }
-      return view('bodys.user_menu.profile',$data);
-    }
+
+    return view('bodys.user_menu.profile',$data);
+  }
 
 ///////////////////////////////////////////////////////////////
 
