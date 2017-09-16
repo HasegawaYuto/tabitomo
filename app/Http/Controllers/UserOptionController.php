@@ -91,11 +91,13 @@ class UserOptionController extends Controller
         if(\Input::get('nickname')){
             $profile['nickname']=$request->nickname;
         }
-        if(\Input::get('year') && \Input::get('month') && \Input::get('day')){
+        $setcheck = \Input::get('year') && \Input::get('month') && \Input::get('day');
+        $valcheck = $request->year != "0000" && $request->month != "00" && $request->day != "00";
+        if($setcheck && $valcheck){
             $birthday = $request->year . '-' . $request->month . '-' . $request->day;
             $profile['birthday']=$birthday;
             $carbonForAge = Carbon::parse($birthday);
-            $profile['age']=$carbonForAge->age;
+            //$profile['age']=$carbonForAge->age;
         }
         if(\Input::get('sex')){
             $profile['sex']=$request->sex;

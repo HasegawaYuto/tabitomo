@@ -58,7 +58,17 @@
           </tr>
           <tr>
             <td class="text-left"><p><b>年齢</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile2">編集</button></p>
-            <p class="text-center">{{isset($user->age) ? $user->age . '歳' : '未設定'}}</p>
+            <p class="text-center">
+            <?php
+                if(isset($user->birthday)){
+                    $age = Carbon\Carbon::parse($user->birthday)->age;
+                    $birthday = new Carbon\Carbon($user->birthday);
+                    $birthdayOfYear = $birthday->year;
+                    $birthdayOfMonth = $birthday->month;
+                    $birthdayOfDay = $birthday->day;
+                }
+            ?>
+            {{isset($age) ? $age . '歳' : '未設定'}}</p>
             <div id="userprofile2" class="collapse text-center">
                 <label class="text-left">生年月日</label><br>
                 {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
@@ -97,11 +107,40 @@
           </td>
           </tr>
           <tr>
-            <td class="text-left">性別ラジオ</td>
+            <td class="text-left"><p><b>性別</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile3">編集</button></p>
+            <p class="text-center">{{$user->sex or '未設定'}}</p>
+              <div id="userprofile3" class="collapse text-center">
+                  {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
+                  <div class="form-group form-inline">
+                      <input {{ isset($user->sex) && $user->sex == "男性" ? 'checked="checked"' : ''}} name="sex" type="radio" value="男性">
+                      <label>男性</label>
+                      <input {{ isset($user->sex) && $user->sex == "女性" ? 'checked="checked"' : ''}} name="sex" type="radio" value="女性">
+                      <label>女性</label>
+                      <input {{ isset($user->sex) && $user->sex == "その他" ? 'checked="checked"' : ''}} name="sex" type="radio" value="その他">
+                      <label>その他</label>
+                  </div>
+                  {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
+                  {!! Form::close() !!}
+              </div>
+            </td>
           </tr>
           <tr>
-            <td class="text-left"><p>エリアドロップダウン</p>
-              <div id="mapSetArea" class="col-xs-12"></div>
+            <td class="text-left"><p><b>エリア</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile4">編集</button></p>
+            <p class="text-center">{{$user->area or '未設定'}}</p>
+              <div id="userprofile4" class="collapse text-center">
+                  {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
+                  <div class="form-group form-inline">
+                      {!! Form::select('pref_id',$prefs,old('pref_id'),['class'=>'form-control','id'=>'pref']) !!}
+                      <select id="city" class="form-control" name="city_id">
+                          <option data-val="00" value="00000" >--市町村--</option>
+                          @foreach($locations as $location)
+                          <option data-val="{{$location->pref_id}}" value="{{$location->city_id}}" >{{$location->city_name}}</option>
+                          @endforeach
+                      </select>
+                  </div>
+                  {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
+                  {!! Form::close() !!}
+              </div>
             </td>
           </tr>
         </table>

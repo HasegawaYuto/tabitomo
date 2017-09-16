@@ -123,24 +123,65 @@ $(function(){
 });
 
 $(function(){
-    var $month = $('#manthSelectBox');
+    var $month = $('#monthSelectBox');
     var $day = $('#daySelectBox');
     var $year = $('#yearSelectBox');
     var originaldays = $day.html();
 
-    $month.change(function(){
-        var valy = $year.val();
-        var valm = $(this).val();
-        if(valm == "02" || valm == "04" || valm == "06" || valm == "09" || valm == "11"){
-          $day.html(originaldays).find('option').each(function() {
-              var vald = $(this).data('val');
-              if (vald == "31") {
-                  $(this).not(':first-child').remove();
-                }
-          });
-        };
-        //if(valy!="0000"){
+    $month.change(leapcheck);
+    $year.change(leapcheck);
 
-        //};
-    });
+      function leapcheck(){
+        var valy = $year.val();
+        var valm = $month.val();
+        $day.html(originaldays).find('option').each(function() {
+            if( valy != "0000" ){
+                var vald = $(this).data('val');
+                if(valm == "04" || valm == "06" || valm == "09" || valm == "11"){
+                    if (vald == "31") {
+                        $(this).not(':last-child').remove();
+                    }
+                } else if(valm == "02"){
+                    if (vald == "31" || vald == "30") {
+                        $(this).not(':last-child').remove();
+                    }
+                    if ( valy % 4 == 0 ){
+                        if(valy % 100 == 0){
+                            if( valy % 400 != 0){
+                                if(vald == "29"){
+                                    $(this).not(':last-child').remove();
+                                }
+                            }
+                        }
+                    } else {
+                        if(vald == "29"){
+                            $(this).not(':last-child').remove();
+                        }
+                    }
+                }
+        }});
+    };
+});
+
+$(function(){
+    var $pref = $('#pref');
+    var $city = $('#city');
+    var originalcitys = $city.html();
+
+    $pref.change(cityselect);
+
+      function cityselect(){
+        var prefID = $(this).val();
+        $city.html(originalcitys).find('option').each(function() {
+            var dataval = $(this).data('val');
+            if (prefID != dataval) {
+                $(this).not(':first-child').remove();
+            }
+        });
+        if ($(this).val() == "00") {
+            $city.attr('disabled', 'disabled');
+        } else {
+            $city.removeAttr('disabled');
+        };
+      };
 });
