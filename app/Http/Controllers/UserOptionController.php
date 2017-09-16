@@ -96,7 +96,7 @@ class UserOptionController extends Controller
         if($setcheck && $valcheck){
             $birthday = $request->year . '-' . $request->month . '-' . $request->day;
             $profile['birthday']=$birthday;
-            $carbonForAge = Carbon::parse($birthday);
+            //$carbonForAge = Carbon::parse($birthday);
             //$profile['age']=$carbonForAge->age;
         }
         if(\Input::get('sex')){

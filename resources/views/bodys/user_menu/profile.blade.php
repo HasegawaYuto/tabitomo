@@ -63,12 +63,12 @@
                 if(isset($user->birthday)){
                     $age = Carbon\Carbon::parse($user->birthday)->age;
                     $birthday = new Carbon\Carbon($user->birthday);
-                    $birthdayOfYear = $birthday->year;
-                    $birthdayOfMonth = $birthday->month;
-                    $birthdayOfDay = $birthday->day;
+                        $birthdayOfYear = $birthday->year;
+                        $birthdayOfMonth = $birthday->month;
+                        $birthdayOfDay = $birthday->day;
                 }
             ?>
-            {{isset($age) ? $age . '歳' : '未設定'}}</p>
+            {{isset($user->birthday) ? $age . '歳' : '未設定'}}</p>
             <div id="userprofile2" class="collapse text-center">
                 <label class="text-left">生年月日</label><br>
                 {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
@@ -130,9 +130,9 @@
               <div id="userprofile4" class="collapse text-center">
                   {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
                   <div class="form-group form-inline">
-                      {!! Form::select('pref_id',$prefs,old('pref_id'),['class'=>'form-control','id'=>'pref']) !!}
-                      <select id="city" class="form-control" name="city_id">
-                          <option data-val="00" value="00000" >--市町村--</option>
+                      {!! Form::select('pref_id',$prefs,old('pref_id'),['class'=>'form-control','id'=>'prefselect']) !!}
+                      <select id="cityselect" class="form-control" name="city_id">
+                          <option data-val="00000" value="00000" >--市町村--</option>
                           @foreach($locations as $location)
                           <option data-val="{{$location->pref_id}}" value="{{$location->city_id}}" >{{$location->city_name}}</option>
                           @endforeach

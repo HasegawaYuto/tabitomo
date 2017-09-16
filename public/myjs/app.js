@@ -17,7 +17,6 @@ $(function(){
               'background-repeat':'no-repeat',
               'background-size':'cover'
         });
-
 $('#avatarForm').on('change', 'input[type="file"]', function(e) {
             var file = e.target.files[0],
                 reader = new FileReader(),
@@ -121,15 +120,15 @@ $(function(){
  
     mapInit();
 });
-
+/////////////////////////////////////////////////////////////////////////////////////////
 $(function(){
     var $month = $('#monthSelectBox');
     var $day = $('#daySelectBox');
     var $year = $('#yearSelectBox');
     var originaldays = $day.html();
 
-    $month.change(leapcheck);
-    $year.change(leapcheck);
+    $month.change(leapcheck());
+    $year.change(leapcheck());
 
       function leapcheck(){
         var valy = $year.val();
@@ -140,19 +139,19 @@ $(function(){
                 if(valm == "04" || valm == "06" || valm == "09" || valm == "11"){
                     if (vald == "31") {
                         $(this).not(':last-child').remove();
-                    }
+                      }
                 } else if(valm == "02"){
                     if (vald == "31" || vald == "30") {
                         $(this).not(':last-child').remove();
-                    }
+                      }
                     if ( valy % 4 == 0 ){
                         if(valy % 100 == 0){
                             if( valy % 400 != 0){
                                 if(vald == "29"){
                                     $(this).not(':last-child').remove();
-                                }
-                            }
-                        }
+                                  }
+                              }
+                          }
                     } else {
                         if(vald == "29"){
                             $(this).not(':last-child').remove();
@@ -160,28 +159,7 @@ $(function(){
                     }
                 }
         }});
-    };
+    }
 });
-
-$(function(){
-    var $pref = $('#pref');
-    var $city = $('#city');
-    var originalcitys = $city.html();
-
-    $pref.change(cityselect);
-
-      function cityselect(){
-        var prefID = $(this).val();
-        $city.html(originalcitys).find('option').each(function() {
-            var dataval = $(this).data('val');
-            if (prefID != dataval) {
-                $(this).not(':first-child').remove();
-            }
-        });
-        if ($(this).val() == "00") {
-            $city.attr('disabled', 'disabled');
-        } else {
-            $city.removeAttr('disabled');
-        };
-      };
-});
+////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////

@@ -21,9 +21,9 @@
         <link rel="stylesheet" type="text/css" href="{{asset('bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}">
         <script type="text/javascript" src="{{asset('bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('bootstrap-datepicker/locales/bootstrap-datepicker.ja.min.js')}}"></script>
-
+<!--
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
+-->
         <script src="{{asset('myjs/app.js')}}"></script>
 
     </head>
