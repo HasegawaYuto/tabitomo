@@ -73,7 +73,8 @@
                         </div>
                         <div class="form-group">
                               {!! Form::label('date','日付') !!}
-                              上記「期間」の中から選択できるようにしたい
+                              <select id="theday" class="form-control" name="theday">
+                              </select>
                         </div>
                         <div class="form-group">
                               {!! Form::file('image') !!}

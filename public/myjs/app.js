@@ -1,10 +1,19 @@
 //////////  アバター変更時
 $(function(){
+    if($('#menuavatarBeforeChangeArea').length){
+        $menuABC = $('#menuavatarBeforeChangeArea');
+        $menuABC.css('height',$menuABC.css('width'));
+        $menuABC.css({'background-position':'center',
+                  'background-repeat':'no-repeat',
+                  'background-size':'cover'
+            });
+    }
+    if($('#avatarBeforeChangeArea').length && $('#avatarAfterChangeArea').length){
     $ABC = $('#avatarBeforeChangeArea');
     $AAC = $('#avatarAfterChangeArea');
-    $menuABC = $('#menuavatarBeforeChangeArea');
+    //$menuABC = $('#menuavatarBeforeChangeArea');
     $ABC.css('height',$ABC.css('width'));
-    $menuABC.css('height',$menuABC.css('width'));
+    //$menuABC.css('height',$menuABC.css('width'));
     $ABC.css({'background-position':'center',
               'background-repeat':'no-repeat',
               'background-size':'cover'
@@ -14,10 +23,10 @@ $(function(){
               'background-repeat':'no-repeat',
               'background-size':'cover'
         });
-    $menuABC.css({'background-position':'center',
-              'background-repeat':'no-repeat',
-              'background-size':'cover'
-        });
+    //$menuABC.css({'background-position':'center',
+    //          'background-repeat':'no-repeat',
+    //          'background-size':'cover'
+    //    });
 $('#avatarForm').on('change', 'input[type="file"]', function(e) {
             var file = e.target.files[0],
                 reader = new FileReader(),
@@ -41,7 +50,7 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
 
             reader.readAsDataURL(file);
           });
-});
+}});
 ////////////////////////////////////////////////////////////////////////
 /////////////// グーグルマップの初期設定
 /*
@@ -125,6 +134,7 @@ $(function(){
 /////////////////////////////////////////////////////////////////////////////////////////
 /////生年月日のうるう年設定
 $(function(){
+    if($('#monthSelectBox').length && $('#daySelectBox').length && $('#yearSelectBox').length){
     var $month = $('#monthSelectBox');
    var $day = $('#daySelectBox');
    var $year = $('#yearSelectBox');
@@ -163,10 +173,11 @@ $(function(){
                }
        }});
    }
-});
+}});
 ///////////////////////////////////////////////////
 /////////都道府県セレクトボックス
 $(function(){
+  if($('#cityselect').length && $('#prefselect').length){
 var $city = $('#cityselect'); //都道府県の要素を変数に入れます。
 var original = $city.html(); //後のイベントで、不要なoption要素を削除するため、オリジナルをとっておく
 
@@ -195,8 +206,10 @@ $('#prefselect').change(function() {
   }
 
 });
-});
+}});
+//////////////////////////////////////////////////////////////////////////////
 $(function(){
+  if($('.datepicker').length && $('#firstday').length && $('#lastday').length){
     //$('.class-sunday').css('color','red !important');
     //$('.class-saturday').css('color','blue !important');
     $('.datepicker').datepicker({
@@ -212,4 +225,5 @@ $(function(){
     });
     //$('.class-sunday').css('color','red');
     $('.class-saturday').css('color','blue');
-});
+}});
+////////////////////////////////////////////////////////////////////////////////////////
