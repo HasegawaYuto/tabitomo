@@ -138,33 +138,51 @@ class PageController extends Controller
 ///////////////////////////////////////////////////////////////
 
     public function showUserMessages($id){
-      return view('bodys.user_menu.messages',['id'=>$id,]);
+      $user = Profile::where('user_id',$id)->first();
+      $data['user']=$user;
+      $data['id']=$id;
+      return view('bodys.user_menu.messages',$data);
     }
     public function showUserItems($id){
-      return view('bodys.user_menu.items',['id'=>$id,]);
+      $user = Profile::where('user_id',$id)->first();
+      $data['user']=$user;
+      $data['id']=$id;
+      return view('bodys.user_menu.items',$data);
     }
     public function showUserFavorites($id){
-      return view('bodys.user_menu.favorites',['id'=>$id,]);
+      $user = Profile::where('user_id',$id)->first();
+      $data['user']=$user;
+      $data['id']=$id;
+      return view('bodys.user_menu.favorites',$data);
     }
     public function showUserMatching($id){
-      return view('bodys.user_menu.matching',['id'=>$id,]);
+      $user = Profile::where('user_id',$id)->first();
+      $data['user']=$user;
+      $data['id']=$id;
+      return view('bodys.user_menu.matching',$data);
     }
 
     public function createItems(Request $request,$id){
+      $user = Profile::where('user_id',$id)->first();
+      $data['user']=$user;
+      $data['id']=$id;
       if(\Input::get('fin')){
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
           //return redirect()->back();
-          $scene_id = $request->scene_id+1;
-          return view('bodys.user_menu.items',[
-                'id'=>$id,
-                'activetab'=>'2',
-                'title_id'=>$request->title_id,
-                'scene_id'=>$scene_id]);
+          //$scene_id = $request->scene_id+1;
+          $data['activetab'] = '2';
+          $data['title_id'] = $request->title_id;
+          $data['scene_id'] = $request->scene_id+1;
+          return view('bodys.user_menu.items',$data);
           //return redirect()->back()->withInput($data);
       }
     }
     public function showTitle($id,$title_id){
-      return view('bodys.user_menu.show_title',['id'=>$id,'title_id'=>$title_id]);
+      $user = Profile::where('user_id',$id)->first();
+      $data['user']=$user;
+      $data['id']=$id;
+      $data['title_id']=$title_id;
+      return view('bodys.user_menu.show_title',$data);
     }
 }

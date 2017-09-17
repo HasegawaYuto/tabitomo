@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row">
-    @include('bodys.user_menu.contents_menu',['id'=>$id])
+    @include('bodys.user_menu.contents_menu',['user'=>$user])
     <div class="col-xs-6">
         <div class="panel panel-info">
             <div class="panel-heading text-center">

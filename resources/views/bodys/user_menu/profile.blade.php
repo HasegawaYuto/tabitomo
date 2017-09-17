@@ -69,6 +69,7 @@
                 }
             ?>
             {{isset($user->birthday) ? $age . '歳' : '未設定'}}</p>
+            <div id="errorcheckdiv"></div>
             <div id="userprofile2" class="collapse text-center">
                 <label class="text-left">生年月日</label><br>
                 {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
@@ -80,7 +81,7 @@
                       <option value="0000" {{ isset($birthdayOfYear) ? '':'selected="selected"'}}>----</option>
                     </select>
                     <label>年</label>
-                    <select name="month"  id="monthSelectBox" class="form-control">
+                    <select name="month" id="monthSelectBox" class="form-control">
                         @for($month=12;$month>=1;$month--)
                             <?php
                               $month0 = str_pad($month, 2, 0, STR_PAD_LEFT);
@@ -131,7 +132,7 @@
                   {!! Form::open(['route'=>['edit_user_profile',$id]])!!}
                   <div class="form-group form-inline">
                       {!! Form::select('pref_id',$prefs,old('pref_id'),['class'=>'form-control','id'=>'prefselect']) !!}
-                      <select id="cityselect" class="form-control" name="city_id">
+                      <select id="cityselect" class="form-control" name="city_id" disabled>
                           <option data-val="00000" value="00000" >--市町村--</option>
                           @foreach($locations as $location)
                           <option data-val="{{$location->pref_id}}" value="{{$location->city_id}}" >{{$location->city_name}}</option>
@@ -145,7 +146,48 @@
           </tr>
         </table>
         @else
-          その他のユーザー
+        <table class="table table-striped">
+          <tr>
+            <td class="text-center">
+                <div class="row">
+                <div class="col-xs-offset-1 col-xs-4"  id="avatarBeforeChange">
+                    <div id="avatarBeforeChangeArea" class="img-circle" style="background-image:{{$url}};">
+                    </div>
+                </div>
+                <div class="col-xs-offset-2 col-xs-4">
+                    <div id="avatarAfterChangeArea" class="img-circle">
+                    </div>
+                </div>
+                </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left"><p><b>ニックネーム</b></p>
+              <p class="text-center">{{$user->nickname or '未設定'}}</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left"><p><b>年齢</b></p>
+            <p class="text-center">
+            <?php
+                if(isset($user->birthday)){
+                    $age = Carbon\Carbon::parse($user->birthday)->age;
+                }
+            ?>
+            {{isset($user->birthday) ? $age . '歳' : '未設定'}}</p>
+          </td>
+          </tr>
+          <tr>
+            <td class="text-left"><p><b>性別</b></p>
+            <p class="text-center">{{$user->sex or '未設定'}}</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left"><p><b>エリア</b></p>
+            <p class="text-center">{{$user->area or '未設定'}}</p>
+            </td>
+          </tr>
+        </table>
         @endif
       </div>
     </div>

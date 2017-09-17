@@ -91,9 +91,9 @@ class UserOptionController extends Controller
         if(\Input::get('nickname')){
             $profile['nickname']=$request->nickname;
         }
-        $setcheck = \Input::get('year') && \Input::get('month') && \Input::get('day');
-        $valcheck = $request->year != "0000" && $request->month != "00" && $request->day != "00";
-        if($setcheck && $valcheck){
+        $BDsetcheck = \Input::get('year') && \Input::get('month') && \Input::get('day');
+        $BDvalcheck = $request->year != "0000" && $request->month != "00" && $request->day != "00";
+        if($BDsetcheck && $BDvalcheck){
             $birthday = $request->year . '-' . $request->month . '-' . $request->day;
             $profile['birthday']=$birthday;
             //$carbonForAge = Carbon::parse($birthday);
@@ -102,7 +102,9 @@ class UserOptionController extends Controller
         if(\Input::get('sex')){
             $profile['sex']=$request->sex;
         }
-        if(\Input::get('pref_id') && \Input::get('city_id')){
+        $Areasetcheck = \Input::get('pref_id') && \Input::get('city_id');
+        $Areavalcheck = \Input::get('pref_id') != "00" && \Input::get('city_id') != "00000";
+        if($Areasetcheck && $Areavalcheck){
             $pref = Pref::where('pref_id',$request->pref_id)->first();
             $city = Location::where('city_id',$request->city_id)->first();
             $profile['area']=$pref->pref_name . $city->city_name;
