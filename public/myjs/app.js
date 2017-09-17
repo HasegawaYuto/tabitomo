@@ -215,15 +215,49 @@ $(function(){
     $('.datepicker').datepicker({
         format: "yyyy年mm月dd日",
         language: "ja",
+        daysOfWeekHighlighted: "0,6"
         }
     );
     var $FD = $('#firstday');
     var $LD = $('#lastday');
     $FD.change(function(){
-        var theday = $FD.val();
-        $LD.attr('value',theday);
+        //var theday = $FD.val();
+        $LD.val($FD.datepicker('getFormattedDate'));
     });
     //$('.class-sunday').css('color','red');
     $('.class-saturday').css('color','blue');
 }});
 ////////////////////////////////////////////////////////////////////////////////////////
+$(function(){
+    if($('#theday').length){
+        $('#firstday').change(selectTheDateSet);
+        $('#lastday').change(selectTheDateSet);
+/////////////////////////////////////
+        function selectTheDateSet(){
+            var $firstday = $('#firstday').val();
+            var $lastday = $('#lastday').val();
+            var $firstdayParse = dateToParse($firstday);
+            var $lastdayParse = dateToParse($lastday);
+            var $difference = ($lastdayParse - $firstdayParse)/1000/60/60/24;
+            var $oneday = 1000*60*60*24;
+            $('#theday').empty();
+            for($d=0;$d<=$difference;$d++){
+                var $optionday = new Date($firstdayParse + ($oneday * $d));
+                var $optionYear = $optionday.getFullYear();
+                var $optionMonth = $optionday.getMonth() + 1;
+                var $optionDay = $optionday.getDate();
+                $('#theday').append('<option value="'+$optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2)+'">'+$optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日'+'</option>');
+            }
+            //$('#theday').append('<option value="01" data-val="01">'+$lastdayParse+'</option>');
+            //$('#theday').append('<option value="01" data-val="01">'+$d+'</option>');
+        }
+//////////////////////////////////////////////////////////////////
+        function dateToParse(date){
+            date=date.replace('月','/');
+            date=date.replace('年','/');
+            date=date.replace('日','');
+            date=Date.parse(date);
+            return date;
+        }
+    }
+});

@@ -65,7 +65,7 @@
                         <div class="form-group form-inline">
                               {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday','style'=>'width:40%;']) !!}
                               <label>～</label>
-                              {!! Form::text('lastday',null,['class'=>'form-control datepicker','id'=>'lastday','style'=>'width:40%;']) !!}
+                              {!! Form::text('lastday',$today,['class'=>'form-control datepicker','id'=>'lastday','style'=>'width:40%;']) !!}
                         </div>
                         <div class="form-group">
                               {!! Form::label('scene','シーン') !!}
@@ -73,7 +73,7 @@
                         </div>
                         <div class="form-group">
                               {!! Form::label('date','日付') !!}
-                              <select id="theday" class="form-control" name="theday">
+                              <select id="theday" class="form-control" name="theday" style="width:40%;">
                               </select>
                         </div>
                         <div class="form-group">
