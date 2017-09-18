@@ -94,10 +94,13 @@ class PageController extends Controller
     }
 
     public function newProfileCreate(){
-        $profile =  new Profile;
-        $profile->user_id = \Auth::user()->id;
-        $profile->save();
-
+        $user_id = \Auth::user()->id;
+        $profile = Profile::where('user_id',$user_id)->first();
+        if(!$profile){
+            $profile =  new Profile;
+            $profile->user_id = $user_id;
+            $profile->save();
+        }
         return redirect('/');
     }
 

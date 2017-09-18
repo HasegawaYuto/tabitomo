@@ -51,7 +51,7 @@
             <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}}" id="tab1-2">
                 <div class="panel panel-body">
                     <div class="col-xs-12">
-                        {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>true]) !!}
+                        {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>'true','id'=>'myLogForm']) !!}
                         {!! Form::hidden('title_id',$title_id) !!}
                         {!! Form::hidden('scene_id',$scene_id) !!}
                         <div class="form-group">
@@ -74,11 +74,17 @@
                         <div class="form-group">
                               {!! Form::label('date','日付') !!}
                               <select id="theday" class="form-control" name="theday" style="width:40%;">
+                                  <option value="{{$today}}">{{$today}}</option>
                               </select>
                         </div>
                         <div class="form-group">
-                              {!! Form::file('image') !!}
+                              {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*']) !!}
                         </div>
+                        <div id="imageThumbnailField" class="col-xs-12">
+                        </div>
+                        <a id="filecheck">
+                          aaaaaaaaaaa
+                        </a>
                         <div class="form-group">
                               {!! Form::label('comment','コメント') !!}
                               {!! Form::textarea('comment',null,['class'=>"form-control",'placeholder'=>"ひとこと",'rows'=>'3']) !!}

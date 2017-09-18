@@ -31,19 +31,13 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
             var file = e.target.files[0],
                 reader = new FileReader(),
                 $preview = $("#avatarAfterChangeArea");
-                t = this;
-
-            // 画像ファイル以外の場合は何もしない
+                //t = this;
             if(file.type.indexOf("image") < 0){
               return false;
             }
-
-            // ファイル読み込みが完了した際のイベント登録
             reader.onload = (function(file) {
               return function(e) {
-                //既存のプレビューを削除
                 $preview.empty();
-                // .prevewの領域の中にロードした画像を表示するimageタグを追加
                 $preview.css('background-image','url("' + e.target.result + '")')
               };
             })(file);
@@ -212,10 +206,18 @@ $(function(){
   if($('.datepicker').length && $('#firstday').length && $('#lastday').length){
     //$('.class-sunday').css('color','red !important');
     //$('.class-saturday').css('color','blue !important');
-    $('.datepicker').datepicker({
+    $('#firstday').datepicker({
         format: "yyyy年mm月dd日",
         language: "ja",
-        daysOfWeekHighlighted: "0,6"
+        daysOfWeekHighlighted: "0,6",
+        useCurrent: false
+        }
+    );
+    $('#lastday').datepicker({
+        format: "yyyy年mm月dd日",
+        language: "ja",
+        daysOfWeekHighlighted: "0,6",
+        useCurrent: false
         }
     );
     var $FD = $('#firstday');
@@ -223,6 +225,7 @@ $(function(){
     $FD.change(function(){
         //var theday = $FD.val();
         $LD.val($FD.datepicker('getFormattedDate'));
+        $LD.datepicker('update');
     });
     //$('.class-sunday').css('color','red');
     $('.class-saturday').css('color','blue');
@@ -259,5 +262,99 @@ $(function(){
             date=Date.parse(date);
             return date;
         }
+    }
+});
+/////////////////////////////////////////////////////////////////////////////////////
+$(function(){
+    thumbF = $('#imageThumbnailField');
+    if(thumbF.length && $('#myLogForm').length){
+        //thumbF.css('height','400px');
+        $('#myLogForm').on('change', 'input[type="file"]', function(event) {
+            thumbF.css('background-color','silver');
+            thumbF.empty();
+            //$('#filecheck').append($('<img class="img-responsive" />').attr('src', e.target.result));
+            var files = event.target.files;
+
+            for($i=0;$i<files.length;$i++){
+                thumbF.append('<div class="col-xs-6" style="background-color:blue;height:200px;padding:20px;"></div>');
+            }
+            $('#imageThumbnailField div').each(function(divcnt){
+                $(this).attr('id','photo' + divcnt);
+            });
+
+
+            for (var i = 0, f; f = files[i]; i++) {
+            //for (var i = 0; i<files.length; i++) {
+            //  var f = files[i];
+              $('#filecheck').append(i);
+              //windows.alert(toString(i));
+                var reader = new FileReader;
+                //var thefile = files[i];
+                //reader.readAsDataURL(f);
+                reader.onload = (function(){
+                    return function(e){
+                        //if(i % 2 == 0){
+                        //      //thumbF.append('<div class="row">');
+                        //      thumbF.append('<div class="col-xs-6" id="photo'+ i +'" //style="background-color:blue;height:400px;padding:20px;"></div>');
+                        //}else{
+                        //      thumbF.append('<div class="col-xs-6" id="photo'+ i +'" //style="background-color:red;height:400px;padding:20px;"></div>');
+                        //}
+                        $('#photo'+ i).append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:20px;" />');
+                        //if(i % 2 == 1){
+                        //      thumbF.append('</div>');
+                        //}
+                    }
+                })(f);//showPhotoInField(f);
+                reader.readAsDataURL(f);
+            }
+
+            //function showPhotoInField(f){
+            //        if(i % 2 == 0){
+            //            thumbF.append('<div class="row">');
+            //            thumbF.append('<div class="col-xs-6" id="photo'+i+'" style="background-color:blue;"></div>');
+            //        }else{
+            //        thumbF.append('<div class="col-xs-6" id="photo'+i+'"></div>');
+            //        }
+            //        $('#photo'+i).append($('<img class="img-responsive" />').attr('src', f.target.result));
+            //        if(i % 2 == 1){
+            //            thumbF.append('</div>');
+            //        }
+            //    }
+                //reader.onload = (function(theFile) {
+                    //return function (e) {
+                      //if(i % 2 == 0){
+                      //    thumbF.append('<div class="row">');
+                      //    thumbF.append('<div class="col-xs-6" id="photo'+i+'" style="background-color:blue;"></div>');
+                      //}else{
+                      //thumbF.append('<div class="col-xs-6" id="photo'+i+'"></div>');
+                      //}
+                      //$('#photo'+i).append($('<img class="img-responsive" />').attr('src', e.target.result));
+                      //if(i % 2 == 1){
+                      //    thumbF.append('</div>');
+                      //}
+                        //var div = document.createElement('div');
+                        //div.className = 'reader_file';
+                        //div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
+                        //div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" />';
+                        //document.getElementById('list').insertBefore(div, null);
+                  //  }
+                //})(f);
+            //}
+
+            //thumbF.append('<div class="col-xs-12" style="background-color:red;" id="photo'+$idnum+'">');
+                    //$('#imageThumbnailField > div').html('hogehogehoge');
+            //thumbF.append('</div>');
+                    //$('#imageThumbnailField > div')
+            //$('#photo'+$idnum).append($('<img class="img-responsive" />').attr('src', this.result));
+            //};
+                // ファイル名表示
+                //$('div#file_list').append($(this)[0].name+'<br />');
+            //thumbF.append('<div class="col-xs-12" style="background-color:red;" id="photo1">');
+            //$('#imageThumbnailField > div').html('hogehogehoge');
+            //thumbF.append('</div>');
+          //});
+        });
+        //thumbF.css('background-color','silver');
+        //thumbF.css('height','400px');
     }
 });
