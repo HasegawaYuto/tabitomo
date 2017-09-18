@@ -272,82 +272,18 @@ $(function(){
         $('#myLogForm').on('change', 'input[type="file"]', function(event) {
             thumbF.css('background-color','silver');
             thumbF.empty();
-            //$('#filecheck').append($('<img class="img-responsive" />').attr('src', e.target.result));
             var files = event.target.files;
-
-            //for($i=0;$i<files[].length;$i++){
-            //    thumbF.append('<div class="col-xs-6" style="background-color:blue;height:200px;padding:20px;"></div>');
-            //}
-            //$('#imageThumbnailField > div').each(function(divcnt){
-            //    $(this).attr('id','photo' + divcnt);
-            //});
             for (var i = 0, f; f = files[i]; i++) {
-              $('#filecheck').append(i);
                 var reader = new FileReader;
                 reader.onload = (function(){
                     return function(e){
-                        if(i % 2 == 0){
-                              //thumbF.append('<div class="row">');
-                              thumbF.append('<div class="col-xs-6" id="photo'+ i +'" style="background-color:blue;height:400px;padding:20px;"></div>');
-                        }else{
-                              thumbF.append('<div class="col-xs-6" id="photo'+ i +'" style="background-color:red;height:400px;padding:20px;"></div>');
-                        }
-                        $('#photo'+ i).append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:20px;" />');
-                        //if(i % 2 == 1){
-                        //      thumbF.append('</div>');
-                        //}
+                        var imageAppend = $('<div class="col-xs-6" />').append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:10px;" />');
+                        thumbF.append(imageAppend);
+                        //$('#photo'+ i).append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:10px;" />');
                     }
-                })(f);//showPhotoInField(f);
+                })(f);
                 reader.readAsDataURL(f);
             }
-
-            //function showPhotoInField(f){
-            //        if(i % 2 == 0){
-            //            thumbF.append('<div class="row">');
-            //            thumbF.append('<div class="col-xs-6" id="photo'+i+'" style="background-color:blue;"></div>');
-            //        }else{
-            //        thumbF.append('<div class="col-xs-6" id="photo'+i+'"></div>');
-            //        }
-            //        $('#photo'+i).append($('<img class="img-responsive" />').attr('src', f.target.result));
-            //        if(i % 2 == 1){
-            //            thumbF.append('</div>');
-            //        }
-            //    }
-                //reader.onload = (function(theFile) {
-                    //return function (e) {
-                      //if(i % 2 == 0){
-                      //    thumbF.append('<div class="row">');
-                      //    thumbF.append('<div class="col-xs-6" id="photo'+i+'" style="background-color:blue;"></div>');
-                      //}else{
-                      //thumbF.append('<div class="col-xs-6" id="photo'+i+'"></div>');
-                      //}
-                      //$('#photo'+i).append($('<img class="img-responsive" />').attr('src', e.target.result));
-                      //if(i % 2 == 1){
-                      //    thumbF.append('</div>');
-                      //}
-                        //var div = document.createElement('div');
-                        //div.className = 'reader_file';
-                        //div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
-                        //div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" />';
-                        //document.getElementById('list').insertBefore(div, null);
-                  //  }
-                //})(f);
-            //}
-
-            //thumbF.append('<div class="col-xs-12" style="background-color:red;" id="photo'+$idnum+'">');
-                    //$('#imageThumbnailField > div').html('hogehogehoge');
-            //thumbF.append('</div>');
-                    //$('#imageThumbnailField > div')
-            //$('#photo'+$idnum).append($('<img class="img-responsive" />').attr('src', this.result));
-            //};
-                // ファイル名表示
-                //$('div#file_list').append($(this)[0].name+'<br />');
-            //thumbF.append('<div class="col-xs-12" style="background-color:red;" id="photo1">');
-            //$('#imageThumbnailField > div').html('hogehogehoge');
-            //thumbF.append('</div>');
-          //});
         });
-        //thumbF.css('background-color','silver');
-        //thumbF.css('height','400px');
     }
 });

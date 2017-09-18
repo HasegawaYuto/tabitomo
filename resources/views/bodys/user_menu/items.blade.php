@@ -82,9 +82,6 @@
                         </div>
                         <div id="imageThumbnailField" class="col-xs-12">
                         </div>
-                        <a id="filecheck">
-                          aaaaaaaaaaa
-                        </a>
                         <div class="form-group">
                               {!! Form::label('comment','コメント') !!}
                               {!! Form::textarea('comment',null,['class'=>"form-control",'placeholder'=>"ひとこと",'rows'=>'3']) !!}
