@@ -275,30 +275,23 @@ $(function(){
             //$('#filecheck').append($('<img class="img-responsive" />').attr('src', e.target.result));
             var files = event.target.files;
 
-            for($i=0;$i<files.length;$i++){
-                thumbF.append('<div class="col-xs-6" style="background-color:blue;height:200px;padding:20px;"></div>');
-            }
-            $('#imageThumbnailField div').each(function(divcnt){
-                $(this).attr('id','photo' + divcnt);
-            });
-
-
+            //for($i=0;$i<files[].length;$i++){
+            //    thumbF.append('<div class="col-xs-6" style="background-color:blue;height:200px;padding:20px;"></div>');
+            //}
+            //$('#imageThumbnailField > div').each(function(divcnt){
+            //    $(this).attr('id','photo' + divcnt);
+            //});
             for (var i = 0, f; f = files[i]; i++) {
-            //for (var i = 0; i<files.length; i++) {
-            //  var f = files[i];
               $('#filecheck').append(i);
-              //windows.alert(toString(i));
                 var reader = new FileReader;
-                //var thefile = files[i];
-                //reader.readAsDataURL(f);
                 reader.onload = (function(){
                     return function(e){
-                        //if(i % 2 == 0){
-                        //      //thumbF.append('<div class="row">');
-                        //      thumbF.append('<div class="col-xs-6" id="photo'+ i +'" //style="background-color:blue;height:400px;padding:20px;"></div>');
-                        //}else{
-                        //      thumbF.append('<div class="col-xs-6" id="photo'+ i +'" //style="background-color:red;height:400px;padding:20px;"></div>');
-                        //}
+                        if(i % 2 == 0){
+                              //thumbF.append('<div class="row">');
+                              thumbF.append('<div class="col-xs-6" id="photo'+ i +'" style="background-color:blue;height:400px;padding:20px;"></div>');
+                        }else{
+                              thumbF.append('<div class="col-xs-6" id="photo'+ i +'" style="background-color:red;height:400px;padding:20px;"></div>');
+                        }
                         $('#photo'+ i).append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:20px;" />');
                         //if(i % 2 == 1){
                         //      thumbF.append('</div>');
