@@ -28,7 +28,9 @@ class CreateMylogsTable extends Migration
             $table->string('lastday')->nullable();
             $table->string('scene_id')->nullable();
             $table->string('scene')->nullable();
+            $table->string('publish')->nullable();
             $table->string('theday')->nullable();
+            $table->integer('score')->nullable();
             $table->text('comment')->nullable();
             $table->string('mime')->nullable();
             $table->binary('data')->nullable();

@@ -37,6 +37,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('matching','PageController@showUserMatching')->name('show_user_matching');
         Route::get('mylog','PageController@showUserItems')->name('show_user_items');
         Route::post('mylog/creating','PageController@createItems')->name('create_items');
-        Route::get('mylog/{title_id}','PageController@showTitle')->name('show_title');
+        Route::get('mylog/title/{title_id}','PageController@showTitle')->name('show_title');
       });
 });

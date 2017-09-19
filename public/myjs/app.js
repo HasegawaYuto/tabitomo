@@ -2,7 +2,7 @@
 $(function(){
     if($('#menuavatarBeforeChangeArea').length){
         $menuABC = $('#menuavatarBeforeChangeArea');
-        $menuABC.css('height',$menuABC.css('width'));
+        $menuABC.css('height',$menuABC.width());
         $menuABC.css({'background-position':'center',
                   'background-repeat':'no-repeat',
                   'background-size':'cover'
@@ -12,13 +12,13 @@ $(function(){
     $ABC = $('#avatarBeforeChangeArea');
     $AAC = $('#avatarAfterChangeArea');
     //$menuABC = $('#menuavatarBeforeChangeArea');
-    $ABC.css('height',$ABC.css('width'));
+    $ABC.css('height',$ABC.width());
     //$menuABC.css('height',$menuABC.css('width'));
     $ABC.css({'background-position':'center',
               'background-repeat':'no-repeat',
               'background-size':'cover'
         });
-    $AAC.css('height',$ABC.css('width'));
+    $AAC.css('height',$ABC.width());
     $AAC.css({'background-position':'center',
               'background-repeat':'no-repeat',
               'background-size':'cover'
@@ -47,6 +47,15 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
 }});
 ////////////////////////////////////////////////////////////////////////
 /////////////// グーグルマップの初期設定
+$(function(){
+    if($('.normalMap').length){
+        $normalMap = $('.normalMap');
+        $normalMap.css('height',$normalMap.width()*0.5);
+        //$normalMap.css('height','500px');
+        $normalMap.css('background-color','grey');
+        $normalMap.html($normalMap.width()+'and'+$normalMap.height());
+    }
+});
 /*
 $(function(){
     $mapSetAreaHeight = $('#mapSetArea').width()  ;
@@ -233,6 +242,7 @@ $(function(){
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function(){
     if($('#theday').length){
+        selectTheDateSet();
         $('#firstday').change(selectTheDateSet);
         $('#lastday').change(selectTheDateSet);
 /////////////////////////////////////
@@ -290,7 +300,7 @@ $(function(){
 ////////////////////////////////////////////////////////////////////
 $(function(){
     if($('#ratefield').length){
-        $.fn.raty.defaults.path = "../images";
+        $.fn.raty.defaults.path = "/raty/lib/images";
         rateF = $('#ratefield');
         rateF.raty();
     }

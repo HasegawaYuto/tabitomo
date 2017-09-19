@@ -54,19 +54,38 @@
                         {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>'true','id'=>'myLogForm']) !!}
                         {!! Form::hidden('title_id',$title_id) !!}
                         {!! Form::hidden('scene_id',$scene_id) !!}
+                        {{ Form::hidden('title_id',$title_id) }}
+                        {{ Form::hidden('scene_id',$scene_id) }}
+                        @if($scene_id==1)
                         <div class="form-group">
                               {!! Form::label('title','タイトル') !!}
                               {!! Form::text('title',null,['class'=>'form-control','placeholder'=>'例〇〇山への旅20XX春']) !!}
                         </div>
+                        @else
+                        <div class="form-group">
+                        <label>タイトル</label>
+                        <p>{{$title or 'No Title'}}</p>
+                        {!! Form::hidden('title',$title) !!}
+                        </div>
+                        @endif
                         <?php
                               $today = Carbon\Carbon::now()->format('Y年m月d日');
                         ?>
+                        @if($scene_id==1)
                         <label>期間</label>
                         <div class="form-group form-inline">
                               {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday','style'=>'width:40%;']) !!}
                               <label>～</label>
                               {!! Form::text('lastday',$today,['class'=>'form-control datepicker','id'=>'lastday','style'=>'width:40%;']) !!}
                         </div>
+                        @else
+                        <div class="form-group form-inline">
+                        <label>期間</label>
+                        <p>{{$firstday or 'UnSettingFirstday'}}～{{$lastday or 'UnSettingLastday'}}</p>
+                        {!! Form::hidden('firstday', $firstday, ['id' => 'firstday']) !!}
+                        {!! Form::hidden('lastday', $lastday, ['id' => 'lastday']) !!}
+                        </div>
+                        @endif
                         <div class="form-group">
                               {!! Form::label('scene','シーン') !!}
                               {!! Form::text('scene',null,['class'=>'form-control','placeholder'=>'例〇〇旅館の夕食']) !!}
@@ -77,12 +96,23 @@
                                   <option value="{{$today}}">{{$today}}</option>
                               </select>
                         </div>
+                        <div class="form-group form-inline">
+                              {!! Form::label('publish','公開設定') !!}
+                              {!! Form::radio('publish','public',true) !!}
+                              <label>公開</label>
+                              {!! Form::radio('publish','private') !!}
+                              <label>非公開</label>
+                        </div>
                         <div class="form-group">
                               {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*']) !!}
                         </div>
                         <div id="imageThumbnailField" class="col-xs-12">
                         </div>
+                        <label>スポット</label>
+                        <div class="normalMap col-xs-12" id="photoSpotSet">
+                        </div>
                         <div class="form-group">
+                          <label>おすすめ度</label>
                           <div id="ratefield">
                           </div>
                         </div>

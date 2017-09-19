@@ -176,7 +176,10 @@ class PageController extends Controller
           //$scene_id = $request->scene_id+1;
           $data['activetab'] = '2';
           $data['title_id'] = $request->title_id;
+          $data['title'] = $request->title;
           $data['scene_id'] = $request->scene_id+1;
+          $data['firstday'] = $request->firstday;
+          $data['lastday'] = $request->lastday;
           return view('bodys.user_menu.items',$data);
           //return redirect()->back()->withInput($data);
       }
