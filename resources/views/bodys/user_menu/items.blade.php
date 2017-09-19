@@ -83,6 +83,10 @@
                         <div id="imageThumbnailField" class="col-xs-12">
                         </div>
                         <div class="form-group">
+                          <div id="ratefield">
+                          </div>
+                        </div>
+                        <div class="form-group">
                               {!! Form::label('comment','コメント') !!}
                               {!! Form::textarea('comment',null,['class'=>"form-control",'placeholder'=>"ひとこと",'rows'=>'3']) !!}
                         </div>

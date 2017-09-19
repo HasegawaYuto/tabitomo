@@ -24,6 +24,9 @@
 <!--
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 -->
+        <link rel="stylesheet" href="{{asset('raty/lib/jquery.raty.css')}}">
+        <script src="{{asset('raty/lib/jquery.raty.js')}}"></script>
+
         <script src="{{asset('myjs/app.js')}}"></script>
 
     </head>

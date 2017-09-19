@@ -277,7 +277,7 @@ $(function(){
                 var reader = new FileReader;
                 reader.onload = (function(){
                     return function(e){
-                        var imageAppend = $('<div class="col-xs-6" />').append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:10px;" />');
+                        var imageAppend = $('<div class="col-xs-6" />').append('<img class="img-responsive" src="'+ e.target.result +'" style="margin-top:10px;margin-bottom:10px;" />');
                         thumbF.append(imageAppend);
                         //$('#photo'+ i).append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:10px;" />');
                     }
@@ -285,5 +285,12 @@ $(function(){
                 reader.readAsDataURL(f);
             }
         });
+    }
+});
+////////////////////////////////////////////////////////////////////
+$(function(){
+    if($('#ratefield').length){
+        rateF = $('#ratefield');
+        rateF.raty();
     }
 });
