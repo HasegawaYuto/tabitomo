@@ -290,6 +290,7 @@ $(function(){
 ////////////////////////////////////////////////////////////////////
 $(function(){
     if($('#ratefield').length){
+        $.fn.raty.defaults.path = "../images";
         rateF = $('#ratefield');
         rateF.raty();
     }
