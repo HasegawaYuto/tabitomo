@@ -19,7 +19,7 @@
                 マイログ
             </div>
             @if($id == Auth::user()->id)
-                <ul class="nav nav-tabs nav-justified">
+                <ul class="nav nav-tabs nav-justified" id="logtabs">
                     <li class="{{ $activetab == '1' ? 'active' : ''}}"><a href="#tab1-1" data-toggle="tab">一覧</a></li>
                     <li class="{{ $activetab == '2' ? 'active' : ''}}"><a href="#tab1-2" data-toggle="tab">アップロード</a></li>
                 </ul>
@@ -111,7 +111,7 @@
                             <label>スポット</label>
                             {!! Form::text('spot',null,['class'=>'form-control','id'=>'photoSpot']) !!}
                             <!--div class="row"-->
-                              <div class="col-xs-12" id="photoSpotSetArea">
+                              <div id="photoSpotSetArea" class="col-xs-12">
                                   {!! Form::hidden('spotNS', null, ['id' => 'ido']) !!}
                                   {!! Form::hidden('spotEW', null, ['id' => 'keido']) !!}
                               </div>

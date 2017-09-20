@@ -60,9 +60,9 @@ $(function(){
         mapInit();
 ///////////////////////////
         function mapInit() {//
-        var centerPosition = {lat: 36, lng: 135};//new google.maps.LatLng(36, 135);
+        var centerPosition = {lat: 36, lng: 136};//new google.maps.LatLng(36, 135);
         var option = {//
-            zoom : 7,//
+            zoom : 5,//
             center : centerPosition,//
             mapTypeId: google.maps.MapTypeId.ROADMAP,//
             //mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
@@ -94,7 +94,15 @@ $(function(){
 	            google.maps.event.trigger(googlemap, "resize");
 	             googlemap.setCenter(center);
           });
+        $('#logtabs a').on('shown.bs.tab', function(){
+              var center = marker.getPosition();//
+	            google.maps.event.trigger(googlemap, 'resize');
+              //var center = marker.getPosition();//
+              googlemap.setCenter(center);
+	            //return false;
+          });
     }
+
         //mapInit();
     }
 });
