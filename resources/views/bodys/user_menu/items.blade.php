@@ -10,6 +10,7 @@
 @if(!isset($activetab))
     <?php $activetab='1'; ?>
 @endif
+<div class="container">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
     <div class="col-md-6">
@@ -48,43 +49,41 @@
             </div>
             @if($id == Auth::user()->id)
           </div>
-            <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}}" id="tab1-2">
+            <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}} col-xs-12" id="tab1-2">
                 <div class="panel panel-body">
                     <div class="col-xs-12">
                         {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>'true','id'=>'myLogForm']) !!}
                         {!! Form::hidden('title_id',$title_id) !!}
                         {!! Form::hidden('scene_id',$scene_id) !!}
-                        {{ Form::hidden('title_id',$title_id) }}
-                        {{ Form::hidden('scene_id',$scene_id) }}
                         @if($scene_id==1)
-                        <div class="form-group">
-                              {!! Form::label('title','タイトル') !!}
-                              {!! Form::text('title',null,['class'=>'form-control','placeholder'=>'例〇〇山への旅20XX春']) !!}
-                        </div>
+                            <div class="form-group">
+                                  {!! Form::label('title','タイトル') !!}
+                                  {!! Form::text('title',null,['class'=>'form-control','placeholder'=>'例〇〇山への旅20XX春']) !!}
+                            </div>
                         @else
-                        <div class="form-group">
-                        <label>タイトル</label>
-                        <p>{{$title or 'No Title'}}</p>
-                        {!! Form::hidden('title',$title) !!}
-                        </div>
+                            <div class="form-group">
+                                <label>タイトル</label>
+                                <p>{{$title or 'No Title'}}</p>
+                                {!! Form::hidden('title',$title) !!}
+                            </div>
                         @endif
                         <?php
                               $today = Carbon\Carbon::now()->format('Y年m月d日');
                         ?>
                         @if($scene_id==1)
-                        <label>期間</label>
-                        <div class="form-group form-inline">
-                              {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday','style'=>'width:40%;']) !!}
-                              <label>～</label>
-                              {!! Form::text('lastday',$today,['class'=>'form-control datepicker','id'=>'lastday','style'=>'width:40%;']) !!}
-                        </div>
+                            <label>期間</label>
+                            <div class="form-group form-inline">
+                                {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday','style'=>'width:40%;']) !!}
+                                <label>～</label>
+                                {!! Form::text('lastday',$today,['class'=>'form-control datepicker','id'=>'lastday','style'=>'width:40%;']) !!}
+                            </div>
                         @else
-                        <div class="form-group form-inline">
-                        <label>期間</label>
-                        <p>{{$firstday or 'UnSettingFirstday'}}～{{$lastday or 'UnSettingLastday'}}</p>
-                        {!! Form::hidden('firstday', $firstday, ['id' => 'firstday']) !!}
-                        {!! Form::hidden('lastday', $lastday, ['id' => 'lastday']) !!}
-                        </div>
+                            <div class="form-group form-inline">
+                                <label>期間</label>
+                                <p>{{$firstday or 'UnSettingFirstday'}}～{{$lastday or 'UnSettingLastday'}}</p>
+                                {!! Form::hidden('firstday', $firstday, ['id' => 'firstday']) !!}
+                                {!! Form::hidden('lastday', $lastday, ['id' => 'lastday']) !!}
+                            </div>
                         @endif
                         <div class="form-group">
                               {!! Form::label('scene','シーン') !!}
@@ -108,15 +107,20 @@
                         </div>
                         <div id="imageThumbnailField" class="col-xs-12">
                         </div>
-                        <div class="form-group">
+                        <!--div class="form-group"-->
                             <label>スポット</label>
-                            <div class="normalMap col-xs-12" id="photoSpotSetArea">
-                            </div>
-                        </div>
+                            {!! Form::text('spot',null,['class'=>'form-control','id'=>'photoSpot']) !!}
+                            <!--div class="row"-->
+                              <div class="col-xs-12" id="photoSpotSetArea">
+                                  {!! Form::hidden('spotNS', null, ['id' => 'ido']) !!}
+                                  {!! Form::hidden('spotEW', null, ['id' => 'keido']) !!}
+                              </div>
+                            <!--/div-->
+                        <!--/div-->
                         <div class="form-group">
-                          <label>おすすめ度</label>
-                          <div id="ratefield">
-                          </div>
+                            <label>おすすめ度</label>
+                            <div id="ratefield">
+                            </div>
                         </div>
                         <div class="form-group">
                               {!! Form::label('comment','コメント') !!}
@@ -125,6 +129,10 @@
                               {!! Form::submit('&nbsp;保存&nbsp;',['class'=>'btn btn-info','name'=>'fin','value'=>'Fin']) !!}
                               {!! Form::submit('続ける',['value'=>'Con','class'=>'btn btn-warning','name'=>'con']) !!}
                         {!! Form::close() !!}
+                        <!--div class="col-xs-12" id="photoSpotSetArea">
+                            {!! Form::hidden('spotNS', null, ['id' => 'ido']) !!}
+                            {!! Form::hidden('spotEW', null, ['id' => 'keido']) !!}
+                        </div-->
                     </div>
                 </div>
             </div>
@@ -132,5 +140,6 @@
         @endif
         </div>
     </div>
+</div>
 </div>
 @endsection

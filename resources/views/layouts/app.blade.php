@@ -13,6 +13,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <!--
+AIzaSyBQb3VgyoduOCh4x0clSJxw8yuzQvd1Zkw
         <script src="https://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript" language="javascript"></script>
         <script src="../common/js/bootstrap.js"></script>
         <link rel="stylesheet" href="../common/css/bootstrap.css">
@@ -21,9 +22,9 @@
         <link rel="stylesheet" type="text/css" href="{{asset('bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}">
         <script type="text/javascript" src="{{asset('bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('bootstrap-datepicker/locales/bootstrap-datepicker.ja.min.js')}}"></script>
-<!--
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
--->
+
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBQb3VgyoduOCh4x0clSJxw8yuzQvd1Zkw"></script>
+
         <link rel="stylesheet" href="{{asset('raty/lib/jquery.raty.css')}}">
         <script src="{{asset('raty/lib/jquery.raty.js')}}"></script>
 

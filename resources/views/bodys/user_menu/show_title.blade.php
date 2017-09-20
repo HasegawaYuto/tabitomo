@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
 <div class="row">
 @include('bodys.user_menu.contents_menu',['user'=>$user])
-<div class="col-xs-9">
+<div class="col-md-9">
     <div class="panel panel-info">
         <div class="panel-heading">
             {!! Link_to_route('show_user_items','マイログ',['id'=>$id]) !!}　≫　{{$title_id}}旅のタイトル&nbsp;&nbsp;<button type="button" class="btn btn-warning btn-xs">編集</button>
@@ -43,6 +44,7 @@
             @endfor
         </div>
     </div>
+</div>
 </div>
 </div>
 @endsection

@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
-    <div class="col-xs-9">
+    <div class="col-md-9">
         <div class="panel panel-info">
             <div class="panel panel-heading text-center">
                 お気に入り
@@ -90,5 +91,6 @@
                 </div>
         </div>
     </div>
+</div>
 </div>
 @endsection

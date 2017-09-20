@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
-    <div class="col-xs-6">
+    <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel-heading text-center">
                 マッチング
@@ -43,6 +44,7 @@
         <div class="in-line" data-date="2010年10月26日"></div>
         <input type="text" id="my_hidden_input">
     </div>
+</div>
 </div>
 
 <script>// detapicker

@@ -1,11 +1,12 @@
 //////////  アバター変更時
 $(function(){
     if($('#menuavatarBeforeChangeArea').length){
+      $menuABC = $('#menuavatarBeforeChangeArea');
       avatarSize();
-      $(window).change(avatarSize());
+      $(window).resize(avatarSize());
       function avatarSize(){
-        $menuABC = $('#menuavatarBeforeChangeArea');
-        $menuABC.css('height',$menuABC.width());
+        //$menuABC = $('#menuavatarBeforeChangeArea');
+        $menuABC.css('height',$('#menuavatarBeforeChange').width()+'px');
         $menuABC.css({'background-position':'center',
                   'background-repeat':'no-repeat',
                   'background-size':'cover'
@@ -53,14 +54,48 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
 /////////////// グーグルマップの初期設定
 $(function(){
     if($('#photoSpotSetArea').length){
-        $normalMap = $('#photoSpotSetArea');
-        $normalMap.html($normalMap.width()+'and'+$normalMap.height());
-        $normalMap.css('width','700px');
-        $normalMap.css('height',$normalMap.width());
-        //$normalMap.css('height',$normalMap.css('width'));
-        //$normalMap.css('height','500px');
-        $normalMap.css('background-color','grey');
-        //$normalMap.html($normalMap.width()+'and'+$normalMap.height()+'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        var $pSS = $('#photoSpotSetArea');
+        $pSS.css('height','40vh');
+//////////////////////////////////////////////
+        mapInit();
+///////////////////////////
+        function mapInit() {//
+        var centerPosition = {lat: 36, lng: 135};//new google.maps.LatLng(36, 135);
+        var option = {//
+            zoom : 7,//
+            center : centerPosition,//
+            mapTypeId: google.maps.MapTypeId.ROADMAP,//
+            //mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
+            mapTypeControl: false,//
+            //fullscreenControl: false,
+            streetViewControl: false,//
+            scrollwheel: true,//
+            zoomControl: true,//
+        };
+        var googlemap = new google.maps.Map(document.getElementById("photoSpotSetArea"), option);
+/////////////////////////////////////////////////
+        var marker = new google.maps.Marker({
+                        position: centerPosition,
+                        map: googlemap
+                    });
+//////////////////////////////////////////////////////////
+        google.maps.event.addListener(googlemap, 'click', function (e) {
+                        marker.position = e.latLng;
+                        //googlemap.getPosition(loc);
+                        $("#photoSpot").val(e.latLng.lat()+':'+e.latLng.lng());
+                        $("#ido").val(e.latLng.lat());
+                        $("#keido").val(e.latLng.lng());
+                        marker.setMap(googlemap);
+                        googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
+                    });
+
+        google.maps.event.addDomListener(window, "resize", function() {
+	           var center = googlemap.getCenter();
+	            google.maps.event.trigger(googlemap, "resize");
+	             googlemap.setCenter(center);
+          });
+    }
+        //mapInit();
     }
 });
 /*

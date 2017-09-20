@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
 <div class="row">
   <?php
       if(!isset($user->data) && !isset($user->mime)){
@@ -192,5 +193,6 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 @endsection
