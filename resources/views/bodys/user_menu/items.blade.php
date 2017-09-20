@@ -49,7 +49,7 @@
             </div>
             @if($id == Auth::user()->id)
           </div>
-            <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}} col-xs-12" id="tab1-2">
+            <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}}" id="tab1-2">
                 <div class="panel panel-body">
                     <div class="col-xs-12">
                         {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>'true','id'=>'myLogForm']) !!}

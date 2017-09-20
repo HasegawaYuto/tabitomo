@@ -90,7 +90,7 @@ $(function(){
                     });
 
         google.maps.event.addDomListener(window, "resize", function() {
-	           var center = googlemap.getCenter();
+	           var center = marker.getPosition();//googlemap.getCenter();
 	            google.maps.event.trigger(googlemap, "resize");
 	             googlemap.setCenter(center);
           });
