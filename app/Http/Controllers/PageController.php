@@ -172,16 +172,16 @@ class PageController extends Controller
       if(\Input::get('fin')){
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
-          //return redirect()->back();
-          //$scene_id = $request->scene_id+1;
           $data['activetab'] = '2';
           $data['title_id'] = $request->title_id;
+          $data['spotNS'] = $request->spotNS;
+          $data['spotEW'] = $request->spotEW;
           $data['title'] = $request->title;
           $data['scene_id'] = $request->scene_id+1;
           $data['firstday'] = $request->firstday;
           $data['lastday'] = $request->lastday;
+          $data['mapzoom'] = $request->mapzoom;
           return view('bodys.user_menu.items',$data);
-          //return redirect()->back()->withInput($data);
       }
     }
     public function showTitle($id,$title_id){

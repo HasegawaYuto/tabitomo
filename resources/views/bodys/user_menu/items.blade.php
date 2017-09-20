@@ -109,11 +109,20 @@
                         </div>
                         <!--div class="form-group"-->
                             <label>スポット</label>
-                            {!! Form::text('spot',null,['class'=>'form-control','id'=>'photoSpot']) !!}
                             <!--div class="row"-->
+                            @if(isset($spotNS) && isset($spotEW))
+                                {!! Form::hidden('spotNS', $spotNS, ['id' => 'ido']) !!}
+                                {!! Form::hidden('spotEW', $spotEW, ['id' => 'keido']) !!}
+                            @else
+                                {!! Form::hidden('spotNS', null, ['id' => 'ido']) !!}
+                                {!! Form::hidden('spotEW', null, ['id' => 'keido']) !!}
+                            @endif
+                            @if(isset($mapzoom))
+                                {!! Form::hidden('mapzoom', $mapzoom, ['id' => 'mapzoom']) !!}
+                            @else
+                                {!! Form::hidden('mapzoom', null, ['id' => 'mapzoom']) !!}
+                            @endif
                               <div id="photoSpotSetArea" class="col-xs-12">
-                                  {!! Form::hidden('spotNS', null, ['id' => 'ido']) !!}
-                                  {!! Form::hidden('spotEW', null, ['id' => 'keido']) !!}
                               </div>
                             <!--/div-->
                         <!--/div-->

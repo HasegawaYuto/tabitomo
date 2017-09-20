@@ -22,15 +22,18 @@ class CreateMylogsTable extends Migration
                   ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->string('title_id')->nullable();
+            $table->integer('title_id')->unsigned()->nullable();
+            $table->tinyInteger('scene_id')->unsigned()->nullable();
+            $table->tinyInteger('photo_id')->unsigned()->nullable();
             $table->string('title')->nullable();
-            $table->string('firstday')->nullable();
-            $table->string('lastday')->nullable();
-            $table->string('scene_id')->nullable();
             $table->string('scene')->nullable();
+            $table->date('firstday')->nullable();
+            $table->date('lastday')->nullable();
+            $table->date('theday')->nullable();
             $table->string('publish')->nullable();
-            $table->string('theday')->nullable();
-            $table->integer('score')->nullable();
+            $table->double('lat')->nullable();
+            $table->double('lng')->nullable();
+            $table->tinyInteger('score')->unsigned()->nullable();
             $table->text('comment')->nullable();
             $table->string('mime')->nullable();
             $table->binary('data')->nullable();
