@@ -6,7 +6,7 @@
     }
     $url = 'url("' . $src . '")';
 ?>
-<div class="col-xs-3">
+<div class="col-md-3">
 <div class="text-left panel panel-info">
   <div class="panel-heading">
       {{$user->nickname or '未設定'}}

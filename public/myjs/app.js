@@ -48,12 +48,15 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
 ////////////////////////////////////////////////////////////////////////
 /////////////// グーグルマップの初期設定
 $(function(){
-    if($('.normalMap').length){
-        $normalMap = $('.normalMap');
-        $normalMap.css('height',$normalMap.width()*0.5);
+    if($('#photoSpotSetArea').length){
+        $normalMap = $('#photoSpotSetArea');
+        $normalMap.html($normalMap.width()+'and'+$normalMap.height());
+        $normalMap.css('width','700px');
+        $normalMap.css('height',$normalMap.width());
+        //$normalMap.css('height',$normalMap.css('width'));
         //$normalMap.css('height','500px');
         $normalMap.css('background-color','grey');
-        $normalMap.html($normalMap.width()+'and'+$normalMap.height());
+        //$normalMap.html($normalMap.width()+'and'+$normalMap.height()+'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     }
 });
 /*

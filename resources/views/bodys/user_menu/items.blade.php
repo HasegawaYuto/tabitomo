@@ -12,7 +12,7 @@
 @endif
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
-    <div class="col-xs-6">
+    <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel panel-heading text-center">
                 マイログ
@@ -108,8 +108,10 @@
                         </div>
                         <div id="imageThumbnailField" class="col-xs-12">
                         </div>
-                        <label>スポット</label>
-                        <div class="normalMap col-xs-12" id="photoSpotSet">
+                        <div class="form-group">
+                            <label>スポット</label>
+                            <div class="normalMap col-xs-12" id="photoSpotSetArea">
+                            </div>
                         </div>
                         <div class="form-group">
                           <label>おすすめ度</label>
