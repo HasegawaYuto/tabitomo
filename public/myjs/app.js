@@ -1,12 +1,16 @@
 //////////  アバター変更時
 $(function(){
     if($('#menuavatarBeforeChangeArea').length){
+      avatarSize();
+      $(window).change(avatarSize());
+      function avatarSize(){
         $menuABC = $('#menuavatarBeforeChangeArea');
         $menuABC.css('height',$menuABC.width());
         $menuABC.css({'background-position':'center',
                   'background-repeat':'no-repeat',
                   'background-size':'cover'
             });
+      }
     }
     if($('#avatarBeforeChangeArea').length && $('#avatarAfterChangeArea').length){
     $ABC = $('#avatarBeforeChangeArea');
