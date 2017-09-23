@@ -29,23 +29,42 @@
                     <div class="tab-pane {{ $activetab == '1' ? 'active' : ''}}" id="tab1-1">
             @endif
             <div class="panel-body">
-                ページネーション
-                @for($i=1;$i<10;$i++)
+                {-- $mylogs->render() --}
+                @if(isset($mylogs))
+                @foreach($mylogs as $key => $mylog)
+                <?php
+                    $firstdayarray = explode('-',$mylog->firstday);
+                    $lastdayarray = explode('-',$mylog->lastday);
+                ?>
                 <div class="panel panel-primary">
                       <div class="panel-heading">
-                            {!! Link_to_route('show_title','旅のタイトル',['id'=>$id,'title_id'=>$i],['style'=>'color:white;']) !!}
+                  {!! Link_to_route('show_title',$mylog->title,['id'=>$mylog->user_id,'title_id'=>$mylog->title_id],['style'=>'color:white;']) !!}
                       </div>
                       <div class="panel-body">
                             <div class="col-xs-3" style="height:60px;">
-                                サムネイル
+                                {{$mylog->title_id}}
                             </div>
                             <div class="col-xs-9">
-                                <p>〇〇月△△日から〇〇月△△日</p>
-                                <p>〇〇地方と寺社</p>
+                                <table>
+                                    <tr>
+                                        <td>{{$firstdayarray[0]}}年</td>
+                                        <td></td>
+                                        <td>{{$lastdayarray[0]==$firstdayarray[0] ? '':$lastdayarray[0].'年'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{(int)$firstdayarray[1]}}月{{(int)$firstdayarray[2]}}日</td>
+                                        <td>～</td>
+                                        <td>{{(int)$lastdayarray[1]}}月{{(int)$lastdayarray[2]}}日</td>
+                                    </tr>
+                                </table>
+                                @foreach($logtitle[$key] as $thelogtitle)
+                                    {{$thelogtitle->title_id}}
+                                @endforeach
                             </div>
                       </div>
                 </div>
-                @endfor
+                @endforeach
+                @endif
             </div>
             @if($id == Auth::user()->id)
           </div>
@@ -53,6 +72,7 @@
                 <div class="panel panel-body">
                     <div class="col-xs-12">
                         {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>'true','id'=>'myLogForm']) !!}
+                        {!! csrf_field() !!}
                         {!! Form::hidden('title_id',$title_id) !!}
                         {!! Form::hidden('scene_id',$scene_id) !!}
                         @if($scene_id==1)
@@ -107,7 +127,7 @@
                         </div>
                         <div id="imageThumbnailField" class="col-xs-12">
                         </div>
-                        <!--div class="form-group"-->
+                        <div class="form-group">
                             <label>スポット</label>
                             <!--div class="row"-->
                             @if(isset($spotNS) && isset($spotEW))
@@ -125,7 +145,7 @@
                               <div id="photoSpotSetArea" class="col-xs-12">
                               </div>
                             <!--/div-->
-                        <!--/div-->
+                        </div>
                         <div class="form-group">
                             <label>おすすめ度</label>
                             <div id="ratefield">

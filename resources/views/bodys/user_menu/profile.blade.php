@@ -37,10 +37,11 @@
                     {!! Form::open(['route'=>['edit_user_profile',$id],'files'=>'true','id'=>'avatarForm'])!!}
                     {!! csrf_field() !!}
                     <div class="form-group">
-                        {!! Form::file('avatar') !!}
+                        {!! Form::file('avatar',['accept'=>'image/*']) !!}
                     </div>
                     {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
                     {!! Form::close() !!}
+                    <p>スマホで撮った画像などは保存の際に向きを調節します</p>
                 </div>
             </td>
           </tr>

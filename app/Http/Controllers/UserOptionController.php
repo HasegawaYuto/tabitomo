@@ -81,7 +81,7 @@ class UserOptionController extends Controller
                   $filename = public_path() . '/image/avatar' . $id . '.' . $file->getClientOriginalExtension();
                   $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
                         $constraint->aspectRatio();
-                      })->save($filename);
+                      })->orientate()->save($filename);
                   $profile['data']=file_get_contents($filename);
                   $profile['mime']=$file->getMimeType();
                   //$profile['path']=

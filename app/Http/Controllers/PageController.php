@@ -12,7 +12,7 @@ use App\User;
 use Carbon\Carbon;
 use App\Location;
 use App\Pref;
-use App\Profile;
+use App\Profile,App\Mylog;
 
 class PageController extends Controller
 {
@@ -95,12 +95,9 @@ class PageController extends Controller
 
     public function newProfileCreate(){
         $user_id = \Auth::user()->id;
-        $profile = Profile::where('user_id',$user_id)->first();
-        if(!$profile){
-            $profile =  new Profile;
-            $profile->user_id = $user_id;
-            $profile->save();
-        }
+        $profile = Profile::firstOrNew(['user_id'=> $user_id]);
+        $profile->user_id = $user_id;
+        $profile->save();
         return redirect('/');
     }
 
@@ -146,18 +143,39 @@ class PageController extends Controller
       $data['id']=$id;
       return view('bodys.user_menu.messages',$data);
     }
+
+
+
     public function showUserItems($id){
       $user = Profile::where('user_id',$id)->first();
+      $tempmylogs = Mylog::where('user_id',$id)
+                      ->where('publish','public');
+      $mylogsByTitle = $tempmylogs
+                      ->groupBy('title_id')
+                      ->select('title_id','title','firstday','lastday','user_id')->get();
+                      //->paginate(10);
+      foreach($mylogsByTitle as  $key => $mylogByTitle){
+          $data['logtitle'][$key] = $tempmylogs
+                                ->where('title_id',$mylogByTitle->title_id)
+                                ->groupBy('scene_id')->get();
+      }
       $data['user']=$user;
       $data['id']=$id;
+      $data['mylogs']=$mylogsByTitle;//->paginate(10);
       return view('bodys.user_menu.items',$data);
     }
+
+
+
     public function showUserFavorites($id){
       $user = Profile::where('user_id',$id)->first();
       $data['user']=$user;
       $data['id']=$id;
       return view('bodys.user_menu.favorites',$data);
     }
+
+
+
     public function showUserMatching($id){
       $user = Profile::where('user_id',$id)->first();
       $data['user']=$user;
@@ -165,25 +183,141 @@ class PageController extends Controller
       return view('bodys.user_menu.matching',$data);
     }
 
+
+
     public function createItems(Request $request,$id){
-      $user = Profile::where('user_id',$id)->first();
-      $data['user']=$user;
-      $data['id']=$id;
+      if($request->scene_id==1){
+          $title_id = Mylog::where('user_id',$id)->max('title_id');
+          if(!isset($title_id)){
+              $data['title_id'] = 1;
+          }else{
+              $data['title_id'] = $title_id + 1;
+          }
+      }else{
+          $data['title_id'] = $request->title_id;
+      }
+      function replaceDate($DateString){
+            $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
+            return $theday;
+      }
+      //$mylog = new Mylog;
+/////////////////////////////////////////////
+      if(\Input::hasFile('image')){
+        $files = \Input::file('image');
+        $typearray = [
+          'gif' => 'image/gif',
+          'jpg' => 'image/jpeg',
+          'png' => 'image/png'];
+        for($i=0;$i<count($_FILES['image']['name']);$i++){
+          //$mylog = new Mylog;
+          if (!isset($_FILES['image']['error'][$i]) || !is_int($_FILES['image']['error'][$i])) {
+              return false;
+          }else{
+            if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
+                $file = $files[$i];//\Input::file('image');
+                $filename = public_path() . '/image/upload' . $id . '-' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
+                $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
+                      $constraint->aspectRatio();
+                    })->orientate()->save($filename);
+                $mylog = new Mylog;
+                $mylog['data']=file_get_contents($filename);
+                $mylog['mime']=$file->getMimeType();
+                $mylog['user_id'] = $id;
+                $mylog['title_id'] = $data['title_id'];
+                $mylog['scene_id'] = $request->scene_id;
+                $mylog['photo_id'] = $i;
+                if(isset($request->title)){
+                    $mylog['title'] = $request->title;
+                }
+                if(isset($request->scene)){
+                    $mylog['scene'] = $request->scene;
+                }
+                if(isset($request->firstday)){
+                    $mylog['firstday'] = replaceDate($request->firstday);
+                }
+                if(isset($request->lastday)){
+                    $mylog['lastday'] = replaceDate($request->lastday);
+                }
+                if(isset($request->theday)){
+                    $mylog['theday'] = replaceDate($request->theday);
+                }
+                if(isset($request->publish)){
+                    $mylog['publish'] = $request->publish;
+                }
+                if(isset($request->spotNS)&&isset($request->spotEW)){
+                    $mylog['lat'] = $request->spotNS;
+                    $mylog['lng'] = $request->spotEW;
+                }
+                if(isset($request->score)){
+                    $mylog['score'] = $request->score;
+                }
+                if(isset($request->comment)){
+                    $mylog['comment'] = $request->comment;
+                }
+                $mylog->save();
+            }
+          }
+        }
+      }/*else{
+            //$mylog = new Mylog;
+            $mylog['user_id'] = $id;
+            $mylog['title_id'] = $data['title_id'];
+            $mylog['scene_id'] = $request->scene_id;
+            if(isset($request->title)){
+                $mylog['title'] = $request->title;
+            }
+            if(isset($request->scene)){
+                $mylog['scene'] = $request->scene;
+            }
+            $mylog['firstday'] = replaceDate($request->firstday);
+            $mylog['lastday'] = replaceDate($request->lastday);
+            $mylog['theday'] = replaceDate($request->theday);
+            $mylog['publish'] = $request->publish;
+            if(isset($request->spotNS)&&isset($request->spotEW)){
+                $mylog['lat'] = $request->spotNS;
+                $mylog['lng'] = $request->spotEW;
+            }
+            if(isset($request->score)){
+                $mylog['score'] = $request->score;
+            }
+            if(isset($request->comment)){
+                $mylog['comment'] = $request->comment;
+            }
+            $mylog->save();
+      }*/
+////////////////////////////////////////////
       if(\Input::get('fin')){
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
+          $user = Profile::where('user_id',$id)->first();
+          $data['user']=$user;
+          $data['id']=$id;
+          $data['title'] = $request->title;
           $data['activetab'] = '2';
-          $data['title_id'] = $request->title_id;
+          $data['scene_id'] = $request->scene_id+1;
+          $data['title_id']=$title_id;
           $data['spotNS'] = $request->spotNS;
           $data['spotEW'] = $request->spotEW;
-          $data['title'] = $request->title;
-          $data['scene_id'] = $request->scene_id+1;
           $data['firstday'] = $request->firstday;
           $data['lastday'] = $request->lastday;
           $data['mapzoom'] = $request->mapzoom;
+          $tempmylogs = Mylog::where('user_id',$id)
+                          ->where('publish','public');
+          $mylogsByTitle = $tempmylogs
+                          ->groupBy('title_id')
+                          ->select('title_id','title','firstday','lastday','user_id')
+                          ->paginate(10);
+          foreach($mylogsByTitle as $mylogByTitle){
+              $data['logtitle'][$mylogByTitle->title_id] = $tempmylogs
+                                    ->where('title_id',$mylogByTitle->title_id)
+                                    ->groupBy('scene_id')->get();
+          }
+          $data['mylogs']=$mylogsByTitle;
           return view('bodys.user_menu.items',$data);
       }
     }
+
+
     public function showTitle($id,$title_id){
       $user = Profile::where('user_id',$id)->first();
       $data['user']=$user;

@@ -26,12 +26,9 @@ $(function(){
     $AAC.css('height',$ABC.width());
     $AAC.css({'background-position':'center',
               'background-repeat':'no-repeat',
-              'background-size':'cover'
+              'background-size':'cover',
+              'transform':'rotate( 0deg )'
         });
-    //$menuABC.css({'background-position':'center',
-    //          'background-repeat':'no-repeat',
-    //          'background-size':'cover'
-    //    });
 $('#avatarForm').on('change', 'input[type="file"]', function(e) {
             var file = e.target.files[0],
                 reader = new FileReader(),
@@ -346,7 +343,9 @@ $(function(){
             thumbF.css('background-color','silver');
             thumbF.empty();
             var files = event.target.files;
-            for (var i = 0, f; f = files[i]; i++) {
+            var $inputFileLength = files.length;//Math.min(20,files.length);
+            for (var i = 0 ; i<$inputFileLength; i++) {
+                var f = files[i];
                 var reader = new FileReader;
                 reader.onload = (function(){
                     return function(e){
@@ -355,6 +354,9 @@ $(function(){
                         //$('#photo'+ i).append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:10px;" />');
                     }
                 })(f);
+                if(i==$inputFileLength-1){
+                    thumbF.append('<p>スマホなどの画像は保存の際に自動で向きを調節します</p>');
+                }
                 reader.readAsDataURL(f);
             }
         });
