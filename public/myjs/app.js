@@ -1,3 +1,99 @@
+////////////////////////////////////////////////////////////////////////
+$(function(){
+    if($('.googlemapSpot').length){
+        var $gmScnt = $('.googlemapSpot').length;
+        for($i=0;$i<$gmScnt;$i++){
+            var $latval = parseFloat($('#googlemapLat'+$i).val());
+            var $lngval = parseFloat($('#googlemapLng'+$i).val());
+            var centerPosition = {lat: $latval, lng: $lngval};
+                var googlemap = new google.maps.Map(document.getElementById("googlemapSpotID"+$i),
+                    {
+                      center : centerPosition,
+                      mapTypeId: google.maps.MapTypeId.TERRAIN,//
+                      mapTypeControl: true,//
+                      fullscreenControl: true,
+                      streetViewControl: true,//
+                      scrollwheel: true,//
+                      zoomControl: true
+                    });
+        }
+            //var centerPosition = {lat: 36, lng: 136};
+            //var option = {//
+                    //zoom : mapzoom,//
+                    //center : centerPosition,//
+                    //mapTypeId: google.maps.MapTypeId.TERRAIN,//
+                    //mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
+                    //mapTypeControl: false,//
+                    //fullscreenControl: false,
+                    //streetViewControl: false,//
+                    //scrollwheel: true,//
+                    //zoomControl: true,//
+                //};
+                //var googlemap = new google.maps.Map($(this), option);
+        //mapInit();
+///////////////////////////
+/*
+        function mapInit() {//
+        if($('#ido').val()!="" && $('#keido').val()!=""){
+            console.log($('#keido').val());
+            var centerPosition = {lat: parseFloat($('#ido').val()), lng: parseFloat($('#keido').val())};
+        }else{
+            var centerPosition = {lat: 36, lng: 136};
+        }
+        if($('#mapzoom').val()!=""){
+            var mapzoom = parseInt($('#mapzoom').val());
+        }else{
+            var mapzoom = 6;
+        }
+        var option = {//
+            zoom : mapzoom,//
+            center : centerPosition,//
+            mapTypeId: google.maps.MapTypeId.TERRAIN,//
+            //mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
+            mapTypeControl: false,//
+            //fullscreenControl: false,
+            streetViewControl: false,//
+            scrollwheel: true,//
+            zoomControl: true,//
+        };
+        var googlemap = new google.maps.Map(document.getElementById("photoSpotSetArea"), option);
+/////////////////////////////////////////////////
+        var marker = new google.maps.Marker({
+                        position: centerPosition,
+                        map: googlemap
+                    });
+//////////////////////////////////////////////////////////
+        google.maps.event.addListener(googlemap, 'click', function (e) {
+                        marker.position = e.latLng;
+                        //googlemap.getPosition(loc);
+                        //$("#photoSpot").val(e.latLng.lat()+':'+e.latLng.lng());
+                        $("#ido").val(e.latLng.lat());
+                        $("#keido").val(e.latLng.lng());
+                        marker.setMap(googlemap);
+                        googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
+                        $("#mapzoom").val(googlemap.getZoom());
+                    });
+
+        google.maps.event.addDomListener(window, "resize", function() {
+	           var center = marker.getPosition();//googlemap.getCenter();
+	            google.maps.event.trigger(googlemap, "resize");
+	             googlemap.setCenter(center);
+               $("#mapzoom").val(googlemap.getZoom());
+          });
+        $('#logtabs a').on('shown.bs.tab', function(){
+              var center = marker.getPosition();//
+	            google.maps.event.trigger(googlemap, 'resize');
+              //var center = marker.getPosition();//
+              googlemap.setCenter(center);
+              $("#mapzoom").val(googlemap.getZoom());
+	            //return false;
+          });
+    }
+
+        //mapInit();
+    */
+    }
+});
 //////////  アバター変更時
 $(function(){
     if($('#menuavatarBeforeChangeArea').length){
@@ -48,7 +144,6 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
           });
 }});
 ////////////////////////////////////////////////////////////////////////
-/////////////// グーグルマップの初期設定
 $(function(){
     if($('#photoSpotSetArea').length){
         var $pSS = $('#photoSpotSetArea');
@@ -59,7 +154,7 @@ $(function(){
         function mapInit() {//
         if($('#ido').val()!="" && $('#keido').val()!=""){
             console.log($('#keido').val());
-            var centerPosition = {lat: parseFloat($('#ido').val()), lng: parseFloat($('#keido').val())};//new google.maps.LatLng(36, 135);
+            var centerPosition = {lat: parseFloat($('#ido').val()), lng: parseFloat($('#keido').val())};
         }else{
             var centerPosition = {lat: 36, lng: 136};
         }

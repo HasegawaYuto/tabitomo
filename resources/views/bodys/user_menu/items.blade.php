@@ -29,8 +29,9 @@
                     <div class="tab-pane {{ $activetab == '1' ? 'active' : ''}}" id="tab1-1">
             @endif
             <div class="panel-body">
-                {-- $mylogs->render() --}
+                {!! $mylogs->render() !!}
                 @if(isset($mylogs))
+                <?php $cnt = 0; ?>
                 @foreach($mylogs as $key => $mylog)
                 <?php
                     $firstdayarray = explode('-',$mylog->firstday);
@@ -41,8 +42,14 @@
                   {!! Link_to_route('show_title',$mylog->title,['id'=>$mylog->user_id,'title_id'=>$mylog->title_id],['style'=>'color:white;']) !!}
                       </div>
                       <div class="panel-body">
-                            <div class="col-xs-3" style="height:60px;">
-                                {{$mylog->title_id}}
+                            <div class="col-xs-3">
+                          @if(isset($thumb[$key]->data))
+                          <?php
+                            $mime = $thumb[$key]->mime;
+                            $dataImage = base64_encode($thumb[$key]->data);
+                          ?>
+                          <img class="img-responsive" src="data:{{$mime}};base64,{{$dataImage}}" style="vertical-align:middle;"/>
+                          @endif
                             </div>
                             <div class="col-xs-9">
                                 <table>
@@ -57,9 +64,14 @@
                                         <td>{{(int)$lastdayarray[1]}}月{{(int)$lastdayarray[2]}}日</td>
                                     </tr>
                                 </table>
+                                @if(isset($logtitle))
+                                <label>シーン</label>
+                                <ul>
                                 @foreach($logtitle[$key] as $thelogtitle)
-                                    {{$thelogtitle->title_id}}
+                                    <li>{{$thelogtitle->scene}}</li>
                                 @endforeach
+                                </ul>
+                                @endif
                             </div>
                       </div>
                 </div>

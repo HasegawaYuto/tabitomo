@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Location;
 use App\Pref;
 use App\Profile,App\Mylog;
+use Illuminate\Support\Facades\Log;
 
 class PageController extends Controller
 {
@@ -148,20 +149,38 @@ class PageController extends Controller
 
     public function showUserItems($id){
       $user = Profile::where('user_id',$id)->first();
-      $tempmylogs = Mylog::where('user_id',$id)
-                      ->where('publish','public');
-      $mylogsByTitle = $tempmylogs
+      $mylogsByTitle = Mylog::where('user_id',$id)
+                      ->where('publish','public')
                       ->groupBy('title_id')
-                      ->select('title_id','title','firstday','lastday','user_id')->get();
-                      //->paginate(10);
-      foreach($mylogsByTitle as  $key => $mylogByTitle){
-          $data['logtitle'][$key] = $tempmylogs
+                      ->select('title_id','title','firstday','lastday','user_id')//->get();
+                      ->paginate(10);
+      foreach($mylogsByTitle as $key => $mylogByTitle){
+          $data['logtitle'][$key] = Mylog::where('user_id',$id)
+                                ->where('publish','public')
                                 ->where('title_id',$mylogByTitle->title_id)
-                                ->groupBy('scene_id')->get();
+                                ->groupBy('scene_id')
+                                ->select('scene')->get();
+          $thumbIDs = Mylog::where('user_id',$id)
+                            //->whereNotNull('mime')
+                            ->where('publish','public')
+                            ->where('title_id',$mylogByTitle->title_id)
+                            ->whereNotNull('data')
+                            ->select('id')
+                            ->get();
+          //$thumbID = array_rand($thumbIDs[$key],1);
+          if(isset($thumbIDs)){
+              foreach($thumbIDs as $thumbID){
+                  $arr[]=$thumbID->id;
+              }
+              if(isset($arr[0])){
+                  $thumbIDrand = array_rand($arr);
+                  $data['thumb'][$key] = Mylog::find($arr[$thumbIDrand]);
+              }
+          }
       }
       $data['user']=$user;
       $data['id']=$id;
-      $data['mylogs']=$mylogsByTitle;//->paginate(10);
+      $data['mylogs']=$mylogsByTitle;
       return view('bodys.user_menu.items',$data);
     }
 
@@ -215,7 +234,7 @@ class PageController extends Controller
           }else{
             if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                 $file = $files[$i];//\Input::file('image');
-                $filename = public_path() . '/image/upload' . $id . '-' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
+                $filename = public_path() . '/image/upload' . $id . '-' . $request->title_id . '-' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
                 $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($filename);
@@ -255,6 +274,11 @@ class PageController extends Controller
                     $mylog['comment'] = $request->comment;
                 }
                 $mylog->save();
+                if(isset($filename)){
+                  if (\File::exists($filename)) {
+                        \File::delete($filename);
+                    }
+                }
             }
           }
         }
@@ -295,20 +319,19 @@ class PageController extends Controller
           $data['title'] = $request->title;
           $data['activetab'] = '2';
           $data['scene_id'] = $request->scene_id+1;
-          $data['title_id']=$title_id;
           $data['spotNS'] = $request->spotNS;
           $data['spotEW'] = $request->spotEW;
           $data['firstday'] = $request->firstday;
           $data['lastday'] = $request->lastday;
           $data['mapzoom'] = $request->mapzoom;
-          $tempmylogs = Mylog::where('user_id',$id)
-                          ->where('publish','public');
-          $mylogsByTitle = $tempmylogs
+          $mylogsByTitle = Mylog::where('user_id',$id)
+                          ->where('publish','public')
                           ->groupBy('title_id')
                           ->select('title_id','title','firstday','lastday','user_id')
                           ->paginate(10);
-          foreach($mylogsByTitle as $mylogByTitle){
-              $data['logtitle'][$mylogByTitle->title_id] = $tempmylogs
+          foreach($mylogsByTitle as $key => $mylogByTitle){
+              $data['logtitle'][$key] = Mylog::where('user_id',$id)
+                                    ->where('publish','public')
                                     ->where('title_id',$mylogByTitle->title_id)
                                     ->groupBy('scene_id')->get();
           }
@@ -320,6 +343,18 @@ class PageController extends Controller
 
     public function showTitle($id,$title_id){
       $user = Profile::where('user_id',$id)->first();
+      $data['title'] = Mylog::where('user_id',$id)
+                              ->where('title_id',$title_id)
+                              ->where('publish','public')
+                              ->select('title','firstday','lastday')
+                              ->first();
+      $data['scenes'] = Mylog::where('user_id',$id)
+                              ->where('title_id',$title_id)
+                              ->where('publish','public')
+                              ->groupBy('scene_id')
+                              ->orderBy('theday')
+                              ->select('scene','theday','lat','lng','score','comment')
+                              ->get();
       $data['user']=$user;
       $data['id']=$id;
       $data['title_id']=$title_id;
