@@ -1,22 +1,56 @@
+$(function(){
+    if($('.showRaty').length){
+        $.fn.raty.defaults.path = "/raty/lib/images";
+        var $showRatyCnt = $('.showRaty').length;
+        for($i=0;$i<$showRatyCnt;$i++){
+            $('#showRatyDiv'+$i).raty({ readOnly: true, score: parseInt($('#showRaty'+$i).val()) });
+        }
+    }
+});
+////////////////////////////////////////////////////////////////
+$(function(){
+    if($('.showRatyAve').length){
+        $.fn.raty.defaults.path = "/raty/lib/images";
+        var $showRatyAveCnt = $('.showRatyAve').length;
+        //for($i=0;$i<$showRatyAveCnt;$i++){
+            $('#showRatyAveDiv').raty({ readOnly: true, score: parseInt($('#showRatyAve').val()*2)/2 });
+        //}
+    }
+});
 ////////////////////////////////////////////////////////////////////////
 $(function(){
     if($('.googlemapSpot').length){
         var $gmScnt = $('.googlemapSpot').length;
         for($i=0;$i<$gmScnt;$i++){
+        //$('.googlemapSpot').each(function(){
             var $latval = parseFloat($('#googlemapLat'+$i).val());
             var $lngval = parseFloat($('#googlemapLng'+$i).val());
             var centerPosition = {lat: $latval, lng: $lngval};
-                var googlemap = new google.maps.Map(document.getElementById("googlemapSpotID"+$i),
+            var googlemap = new google.maps.Map(document.getElementById("googlemapSpotID"+$i),
+            //var googlemap = new google.maps.Map($(this),
                     {
+                      zoom : 8,
                       center : centerPosition,
                       mapTypeId: google.maps.MapTypeId.TERRAIN,//
-                      mapTypeControl: true,//
+                      mapTypeControl: false,//
                       fullscreenControl: true,
-                      streetViewControl: true,//
+                      streetViewControl: false,//
                       scrollwheel: true,//
                       zoomControl: true
                     });
+            var marker = new google.maps.Marker({
+                            position: centerPosition,
+                            map: googlemap
+                        });
+
+            google.maps.event.addDomListener(window, "resize", function() {
+    	           //var center = marker.getPosition();//googlemap.getCenter();
+    	            google.maps.event.trigger(googlemap, "resize");
+    	             googlemap.setCenter(centerPosition);
+                   //$("#mapzoom").val(googlemap.getZoom());
+              });
         }
+        //});
             //var centerPosition = {lat: 36, lng: 136};
             //var option = {//
                     //zoom : mapzoom,//

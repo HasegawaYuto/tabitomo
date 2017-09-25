@@ -282,8 +282,8 @@ class PageController extends Controller
             }
           }
         }
-      }/*else{
-            //$mylog = new Mylog;
+      }else{
+            $mylog = new Mylog;
             $mylog['user_id'] = $id;
             $mylog['title_id'] = $data['title_id'];
             $mylog['scene_id'] = $request->scene_id;
@@ -293,10 +293,18 @@ class PageController extends Controller
             if(isset($request->scene)){
                 $mylog['scene'] = $request->scene;
             }
-            $mylog['firstday'] = replaceDate($request->firstday);
-            $mylog['lastday'] = replaceDate($request->lastday);
-            $mylog['theday'] = replaceDate($request->theday);
-            $mylog['publish'] = $request->publish;
+            if(isset($request->firstday)){
+                $mylog['firstday'] = replaceDate($request->firstday);
+            }
+            if(isset($request->lastday)){
+                $mylog['lastday'] = replaceDate($request->lastday);
+            }
+            if(isset($request->theday)){
+                $mylog['theday'] = replaceDate($request->theday);
+            }
+            if(isset($request->publish)){
+                $mylog['publish'] = $request->publish;
+            }
             if(isset($request->spotNS)&&isset($request->spotEW)){
                 $mylog['lat'] = $request->spotNS;
                 $mylog['lng'] = $request->spotEW;
@@ -308,7 +316,7 @@ class PageController extends Controller
                 $mylog['comment'] = $request->comment;
             }
             $mylog->save();
-      }*/
+      }
 ////////////////////////////////////////////
       if(\Input::get('fin')){
           return redirect('user/'. $id .'/mylog');
@@ -346,18 +354,78 @@ class PageController extends Controller
       $data['title'] = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
                               ->where('publish','public')
-                              ->select('title','firstday','lastday')
+                              ->select('title','firstday','lastday','title_id')
                               ->first();
-      $data['scenes'] = Mylog::where('user_id',$id)
+      $scenes = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
                               ->where('publish','public')
                               ->groupBy('scene_id')
                               ->orderBy('theday')
-                              ->select('scene','theday','lat','lng','score','comment')
-                              ->get();
+                              ->select('scene','theday','lat','lng','score','comment','scene_id')
+                              ->paginate(5);
+      $data['scenes'] = $scenes;
+      $data['scoreAve'] = Mylog::where('user_id',$id)
+                              ->where('title_id',$title_id)
+                              ->where('publish','public')
+                              ->orderBy('scene_id')
+                              ->avg('score');
+      foreach($scenes as $key => $scene){
+          $thumbIDs = Mylog::where('user_id',$id)
+                                  ->where('title_id',$title_id)
+                                  ->where('publish','public')
+                                  ->where('scene_id',$scene->scene_id)
+                                  ->whereNotNull('data')
+                                  ->select('id')
+                                  ->get();
+          if(isset($thumbIDs)){
+              foreach($thumbIDs as $thumbID){
+                  $arr[] = $thumbID->id;
+              }
+              if(isset($arr[0])){
+                  $thumbIDrand = array_rand($arr);
+                  $data['thumb'][$key] = Mylog::find($arr[$thumbIDrand]);
+              }
+          }
+      }
       $data['user']=$user;
       $data['id']=$id;
-      $data['title_id']=$title_id;
+      //$data['title_id']=$title_id;
+      $data['thisyear']=Carbon::now()->year;
       return view('bodys.user_menu.show_title',$data);
+    }
+
+    public function editTitle(Request $request ,$id,$title_id){
+        function replaceDate($DateString){
+              $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
+              return $theday;
+        }
+        $changes = Mylog::where('user_id',$id)
+                        ->where('title_id',$title_id)
+                        ->get();
+        foreach($changes as $change){
+              $change->update([ 'title'=>$request->NewTitle,
+                                'firstday'=>replaceDate($request->firstday),
+                                'lastday'=>replaceDate($request->lastday)
+                              ]);
+        }
+        return redirect()->back();
+    }
+
+    public function editScene(Request $request ,$id,$title_id,$scene_id){
+        function replaceDate($DateString){
+              $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
+              return $theday;
+        }
+        $changes = Mylog::where('user_id',$id)
+                        ->where('title_id',$title_id)
+                        ->where('scene_id',$scene_id)
+                        ->get();
+        foreach($changes as $change){
+              $change->update([ 'scene'=>$request->NewScene,
+                                //'firstday'=>replaceDate($request->firstday),
+                                //'lastday'=>replaceDate($request->lastday)
+                              ]);
+        }
+        return redirect()->back();
     }
 }

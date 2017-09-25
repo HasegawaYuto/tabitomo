@@ -68,7 +68,7 @@
                                 <label>シーン</label>
                                 <ul>
                                 @foreach($logtitle[$key] as $thelogtitle)
-                                    <li>{{$thelogtitle->scene}}</li>
+                                    <li style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">{{$thelogtitle->scene}}</li>
                                 @endforeach
                                 </ul>
                                 @endif
@@ -102,8 +102,8 @@
                         <?php
                               $today = Carbon\Carbon::now()->format('Y年m月d日');
                         ?>
+                        <label>期間</label>
                         @if($scene_id==1)
-                            <label>期間</label>
                             <div class="form-group form-inline">
                                 {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday','style'=>'width:40%;']) !!}
                                 <label>～</label>
@@ -111,7 +111,6 @@
                             </div>
                         @else
                             <div class="form-group form-inline">
-                                <label>期間</label>
                                 <p>{{$firstday or 'UnSettingFirstday'}}～{{$lastday or 'UnSettingLastday'}}</p>
                                 {!! Form::hidden('firstday', $firstday, ['id' => 'firstday']) !!}
                                 {!! Form::hidden('lastday', $lastday, ['id' => 'lastday']) !!}

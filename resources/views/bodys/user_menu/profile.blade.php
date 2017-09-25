@@ -102,7 +102,7 @@
                         @endfor
                         <option data-val="00" value="00" {{ isset($birthdayOfDay) ? '':'selected="selected"'}}>--</option>
                     </select>
-                    <label>月</label>
+                    <label>日</label>
                 </div>
                 {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
                 {!! Form::close() !!}
