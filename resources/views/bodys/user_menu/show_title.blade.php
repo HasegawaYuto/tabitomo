@@ -140,7 +140,7 @@
         <h4 class="modal-title">シーンの編集</h4>
       </div>
       <div class="modal-body">
-          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>$scene->scene_id],'files'=>'true','id'=>'myLogForm $key','class'=>'myLogForm']) !!}
+          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>$scene->scene_id],'files'=>'true','id'=>'myLogForm' . $key ,'class'=>'myLogForm']) !!}
           {!! csrf_field() !!}
           <div class="form-group form-inline">
               {!! Form::label('NewScene','シーン：') !!}
