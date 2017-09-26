@@ -140,7 +140,7 @@
         <h4 class="modal-title">シーンの編集</h4>
       </div>
       <div class="modal-body">
-          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>$scene->scene_id],'files'=>'true','id'=>'myLogForm{{$key}}','class'=>'myLogForm']) !!}
+          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>$scene->scene_id],'files'=>'true','id'=>'myLogForm $key','class'=>'myLogForm']) !!}
           {!! csrf_field() !!}
           <div class="form-group form-inline">
               {!! Form::label('NewScene','シーン：') !!}
@@ -154,8 +154,8 @@
                 $OldFirstday = $oldfirstday->format('Y年m月d日');
                 $OldLastday = $oldlastday->format('Y年m月d日');
           ?>
-              {!! Form::hidden('firstday',$OldFirstday,['id'=>'firstday{{$key}}']) !!}
-              {!! Form::hidden('lastday',$OldLastday,['id'=>'lastday{{$key}}']) !!}
+              {!! Form::hidden('firstday',$OldFirstday,['id'=>'firstday $key']) !!}
+              {!! Form::hidden('lastday',$OldLastday,['id'=>'lastday $key']) !!}
                 {!! Form::label('date','日付：') !!}
                 <select id="theday" class="form-control" name="theday" style="width:40%;">
                     <option value="{{$today}}">{{$today}}</option>
@@ -176,9 +176,9 @@
           <div class="form-group">
               <label>スポット</label>
               <!--div class="row"-->
-                  {!! Form::hidden('spotNS', $scene->lat, ['id' => 'ido{{$key}}']) !!}
-                  {!! Form::hidden('spotEW', $scene->lng, ['id' => 'keido{{$key}}']) !!}
-                  {!! Form::hidden('mapzoom', 6, ['id' => 'mapzoom']) !!}
+                  {!! Form::hidden('spotNS', $scene->lat, ['id' => 'ido $key']) !!}
+                  {!! Form::hidden('spotEW', $scene->lng, ['id' => 'keido $key']) !!}
+                  {!! Form::hidden('mapzoom', 6, ['id' => 'mapzoom $key']) !!}
                 <div id="photoSpotSetArea{{$key}}" class="col-xs-12 photoSpotSetArea">
                 </div>
               <!--/div-->
