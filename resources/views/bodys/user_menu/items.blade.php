@@ -105,15 +105,15 @@
                         <label>期間</label>
                         @if($scene_id==1)
                             <div class="form-group form-inline">
-                                {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday','style'=>'width:40%;']) !!}
+                                {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday0','style'=>'width:40%;']) !!}
                                 <label>～</label>
-                                {!! Form::text('lastday',$today,['class'=>'form-control datepicker','id'=>'lastday','style'=>'width:40%;']) !!}
+                                {!! Form::text('lastday',$today,['class'=>'form-control datepicker','id'=>'lastday0','style'=>'width:40%;']) !!}
                             </div>
                         @else
                             <div class="form-group form-inline">
                                 <p>{{$firstday or 'UnSettingFirstday'}}～{{$lastday or 'UnSettingLastday'}}</p>
-                                {!! Form::hidden('firstday', $firstday, ['id' => 'firstday']) !!}
-                                {!! Form::hidden('lastday', $lastday, ['id' => 'lastday']) !!}
+                                {!! Form::hidden('firstday', $firstday, ['id' => 'firstday0']) !!}
+                                {!! Form::hidden('lastday', $lastday, ['id' => 'lastday0']) !!}
                             </div>
                         @endif
                         <div class="form-group">
@@ -122,7 +122,7 @@
                         </div>
                         <div class="form-group">
                               {!! Form::label('date','日付') !!}
-                              <select id="theday" class="form-control" name="theday" style="width:40%;">
+                              <select id="theday0" class="form-control theday" name="theday" style="width:40%;">
                                   <option value="{{$today}}">{{$today}}</option>
                               </select>
                         </div>

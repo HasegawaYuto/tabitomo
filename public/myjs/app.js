@@ -226,15 +226,17 @@ $(function(){
                         $("#keido"+no).val(e.latLng.lng());
                         marker.setMap(googlemap);
                         googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
-                        $("#mapzoom"+no).val(googlemap.getZoom());
+                        //$("#mapzoom"+no).val(googlemap.getZoom());
                     });
 
         google.maps.event.addDomListener(window, "resize", function() {
 	           var center = marker.getPosition();//googlemap.getCenter();
 	            google.maps.event.trigger(googlemap, "resize");
 	             googlemap.setCenter(center);
-               $("#mapzoom"+no).val(googlemap.getZoom());
+               //$("#mapzoom"+no).val(googlemap.getZoom());
           });
+
+        if($('#logtabs a').length){
         $('#logtabs a').on('shown.bs.tab', function(){
               var center = marker.getPosition();//
 	            google.maps.event.trigger(googlemap, 'resize');
@@ -243,10 +245,10 @@ $(function(){
               $("#mapzoom"+no).val(googlemap.getZoom());
 	            //return false;
           });
-/*
-        var $modalCnt = $('.modal').length;
-        for($i=0;$i<$modalCnt;$i++){
-        $('#fixScene'+$i).on('shown.bs.modal', function(){
+        }
+
+        if($('#fixScene'+no).length){
+        $('#fixScene'+no).on('shown.bs.modal', function(){
               var center = marker.getPosition();//
 	            google.maps.event.trigger(googlemap, 'resize');
               //var center = marker.getPosition();//
@@ -255,7 +257,7 @@ $(function(){
 	            //return false;
           });
         }
-*/
+
 
     }
 
@@ -447,25 +449,28 @@ $(function(){
 }});
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function(){
-    if($('#theday').length){
-        selectTheDateSet();
-        $('#firstday').change(selectTheDateSet);
-        $('#lastday').change(selectTheDateSet);
+    if($('.theday').length){
+        var thedayCnt = $('.theday').length;
+        for($i=0;$i<thedayCnt;$i++){
+            selectTheDateSet($i);
+        }
+        $('#firstday0').change(selectTheDateSet);
+        $('#lastday0').change(selectTheDateSet);
 /////////////////////////////////////
-        function selectTheDateSet(){
-            var $firstday = $('#firstday').val();
-            var $lastday = $('#lastday').val();
+        function selectTheDateSet(no){
+            var $firstday = $('#firstday'+no).val();
+            var $lastday = $('#lastday'+no).val();
             var $firstdayParse = dateToParse($firstday);
             var $lastdayParse = dateToParse($lastday);
             var $difference = ($lastdayParse - $firstdayParse)/1000/60/60/24;
             var $oneday = 1000*60*60*24;
-            $('#theday').empty();
+            $('#theday'+no).empty();
             for($d=0;$d<=$difference;$d++){
                 var $optionday = new Date($firstdayParse + ($oneday * $d));
                 var $optionYear = $optionday.getFullYear();
                 var $optionMonth = $optionday.getMonth() + 1;
                 var $optionDay = $optionday.getDate();
-                $('#theday').append('<option value="'+$optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2)+'">'+$optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日'+'</option>');
+                $('#theday'+no).append('<option value="'+$optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2)+'">'+$optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日'+'</option>');
             }
             //$('#theday').append('<option value="01" data-val="01">'+$lastdayParse+'</option>');
             //$('#theday').append('<option value="01" data-val="01">'+$d+'</option>');
@@ -487,9 +492,9 @@ $(function(){
        var thumbFCnt = $('.imageThumbnailField').length;
         //thumbF.css('height','400px');
         for($i=0;$i<thumbFCnt;$i++){
-            var thumbF = $('#imageThumbnailField'+$i);
-        $('#myLogForm'+$i).on('change', 'input[type="file"]', function(event) {
             //var thumbF = $('#imageThumbnailField'+$i);
+        $('#myLogForm'+$i).on('change', 'input[type="file"]', function(event) {
+            var thumbF = $('#imageThumbnailField'+$i);
             thumbF.css('background-color','silver');
             thumbF.empty();
             var files = event.target.files;
@@ -514,9 +519,12 @@ $(function(){
 });
 ////////////////////////////////////////////////////////////////////
 $(function(){
-    if($('#ratefield').length){
-        $.fn.raty.defaults.path = "/raty/lib/images";
-        rateF = $('#ratefield');
-        rateF.raty();
+    if($('.rateField').length){
+        var rateFieldCnt = $('.rateField').length;
+        for($i=0;$i<rateFieldCnt;$i++){
+            $.fn.raty.defaults.path = "/raty/lib/images";
+            rateF = $('#rateField'+$i);
+            rateF.raty({score: parseInt($('#showRaty'+$i).val())});
+        }
     }
 });

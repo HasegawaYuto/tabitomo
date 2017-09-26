@@ -422,9 +422,84 @@ class PageController extends Controller
                         ->get();
         foreach($changes as $change){
               $change->update([ 'scene'=>$request->NewScene,
-                                //'firstday'=>replaceDate($request->firstday),
-                                //'lastday'=>replaceDate($request->lastday)
+                                'theday'=>replaceDate($request->theday),
+                                'publish'=>$request->publish,
+                                'lat'=>$request->spotNS,
+                                'lng'=>$request->spotEW,
+                                'score'=>$request->score,
                               ]);
+        }
+        if(\Input::hasFile('image')){
+          $files = \Input::file('image');
+          $typearray = [
+            'gif' => 'image/gif',
+            'jpg' => 'image/jpeg',
+            'png' => 'image/png'];
+          $photoCnt = Mylog::where('user_id',$id)
+                          ->where('title_id',$title_id)
+                          ->where('scene_id',$scene_id)
+                          ->whereNotNull('photo_id')
+                          ->max('photo_id');
+          if(!isset($photoCnt)){
+              $photoCnt = 0;
+          }else{
+              $photoCnt = $photoCnt+1;
+          }
+          for($i=0;$i<count($_FILES['image']['name']);$i++){
+            //$mylog = new Mylog;
+            if (!isset($_FILES['image']['error'][$i]) || !is_int($_FILES['image']['error'][$i])) {
+                return false;
+            }else{
+              if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
+                  $file = $files[$i];//\Input::file('image');
+                  $filename = public_path() . '/image/upload' . $id . '-' . $request->title_id . '-' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
+                  $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                      })->orientate()->save($filename);
+                  $mylog = new Mylog;
+                  $mylog['data']=file_get_contents($filename);
+                  $mylog['mime']=$file->getMimeType();
+                  $mylog['user_id'] = $id;
+                  $mylog['title_id'] = $title_id;
+                  $mylog['scene_id'] = $scene_id;
+                  $mylog['photo_id'] = $i+$photoCnt;
+                  //if(isset($request->title)){
+                      $mylog['title'] = $request->title;
+                  //}
+                  //if(isset($request->scene)){
+                      $mylog['scene'] = $request->scene;
+                  //}
+                  //if(isset($request->firstday)){
+                      $mylog['firstday'] = replaceDate($request->firstday);
+                  //}
+                  //if(isset($request->lastday)){
+                      $mylog['lastday'] = replaceDate($request->lastday);
+                  //}
+                  if(isset($request->theday)){
+                      $mylog['theday'] = replaceDate($request->theday);
+                  }
+                  if(isset($request->publish)){
+                      $mylog['publish'] = $request->publish;
+                  }
+                  if(isset($request->spotNS)&&isset($request->spotEW)){
+                      $mylog['lat'] = $request->spotNS;
+                      $mylog['lng'] = $request->spotEW;
+                  }
+                  if(isset($request->score)){
+                      $mylog['score'] = $request->score;
+                  }
+                  if(isset($request->comment)){
+                      $mylog['comment'] = $request->comment;
+                  }
+                  $mylog->save();
+                  if(isset($filename)){
+                    if (\File::exists($filename)) {
+                          \File::delete($filename);
+                      }
+                  }
+              }
+            }
+          }
         }
         return redirect()->back();
     }
