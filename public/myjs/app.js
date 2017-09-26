@@ -492,9 +492,9 @@ $(function(){
        var thumbFCnt = $('.imageThumbnailField').length;
         //thumbF.css('height','400px');
         for($i=0;$i<thumbFCnt;$i++){
-            //var thumbF = $('#imageThumbnailField'+$i);
-        $('#myLogForm'+$i).on('change', 'input[type="file"]', function(event) {
             var thumbF = $('#imageThumbnailField'+$i);
+        $('#myLogForm'+$i).on('change', 'input[type="file"]', function(event) {
+            //var thumbF = $('#imageThumbnailField'+$i);
             thumbF.css('background-color','silver');
             thumbF.empty();
             var files = event.target.files;

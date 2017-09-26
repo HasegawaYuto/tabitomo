@@ -164,9 +164,9 @@
           </div>
           <div class="form-group form-inline">
                 {!! Form::label('publish','公開設定') !!}
-                {!! Form::radio('publish','public',true) !!}
+                {!! Form::radio('publish','public',true,['id'=>'publish'.$key]) !!}
                 <label>公開</label>
-                {!! Form::radio('publish','private') !!}
+                {!! Form::radio('publish','private',false,['id'=>'publish'.$key]) !!}
                 <label>非公開</label>
           </div>
           <div class="form-group">
