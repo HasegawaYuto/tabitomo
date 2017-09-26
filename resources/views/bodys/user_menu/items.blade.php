@@ -83,7 +83,7 @@
             <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}}" id="tab1-2">
                 <div class="panel panel-body">
                     <div class="col-xs-12">
-                        {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>'true','id'=>'myLogForm']) !!}
+                        {!! Form::open(['route'=>['create_items',Auth::user()->id],'files'=>'true','id'=>'myLogForm0','class'=>'myLogForm']) !!}
                         {!! csrf_field() !!}
                         {!! Form::hidden('title_id',$title_id) !!}
                         {!! Form::hidden('scene_id',$scene_id) !!}
@@ -136,30 +136,30 @@
                         <div class="form-group">
                               {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*']) !!}
                         </div>
-                        <div id="imageThumbnailField" class="col-xs-12">
+                        <div id="imageThumbnailField0" class="col-xs-12 imageThumbnailField">
                         </div>
                         <div class="form-group">
                             <label>スポット</label>
                             <!--div class="row"-->
                             @if(isset($spotNS) && isset($spotEW))
-                                {!! Form::hidden('spotNS', $spotNS, ['id' => 'ido']) !!}
-                                {!! Form::hidden('spotEW', $spotEW, ['id' => 'keido']) !!}
+                                {!! Form::hidden('spotNS', $spotNS, ['id' => 'ido0']) !!}
+                                {!! Form::hidden('spotEW', $spotEW, ['id' => 'keido0']) !!}
                             @else
-                                {!! Form::hidden('spotNS', null, ['id' => 'ido']) !!}
-                                {!! Form::hidden('spotEW', null, ['id' => 'keido']) !!}
+                                {!! Form::hidden('spotNS', null, ['id' => 'ido0']) !!}
+                                {!! Form::hidden('spotEW', null, ['id' => 'keido0']) !!}
                             @endif
                             @if(isset($mapzoom))
-                                {!! Form::hidden('mapzoom', $mapzoom, ['id' => 'mapzoom']) !!}
+                                {!! Form::hidden('mapzoom', $mapzoom, ['id' => 'mapzoom0']) !!}
                             @else
-                                {!! Form::hidden('mapzoom', null, ['id' => 'mapzoom']) !!}
+                                {!! Form::hidden('mapzoom', null, ['id' => 'mapzoom0']) !!}
                             @endif
-                              <div id="photoSpotSetArea" class="col-xs-12">
+                              <div id="photoSpotSetArea0" class="col-xs-12 photoSpotSetArea">
                               </div>
                             <!--/div-->
                         </div>
                         <div class="form-group">
                             <label>おすすめ度</label>
-                            <div id="ratefield">
+                            <div id="rateField0" class="rateField">
                             </div>
                         </div>
                         <div class="form-group">

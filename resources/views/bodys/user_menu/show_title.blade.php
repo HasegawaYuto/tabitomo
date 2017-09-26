@@ -53,7 +53,7 @@
                 $lastdayarray = explode('-',$title->lastday);
             ?>
         <div class="title_detail">
-            <div class="col-xs-4">
+            <div class="col-xs-5">
             <label>期間</label><br>
                 {{$firstdayarray[0]}}年{{(int)$firstdayarray[1]}}月{{(int)$firstdayarray[2]}}日
             ～
@@ -70,7 +70,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>お気に入り</label>〇
             </div>
         </div>
@@ -140,13 +140,13 @@
         <h4 class="modal-title">シーンの編集</h4>
       </div>
       <div class="modal-body">
-          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>$scene->scene_id]]) !!}
+          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>$scene->scene_id],'files'=>'true','id'=>'myLogForm{{$key}}','class'=>'myLogForm']) !!}
+          {!! csrf_field() !!}
           <div class="form-group form-inline">
               {!! Form::label('NewScene','シーン：') !!}
               {!! Form::text('NewScene',$scene->scene,['class'=>'form-control']) !!}
           </div>
           <div class="form-group form-inline">
-              <label>期間：</label>
           <?php
                 $today = Carbon\Carbon::now()->format('Y年m月d日');
                 $oldfirstday = new Carbon\Carbon($title->firstday);
@@ -154,9 +154,43 @@
                 $OldFirstday = $oldfirstday->format('Y年m月d日');
                 $OldLastday = $oldlastday->format('Y年m月d日');
           ?>
-              {!! Form::text('firstday',$OldFirstday,['class'=>'form-control datepicker','id'=>'firstday','style'=>'width:40%;']) !!}
-              <label>～</label>
-              {!! Form::text('lastday',$OldLastday,['class'=>'form-control datepicker','id'=>'lastday','style'=>'width:40%;']) !!}
+              {!! Form::hidden('firstday',$OldFirstday,['id'=>'firstday{{$key}}']) !!}
+              {!! Form::hidden('lastday',$OldLastday,['id'=>'lastday{{$key}}']) !!}
+                {!! Form::label('date','日付：') !!}
+                <select id="theday" class="form-control" name="theday" style="width:40%;">
+                    <option value="{{$today}}">{{$today}}</option>
+                </select>
+          </div>
+          <div class="form-group form-inline">
+                {!! Form::label('publish','公開設定') !!}
+                {!! Form::radio('publish','public',true) !!}
+                <label>公開</label>
+                {!! Form::radio('publish','private') !!}
+                <label>非公開</label>
+          </div>
+          <div class="form-group">
+                {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*']) !!}
+          </div>
+          <div id="imageThumbnailField{{$key}}" class="col-xs-12 imageThumbnailField">
+          </div>
+          <div class="form-group">
+              <label>スポット</label>
+              <!--div class="row"-->
+                  {!! Form::hidden('spotNS', $scene->lat, ['id' => 'ido{{$key}}']) !!}
+                  {!! Form::hidden('spotEW', $scene->lng, ['id' => 'keido{{$key}}']) !!}
+                  {!! Form::hidden('mapzoom', 6, ['id' => 'mapzoom']) !!}
+                <div id="photoSpotSetArea{{$key}}" class="col-xs-12 photoSpotSetArea">
+                </div>
+              <!--/div-->
+          </div>
+          <div class="form-group">
+              <label>おすすめ度</label>
+              <div id="ratefield{{$key}}">
+              </div>
+          </div>
+          <div class="form-group">
+                {!! Form::label('comment','コメント') !!}
+                {!! Form::textarea('comment',null,['class'=>"form-control",'placeholder'=>"ひとこと",'rows'=>'3']) !!}
           </div>
           {!! Form::submit('更新',['class'=>'btn btn-primary btn-xs']) !!}
           {!! Form::close() !!}

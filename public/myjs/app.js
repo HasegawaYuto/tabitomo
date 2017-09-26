@@ -179,21 +179,24 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
 }});
 ////////////////////////////////////////////////////////////////////////
 $(function(){
-    if($('#photoSpotSetArea').length){
-        var $pSS = $('#photoSpotSetArea');
+    if($('.photoSpotSetArea').length){
+        var $pSSCnt = $('.photoSpotSetArea').length;
+        for($i=0;$i<$pSSCnt;$i++){
+        var $pSS = $('#photoSpotSetArea'+$i);
         $pSS.css('height','40vh');
 //////////////////////////////////////////////
-        mapInit();
+        mapInit($i);
+        }
 ///////////////////////////
-        function mapInit() {//
-        if($('#ido').val()!="" && $('#keido').val()!=""){
-            console.log($('#keido').val());
-            var centerPosition = {lat: parseFloat($('#ido').val()), lng: parseFloat($('#keido').val())};
+        function mapInit(no) {//
+        if($('#ido'+no).val()!="" && $('#keido'+no).val()!=""){
+            console.log($('#keido'+no).val());
+            var centerPosition = {lat: parseFloat($('#ido'+no).val()), lng: parseFloat($('#keido'+no).val())};
         }else{
             var centerPosition = {lat: 36, lng: 136};
         }
-        if($('#mapzoom').val()!=""){
-            var mapzoom = parseInt($('#mapzoom').val());
+        if($('#mapzoom'+no).val()!=""){
+            var mapzoom = parseInt($('#mapzoom'+no).val());
         }else{
             var mapzoom = 6;
         }
@@ -208,7 +211,7 @@ $(function(){
             scrollwheel: true,//
             zoomControl: true,//
         };
-        var googlemap = new google.maps.Map(document.getElementById("photoSpotSetArea"), option);
+        var googlemap = new google.maps.Map(document.getElementById("photoSpotSetArea"+no), option);
 /////////////////////////////////////////////////
         var marker = new google.maps.Marker({
                         position: centerPosition,
@@ -219,27 +222,41 @@ $(function(){
                         marker.position = e.latLng;
                         //googlemap.getPosition(loc);
                         //$("#photoSpot").val(e.latLng.lat()+':'+e.latLng.lng());
-                        $("#ido").val(e.latLng.lat());
-                        $("#keido").val(e.latLng.lng());
+                        $("#ido"+no).val(e.latLng.lat());
+                        $("#keido"+no).val(e.latLng.lng());
                         marker.setMap(googlemap);
                         googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
-                        $("#mapzoom").val(googlemap.getZoom());
+                        $("#mapzoom"+no).val(googlemap.getZoom());
                     });
 
         google.maps.event.addDomListener(window, "resize", function() {
 	           var center = marker.getPosition();//googlemap.getCenter();
 	            google.maps.event.trigger(googlemap, "resize");
 	             googlemap.setCenter(center);
-               $("#mapzoom").val(googlemap.getZoom());
+               $("#mapzoom"+no).val(googlemap.getZoom());
           });
         $('#logtabs a').on('shown.bs.tab', function(){
               var center = marker.getPosition();//
 	            google.maps.event.trigger(googlemap, 'resize');
               //var center = marker.getPosition();//
               googlemap.setCenter(center);
-              $("#mapzoom").val(googlemap.getZoom());
+              $("#mapzoom"+no).val(googlemap.getZoom());
 	            //return false;
           });
+/*
+        var $modalCnt = $('.modal').length;
+        for($i=0;$i<$modalCnt;$i++){
+        $('#fixScene'+$i).on('shown.bs.modal', function(){
+              var center = marker.getPosition();//
+	            google.maps.event.trigger(googlemap, 'resize');
+              //var center = marker.getPosition();//
+              googlemap.setCenter(center);
+              //$("#mapzoom").val(googlemap.getZoom());
+	            //return false;
+          });
+        }
+*/
+
     }
 
         //mapInit();
@@ -465,10 +482,14 @@ $(function(){
 });
 /////////////////////////////////////////////////////////////////////////////////////
 $(function(){
-    thumbF = $('#imageThumbnailField');
-    if(thumbF.length && $('#myLogForm').length){
+    //thumbF = $('#imageThumbnailField');
+    if($('.imageThumbnailField').length && $('.myLogForm').length){
+       var thumbFCnt = $('.imageThumbnailField').length;
         //thumbF.css('height','400px');
-        $('#myLogForm').on('change', 'input[type="file"]', function(event) {
+        for($i=0;$i<thumbFCnt;$i++){
+            var thumbF = $('#imageThumbnailField'+$i);
+        $('#myLogForm'+$i).on('change', 'input[type="file"]', function(event) {
+            //var thumbF = $('#imageThumbnailField'+$i);
             thumbF.css('background-color','silver');
             thumbF.empty();
             var files = event.target.files;
@@ -489,7 +510,7 @@ $(function(){
                 reader.readAsDataURL(f);
             }
         });
-    }
+    }}
 });
 ////////////////////////////////////////////////////////////////////
 $(function(){
