@@ -145,7 +145,7 @@
           {!! Form::hidden('title',$title->title) !!}
           <div class="form-group form-inline">
               {!! Form::label('NewScene','シーン：') !!}
-              {!! Form::text('NewScene',$scene->scene,['class'=>'form-control']) !!}
+              {!! Form::text('NewScene',$scene->scene,['class'=>'form-control','id'=>'NewScene'.$key]) !!}
           </div>
           <div class="form-group form-inline">
           <?php
@@ -192,7 +192,7 @@
           </div>
           <div class="form-group">
                 {!! Form::label('comment','コメント') !!}
-                {!! Form::textarea('comment',null,['class'=>"form-control",'placeholder'=>"ひとこと",'rows'=>'3']) !!}
+                {!! Form::textarea('comment',null,['class'=>"form-control",'placeholder'=>"ひとこと",'rows'=>'3','id'=>'comment'.$key]) !!}
           </div>
           {!! Form::submit('更新',['class'=>'btn btn-primary btn-xs']) !!}
           {!! Form::close() !!}
