@@ -12,8 +12,15 @@
       {{$user->nickname or '未設定'}}
   </div>
   <div class="panel-body text-center">
-    <div class="col-xs-offset-2 col-xs-8"  id="menuavatarBeforeChange">
-        <div id="menuavatarBeforeChangeArea" class="img-circle" style="background-image:{{$url}};">
+    <div id="menuavatarBeforeChange" style="padding:50% 0 0 ;width:50%;height:100%;position: relative;left:25%;">
+        <div id="menuavatarBeforeChangeArea" class="img-circle" style="background-image:{{$url}};
+        height:100%;
+        width:100%;
+        background-size:cover;
+        background-position:center;
+        position: absolute;
+	top: 0;
+	left: 0;">
         </div>
     </div>
   </div>

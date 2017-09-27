@@ -369,6 +369,11 @@ class PageController extends Controller
                               ->where('publish','public')
                               ->orderBy('scene_id')
                               ->avg('score');
+      $data['photos'] = Mylog::where('user_id',$id)
+                              ->where('title_id',$title_id)
+                              ->whereNotNull('data')
+                              ->select('mime','data')
+                              ->get();
       foreach($scenes as $key => $scene){
           $thumbIDs = Mylog::where('user_id',$id)
                                   ->where('title_id',$title_id)

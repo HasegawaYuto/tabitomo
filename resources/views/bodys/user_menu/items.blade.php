@@ -153,13 +153,13 @@
                             @else
                                 {!! Form::hidden('mapzoom', null, ['id' => 'mapzoom0']) !!}
                             @endif
-                              <div id="photoSpotSetArea0" class="col-xs-12 photoSpotSetArea">
+                              <div id="createPhotoSpotSetArea0" class="col-xs-12 photoSpotSetArea">
                               </div>
                             <!--/div-->
                         </div>
                         <div class="form-group">
                             <label>おすすめ度</label>
-                            <div id="rateField0" class="rateField">
+                            <div id="createRateField0" class="rateField">
                             </div>
                         </div>
                         <div class="form-group">

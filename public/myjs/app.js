@@ -1,4 +1,91 @@
 $(function(){
+    if($('.imgPhotos').length){
+        var $imgPhotos = $('.imgPhotos');
+        $imgPhotos.css('max-height','20vh');
+    }
+});
+//////////////////////////////////////////////////
+$(function(){
+    if($('#fixScene0').length){
+        $('#fixScene0').on('shown.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var oldScene = button.data('scene');
+            var oldLat = button.data('lat');
+            var oldLng = button.data('lng');
+            var oldScore = button.data('score');
+            var oldComment = button.data('comment');
+            $('#NewScene0').val(oldScene);
+            $('#ido0').val(oldLat);
+            $('#keido0').val(oldLng);
+            $('#oldScore').val(oldScore);
+            $('#comment0').val(oldComment);
+            if($('#editRateField0').length){
+                    $.fn.raty.defaults.path = "/raty/lib/images";
+                    rateF = $('#editRateField0');
+                        rateF.raty({score: parseInt($('#oldScore').val())});
+                        //rateF.raty();
+            }
+            if($('#editPhotoSpotSetArea0').length){
+                var $pSS = $('#editPhotoSpotSetArea0');
+                $pSS.css('height','40vh');
+        //////////////////////////////////////////////
+                mapInit();
+        ///////////////////////////
+                function mapInit() {//
+                if($('#ido0').val()!="" && $('#keido0').val()!=""){
+                    var centerPosition = {lat: parseFloat($('#ido0').val()), lng: parseFloat($('#keido0').val())};
+                }else{
+                    var centerPosition = {lat: 36, lng: 136};
+                }
+                if($('#mapzoom0').val()!=""){
+                    var mapzoom = parseInt($('#mapzoom0').val());
+                }else{
+                    var mapzoom = 6;
+                }
+                var option = {//
+                    zoom : mapzoom,//
+                    center : centerPosition,//
+                    mapTypeId: google.maps.MapTypeId.TERRAIN,//
+                    //mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
+                    mapTypeControl: false,//
+                    //fullscreenControl: false,
+                    streetViewControl: false,//
+                    scrollwheel: true,//
+                    zoomControl: true,//
+                };
+                var googlemap = new google.maps.Map(document.getElementById("editPhotoSpotSetArea0"), option);
+        /////////////////////////////////////////////////
+                var marker = new google.maps.Marker({
+                                position: centerPosition,
+                                map: googlemap
+                            });
+        //////////////////////////////////////////////////////////
+                google.maps.event.addListener(googlemap, 'click', function (e) {
+                                marker.position = e.latLng;
+                                //googlemap.getPosition(loc);
+                                //$("#photoSpot").val(e.latLng.lat()+':'+e.latLng.lng());
+                                $("#ido0").val(e.latLng.lat());
+                                $("#keido0").val(e.latLng.lng());
+                                marker.setMap(googlemap);
+                                googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
+                                //$("#mapzoom"+no).val(googlemap.getZoom());
+                            });
+
+                google.maps.event.addDomListener(window, "resize", function() {
+        	           var center = marker.getPosition();//googlemap.getCenter();
+        	            google.maps.event.trigger(googlemap, "resize");
+        	             googlemap.setCenter(center);
+                       //$("#mapzoom"+no).val(googlemap.getZoom());
+                  });
+            }
+
+                //mapInit();
+            }
+    });
+  }
+});
+//////////////////////////////////////////////////////
+$(function(){
     if($('.showRaty').length){
         $.fn.raty.defaults.path = "/raty/lib/images";
         var $showRatyCnt = $('.showRaty').length;
@@ -130,35 +217,7 @@ $(function(){
 });
 //////////  アバター変更時
 $(function(){
-    if($('#menuavatarBeforeChangeArea').length){
-      $menuABC = $('#menuavatarBeforeChangeArea');
-      avatarSize();
-      $(window).resize(avatarSize());
-      function avatarSize(){
-        //$menuABC = $('#menuavatarBeforeChangeArea');
-        $menuABC.css('height',$('#menuavatarBeforeChange').width()+'px');
-        $menuABC.css({'background-position':'center',
-                  'background-repeat':'no-repeat',
-                  'background-size':'cover'
-            });
-      }
-    }
     if($('#avatarBeforeChangeArea').length && $('#avatarAfterChangeArea').length){
-    $ABC = $('#avatarBeforeChangeArea');
-    $AAC = $('#avatarAfterChangeArea');
-    //$menuABC = $('#menuavatarBeforeChangeArea');
-    $ABC.css('height',$ABC.width());
-    //$menuABC.css('height',$menuABC.css('width'));
-    $ABC.css({'background-position':'center',
-              'background-repeat':'no-repeat',
-              'background-size':'cover'
-        });
-    $AAC.css('height',$ABC.width());
-    $AAC.css({'background-position':'center',
-              'background-repeat':'no-repeat',
-              'background-size':'cover',
-              'transform':'rotate( 0deg )'
-        });
 $('#avatarForm').on('change', 'input[type="file"]', function(e) {
             var file = e.target.files[0],
                 reader = new FileReader(),
@@ -179,24 +238,20 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
 }});
 ////////////////////////////////////////////////////////////////////////
 $(function(){
-    if($('.photoSpotSetArea').length){
-        var $pSSCnt = $('.photoSpotSetArea').length;
-        for($i=0;$i<$pSSCnt;$i++){
-        var $pSS = $('#photoSpotSetArea'+$i);
+    if($('#createPhotoSpotSetArea0').length){
+        var $pSS = $('#createPhotoSpotSetArea0');
         $pSS.css('height','40vh');
 //////////////////////////////////////////////
-        mapInit($i);
-        }
+        mapInit();
 ///////////////////////////
-        function mapInit(no) {//
-        if($('#ido'+no).val()!="" && $('#keido'+no).val()!=""){
-            console.log($('#keido'+no).val());
-            var centerPosition = {lat: parseFloat($('#ido'+no).val()), lng: parseFloat($('#keido'+no).val())};
+        function mapInit() {//
+        if($('#ido0').val()!="" && $('#keido0').val()!=""){
+            var centerPosition = {lat: parseFloat($('#ido0').val()), lng: parseFloat($('#keido0').val())};
         }else{
             var centerPosition = {lat: 36, lng: 136};
         }
-        if($('#mapzoom'+no).val()!=""){
-            var mapzoom = parseInt($('#mapzoom'+no).val());
+        if($('#mapzoom0').val()!=""){
+            var mapzoom = parseInt($('#mapzoom0').val());
         }else{
             var mapzoom = 6;
         }
@@ -211,7 +266,7 @@ $(function(){
             scrollwheel: true,//
             zoomControl: true,//
         };
-        var googlemap = new google.maps.Map(document.getElementById("photoSpotSetArea"+no), option);
+        var googlemap = new google.maps.Map(document.getElementById("createPhotoSpotSetArea0"), option);
 /////////////////////////////////////////////////
         var marker = new google.maps.Marker({
                         position: centerPosition,
@@ -222,8 +277,8 @@ $(function(){
                         marker.position = e.latLng;
                         //googlemap.getPosition(loc);
                         //$("#photoSpot").val(e.latLng.lat()+':'+e.latLng.lng());
-                        $("#ido"+no).val(e.latLng.lat());
-                        $("#keido"+no).val(e.latLng.lng());
+                        $("#ido0").val(e.latLng.lat());
+                        $("#keido0").val(e.latLng.lng());
                         marker.setMap(googlemap);
                         googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
                         //$("#mapzoom"+no).val(googlemap.getZoom());
@@ -242,23 +297,11 @@ $(function(){
 	            google.maps.event.trigger(googlemap, 'resize');
               //var center = marker.getPosition();//
               googlemap.setCenter(center);
-              $("#mapzoom"+no).val(googlemap.getZoom());
+              $("#mapzoom0").val(googlemap.getZoom());
 	            //return false;
           });
+
         }
-
-        if($('#fixScene'+no).length){
-        $('#fixScene'+no).on('shown.bs.modal', function(){
-              var center = marker.getPosition();//
-	            google.maps.event.trigger(googlemap, 'resize');
-              //var center = marker.getPosition();//
-              googlemap.setCenter(center);
-              //$("#mapzoom").val(googlemap.getZoom());
-	            //return false;
-          });
-        }
-
-
     }
 
         //mapInit();
@@ -450,12 +493,12 @@ $(function(){
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function(){
     if($('.theday').length){
-        var thedayCnt = $('.theday').length;
-        for($i=0;$i<thedayCnt;$i++){
-            selectTheDateSet($i);
-        }
-        $('#firstday0').change(selectTheDateSet);
-        $('#lastday0').change(selectTheDateSet);
+        //var thedayCnt = $('.theday').length;
+        //for($i=0;$i<thedayCnt;$i++){
+            selectTheDateSet(0);
+        //}
+        //$('#firstday0').change(selectTheDateSet);
+        //$('#lastday0').change(selectTheDateSet);
 /////////////////////////////////////
         function selectTheDateSet(no){
             var $firstday = $('#firstday'+no).val();
@@ -487,44 +530,39 @@ $(function(){
 });
 /////////////////////////////////////////////////////////////////////////////////////
 $(function(){
-    //thumbF = $('#imageThumbnailField');
     if($('.imageThumbnailField').length && $('.myLogForm').length){
-       var thumbFCnt = $('.imageThumbnailField').length;
-        //thumbF.css('height','400px');
+        var thumbFCnt = $('.imageThumbnailField').length;
         for($i=0;$i<thumbFCnt;$i++){
             var thumbF = $('#imageThumbnailField'+$i);
-        $('#myLogForm'+$i).on('change', 'input[type="file"]', function(event) {
-            //var thumbF = $('#imageThumbnailField'+$i);
-            thumbF.css('background-color','silver');
-            thumbF.empty();
-            var files = event.target.files;
-            var $inputFileLength = files.length;//Math.min(20,files.length);
-            for (var i = 0 ; i<$inputFileLength; i++) {
-                var f = files[i];
-                var reader = new FileReader;
-                reader.onload = (function(){
-                    return function(e){
-                        var imageAppend = $('<div class="col-xs-6" />').append('<img class="img-responsive" src="'+ e.target.result +'" style="margin-top:10px;margin-bottom:10px;" />');
-                        thumbF.append(imageAppend);
-                        //$('#photo'+ i).append('<img class="img-responsive" src="'+ e.target.result +'" style="margin:10px;" />');
-                    }
-                })(f);
+            $('#myLogForm'+$i).on('change', 'input[type="file"]', function(event) {
+                thumbF.css('background-color','silver');
+                thumbF.empty();
+                var files = event.target.files;
+                var $inputFileLength = files.length;//Math.min(20,files.length);
+                for (var i = 0 ; i<$inputFileLength; i++) {
+                    var f = files[i];
+                    var reader = new FileReader;
+                    reader.onload = (function(){
+                        return function(e){
+                            var imageAppend = $('<div class="col-xs-6" />').append('<img class="img-responsive" src="'+ e.target.result +'" style="margin-top:10px;margin-bottom:10px;" />');
+                            thumbF.append(imageAppend);
+                        }
+                    })(f);
                 if(i==$inputFileLength-1){
                     thumbF.append('<p>スマホなどの画像は保存の際に自動で向きを調節します</p>');
-                }
+                  }
                 reader.readAsDataURL(f);
-            }
-        });
-    }}
+                }
+            });
+        }
+    }
 });
 ////////////////////////////////////////////////////////////////////
 $(function(){
-    if($('.rateField').length){
-        var rateFieldCnt = $('.rateField').length;
-        for($i=0;$i<rateFieldCnt;$i++){
+    if($('#createRateField0').length){
             $.fn.raty.defaults.path = "/raty/lib/images";
-            rateF = $('#rateField'+$i);
-            rateF.raty({score: parseInt($('#showRaty'+$i).val())});
-        }
+            rateF = $('#createRateField0');
+                //rateF.raty({score: parseInt($('#oldScore').val())});
+                rateF.raty();
     }
 });

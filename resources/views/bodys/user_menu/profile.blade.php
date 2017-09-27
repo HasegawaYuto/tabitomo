@@ -22,13 +22,28 @@
         <table class="table table-striped">
           <tr>
             <td class="text-center">
-                <div class="row">
-                <div class="col-xs-offset-1 col-xs-4"  id="avatarBeforeChange">
-                    <div id="avatarBeforeChangeArea" class="img-circle" style="background-image:{{$url}};">
+                <div class="col-xs-6">
+                <div  id="avatarBeforeChange"
+                style="padding:50% 0 0;position:relative;width:50%;height:50%;left:25%;">
+                    <div id="avatarBeforeChangeArea" class="img-circle" style="background-image:{{$url}};height:100%;
+                    width:100%;
+                    background-size:cover;
+                    background-position:center;
+                    position: absolute;
+            	top: 0;
+            	left: 0;">
                     </div>
                 </div>
-                <div class="col-xs-offset-2 col-xs-4">
-                    <div id="avatarAfterChangeArea" class="img-circle">
+                </div>
+                <div class="col-xs-6">
+                <div style="padding:50% 0 0;position:relative;width:50%;height:50%;left:25%;">
+                    <div id="avatarAfterChangeArea" class="img-circle"  style="height:100%;
+                    width:100%;
+                    background-size:cover;
+                    background-position:center;
+                    position: absolute;
+            	top: 0;
+            	left: 0;">
                     </div>
                 </div>
                 </div>
