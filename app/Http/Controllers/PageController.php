@@ -372,7 +372,7 @@ class PageController extends Controller
       $data['photos'] = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
                               ->whereNotNull('data')
-                              ->select('mime','data')
+                              ->select('mime','data','scene_id')
                               ->get();
       foreach($scenes as $key => $scene){
           $thumbIDs = Mylog::where('user_id',$id)

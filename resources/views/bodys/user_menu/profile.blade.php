@@ -15,7 +15,11 @@
   <div class="text-center col-md-6">
     <div class="panel panel-info">
       <div class="panel panel-heading">
-        プロフィールの編集
+        @if(Auth::user()->id==$id)
+            プロフィールの編集
+        @else
+            プロフィール
+        @endif
       </div>
       <div class="panel-body">
       @if(Auth::user()->id == $id)
@@ -164,20 +168,6 @@
         </table>
         @else
         <table class="table table-striped">
-          <tr>
-            <td class="text-center">
-                <div class="row">
-                <div class="col-xs-offset-1 col-xs-4"  id="avatarBeforeChange">
-                    <div id="avatarBeforeChangeArea" class="img-circle" style="background-image:{{$url}};">
-                    </div>
-                </div>
-                <div class="col-xs-offset-2 col-xs-4">
-                    <div id="avatarAfterChangeArea" class="img-circle">
-                    </div>
-                </div>
-                </div>
-            </td>
-          </tr>
           <tr>
             <td class="text-left"><p><b>ニックネーム</b></p>
               <p class="text-center">{{$user->nickname or '未設定'}}</p>

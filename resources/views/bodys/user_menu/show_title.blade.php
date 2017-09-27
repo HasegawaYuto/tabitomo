@@ -8,10 +8,17 @@
     <div class="panel panel-info">
         <div class="panel-heading" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">
                 {!! Link_to_route('show_user_items','マイログ',['id'=>$id]) !!}
-                &nbsp;&nbsp; ≫&nbsp;&nbsp;
-                <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fixTitle">編集</button>
-                &nbsp;&nbsp;{{$title->title}}
+                &nbsp;&nbsp; ≫
+                @if(Auth::user()->id == $id)
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fixTitle">編集</button>
+                @else
+                    「お気に入ボタン」
+                @endif
+                &nbsp;&nbsp;
+                {{$title->title}}
 
+@if(Auth::user()->id == $id)
 <div class="modal fade" id="fixTitle">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -43,7 +50,7 @@
     </div>
   </div>
 </div>
-
+@endif
 
 
         </div>
@@ -83,6 +90,7 @@
                 <div class="col-xs-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">
+                          @if(Auth::user()->id == $id)
                             <button type="button" class="btn btn-warning btn-xs"  data-toggle="modal" data-target="#fixScene0" data-scene="{{$scene->scene}}"
                             data-lat="{{$scene->lat}}"
                             data-lng="{{$scene->lng}}"
@@ -91,6 +99,9 @@
                             data-oldtheday="{{$thedayarray[0]}}年{{$thedayarray[1]}}月{{$thedayarray[2]}}日"
                             data-sceneid="{{$scene->scene_id}}"
                               >編集</button>
+                          @else
+                            「お気に入りボタン」
+                          @endif
                             &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                         </div>
                         <div class="panel-body">
@@ -181,10 +192,10 @@
                 </select>
           </div>
           @if(isset($photos))
-              <div class="col-xs-12">
+              <div class="col-xs-12" id="photosField">
                   @foreach($photos as $photo)
-                      <div class="col-xs-4">
-                          <img class="img-responsive imgPhotos" src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" style="margin-top:10px;margin-bottom:10px;" data-sceneID="{{$photo->scene_id}}" />
+                      <div class="col-xs-4" data-sceneID="{{$photo->scene_id}}">
+                          <img class="img-responsive imgPhotos" src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" style="margin-top:10px;margin-bottom:10px;max-height:20vh;" />
                       </div>
                   @endforeach
               </div>

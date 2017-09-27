@@ -1,12 +1,19 @@
-$(function(){
-    if($('.imgPhotos').length){
-        var $imgPhotos = $('.imgPhotos');
-        $imgPhotos.css('max-height','20vh');
-    }
-});
 //////////////////////////////////////////////////
 $(function(){
     if($('#fixScene0').length){
+        var originalImg = $('#photosField').html();
+        $('#fixScene0').on('hidden.bs.modal', function () {
+            $('#photosField').html(originalImg);
+        });
+        $('#fixScene0').on('show.bs.modal', function (event) {
+            var $sceneID = $(event.relatedTarget).data('sceneid');
+            $('#photosField').find('div').each(function(){
+                if($(this).data('sceneID') != $sceneID){
+                    $(this).remove();
+                }
+            });
+            $('#photosField').append('hoge');
+        });
         $('#fixScene0').on('shown.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var oldScene = button.data('scene');
