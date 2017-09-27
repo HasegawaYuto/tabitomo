@@ -121,7 +121,7 @@
                               {!! Form::text('scene',null,['class'=>'form-control','placeholder'=>'例〇〇旅館の夕食']) !!}
                         </div>
                         <div class="form-group">
-                              {!! Form::label('date','日付') !!}
+                              {!! Form::label('theday','日付') !!}
                               <select id="theday0" class="form-control theday" name="theday" style="width:40%;">
                                   <option value="{{$today}}">{{$today}}</option>
                               </select>

@@ -14,10 +14,12 @@ $(function(){
             var oldLng = button.data('lng');
             var oldScore = button.data('score');
             var oldComment = button.data('comment');
+            var oldTheday = button.data('theday');
             $('#NewScene0').val(oldScene);
             $('#ido0').val(oldLat);
             $('#keido0').val(oldLng);
             $('#oldScore').val(oldScore);
+            $('#edittheday0').val(oldTheday);
             $('#comment0').val(oldComment);
             if($('#editRateField0').length){
                     $.fn.raty.defaults.path = "/raty/lib/images";
@@ -463,60 +465,63 @@ $('#prefselect').change(function() {
 }});
 //////////////////////////////////////////////////////////////////////////////
 $(function(){
-  if($('.datepicker').length && $('#firstday').length && $('#lastday').length){
+  if($('.datepicker').length && $('#firstday0').length && $('#lastday0').length){
     //$('.class-sunday').css('color','red !important');
     //$('.class-saturday').css('color','blue !important');
-    $('#firstday').datepicker({
+    $('#firstday0').datepicker({
         format: "yyyy年mm月dd日",
         language: "ja",
         daysOfWeekHighlighted: "0,6",
         useCurrent: false
         }
     );
-    $('#lastday').datepicker({
+    $('#lastday0').datepicker({
         format: "yyyy年mm月dd日",
         language: "ja",
         daysOfWeekHighlighted: "0,6",
         useCurrent: false
         }
     );
-    var $FD = $('#firstday');
-    var $LD = $('#lastday');
+    var $FD = $('#firstday0');
+    var $LD = $('#lastday0');
     $FD.change(function(){
-        //var theday = $FD.val();
         $LD.val($FD.datepicker('getFormattedDate'));
         $LD.datepicker('update');
     });
-    //$('.class-sunday').css('color','red');
     $('.class-saturday').css('color','blue');
 }});
 ////////////////////////////////////////////////////////////////////////////////////////
 $(function(){
     if($('.theday').length){
-        //var thedayCnt = $('.theday').length;
-        //for($i=0;$i<thedayCnt;$i++){
-            selectTheDateSet(0);
-        //}
-        //$('#firstday0').change(selectTheDateSet);
-        //$('#lastday0').change(selectTheDateSet);
+        selectTheDateSetCreate();
+        $('#firstday0').change(selectTheDateSetCreate);
+        $('#lastday0').change(selectTheDateSetCreate);
+        $('#edittheday0').change(selectTheDateSetCreate);
 /////////////////////////////////////
-        function selectTheDateSet(no){
-            var $firstday = $('#firstday'+no).val();
-            var $lastday = $('#lastday'+no).val();
+        function selectTheDateSetCreate(){
+            var $firstday = $('#firstday0').val();
+            var $lastday = $('#lastday0').val();
             var $firstdayParse = dateToParse($firstday);
             var $lastdayParse = dateToParse($lastday);
             var $difference = ($lastdayParse - $firstdayParse)/1000/60/60/24;
+            if($('#edittheday0').length){
+                var $theday = $('#edittheday0').val();
+                var $thedayParse = dateToParse($theday);
+                var $editdifference = ($thedayParse - $firstdayParse)/1000/60/60/24;
+            }
             var $oneday = 1000*60*60*24;
-            $('#theday'+no).empty();
+            $('#theday0').empty();
             for($d=0;$d<=$difference;$d++){
                 var $optionday = new Date($firstdayParse + ($oneday * $d));
                 var $optionYear = $optionday.getFullYear();
                 var $optionMonth = $optionday.getMonth() + 1;
                 var $optionDay = $optionday.getDate();
-                $('#theday'+no).append('<option value="'+$optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2)+'">'+$optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日'+'</option>');
+                if($('#edittheday0').length && $d==$editdifference){
+                    $('#theday0').append('<option selected  value="'+$optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2)+'">'+$optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日'+'</option>');
+                }else{
+                    $('#theday0').append('<option value="'+$optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2)+'">'+$optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日'+'</option>');
+                }
             }
-            //$('#theday').append('<option value="01" data-val="01">'+$lastdayParse+'</option>');
-            //$('#theday').append('<option value="01" data-val="01">'+$d+'</option>');
         }
 //////////////////////////////////////////////////////////////////
         function dateToParse(date){
@@ -535,7 +540,7 @@ $(function(){
         for($i=0;$i<thumbFCnt;$i++){
             var thumbF = $('#imageThumbnailField'+$i);
             $('#myLogForm'+$i).on('change', 'input[type="file"]', function(event) {
-                thumbF.css('background-color','silver');
+                //thumbF.css('background-color','silver');
                 thumbF.empty();
                 var files = event.target.files;
                 var $inputFileLength = files.length;//Math.min(20,files.length);

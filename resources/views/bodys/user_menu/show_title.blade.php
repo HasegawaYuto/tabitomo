@@ -88,6 +88,7 @@
                             data-lng="{{$scene->lng}}"
                             data-score="{{$scene->score}}"
                             data-comment="{{$scene->comment}}"
+                            data-theday="{{$thedayarray[0]}}年{{$thedayarray[1]}}月{{$thedayarray[2]}}日"
                               >編集</button>
                             &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                         </div>
@@ -165,17 +166,20 @@
                 $today = Carbon\Carbon::now()->format('Y年m月d日');
                 $oldfirstday = new Carbon\Carbon($title->firstday);
                 $oldlastday = new Carbon\Carbon($title->lastday);
+                //$oldlastday = new Carbon\Carbon($title->theday);
                 $OldFirstday = $oldfirstday->format('Y年m月d日');
                 $OldLastday = $oldlastday->format('Y年m月d日');
+                //$OldTheday = $oldtheday->format('Y/m/d');
           ?>
               {!! Form::hidden('firstday',$OldFirstday,['id'=>'firstday0']) !!}
               {!! Form::hidden('lastday',$OldLastday,['id'=>'lastday0']) !!}
+              {!! Form::hidden('oldtheday',$today,['id'=>'edittheday0']) !!}
                 {!! Form::label('date','日付：') !!}
                 <select id="theday0" class="form-control theday" name="theday">
                 </select>
           </div>
           @if(isset($photos))
-              <div class="col-xs-12" style="background-color:silver;">
+              <div class="col-xs-12">
                   @foreach($photos as $photo)
                       <div class="col-xs-4">
                           <img class="img-responsive imgPhotos" src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" style="margin-top:10px;margin-bottom:10px;" />
