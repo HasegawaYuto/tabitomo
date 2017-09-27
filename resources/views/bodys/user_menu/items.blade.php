@@ -122,7 +122,7 @@
                         </div>
                         <div class="form-group">
                               {!! Form::label('theday','日付') !!}
-                              <select id="theday0" class="form-control theday" name="theday" style="width:40%;">
+                              <select id="theday0" class="form-control theday" name="theday">
                                   <option value="{{$today}}">{{$today}}</option>
                               </select>
                         </div>

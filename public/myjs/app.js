@@ -10,22 +10,62 @@ $(function(){
         $('#fixScene0').on('shown.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var oldScene = button.data('scene');
+            var Sceneid = button.data('sceneid');
             var oldLat = button.data('lat');
             var oldLng = button.data('lng');
             var oldScore = button.data('score');
             var oldComment = button.data('comment');
-            var oldTheday = button.data('theday');
+            var oldTheday = button.data('oldtheday');
+            var titleId = $('#titleIdAction').val();
             $('#NewScene0').val(oldScene);
             $('#ido0').val(oldLat);
             $('#keido0').val(oldLng);
             $('#oldScore').val(oldScore);
             $('#edittheday0').val(oldTheday);
             $('#comment0').val(oldComment);
+            var originalurl = $('#myLogForm0').attr('action');
+            var editreplace = 'title/'+titleId+'/'+Sceneid+'/edit';
+            var editurl = originalurl.replace(/(title\/)(.*?)(\/edit)/,editreplace);
+            $("#myLogForm0").attr("action",editurl);
+
+            function dateToParse(date){
+                date=date.replace('月','/');
+                date=date.replace('年','/');
+                date=date.replace('日','');
+                date=Date.parse(date);
+                return date;
+            }
+            var $firstday = $('#firstday0').val();
+            var $lastday = $('#lastday0').val();
+            var $theday = $('#edittheday0').val();
+            var $firstdayParse = dateToParse($firstday);
+            var $lastdayParse = dateToParse($lastday);
+            var $thedayParse = dateToParse($theday);
+            var $difference = ($lastdayParse - $firstdayParse)/1000/60/60/24;
+            var $editdifference = ($thedayParse - $firstdayParse)/1000/60/60/24;
+            var $oneday = 1000*60*60*24;
+            $('#theday0').empty();
+            //$('#theday0').append('<option value="0000-00-00">0000年00月00日</option>');
+            //$('#theday0').append('<option value="0000-00-01" selected="selected">0000年00月01日</option>');
+            for($d=0;$d<=$difference;$d++){
+                var $optionday = new Date($firstdayParse + ($oneday * $d));
+                var $optionYear = $optionday.getFullYear();
+                var $optionMonth = $optionday.getMonth() + 1;
+                var $optionDay = $optionday.getDate();
+                var $optionvalue = $optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2);
+                var $optionstr = $optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日';
+                if($d==$editdifference){
+                    $('#theday0').append('<option selected="selected" value="'+$optionvalue+'">'+$optionstr+'</option>');
+                }else{
+                    $('#theday0').append('<option value="'+$optionvalue+'">'+$optionstr+'</option>');
+                }
+            }
+
+
             if($('#editRateField0').length){
                     $.fn.raty.defaults.path = "/raty/lib/images";
                     rateF = $('#editRateField0');
                         rateF.raty({score: parseInt($('#oldScore').val())});
-                        //rateF.raty();
             }
             if($('#editPhotoSpotSetArea0').length){
                 var $pSS = $('#editPhotoSpotSetArea0');
@@ -87,7 +127,7 @@ $(function(){
   }
 });
 //////////////////////////////////////////////////////
-$(function(){
+$(function(){///オススメ更新
     if($('.showRaty').length){
         $.fn.raty.defaults.path = "/raty/lib/images";
         var $showRatyCnt = $('.showRaty').length;
@@ -97,26 +137,22 @@ $(function(){
     }
 });
 ////////////////////////////////////////////////////////////////
-$(function(){
+$(function(){///オススメ表示
     if($('.showRatyAve').length){
         $.fn.raty.defaults.path = "/raty/lib/images";
         var $showRatyAveCnt = $('.showRatyAve').length;
-        //for($i=0;$i<$showRatyAveCnt;$i++){
             $('#showRatyAveDiv').raty({ readOnly: true, score: parseInt($('#showRatyAve').val()*2)/2 });
-        //}
     }
 });
 ////////////////////////////////////////////////////////////////////////
-$(function(){
+$(function(){///グーグルマップ表示
     if($('.googlemapSpot').length){
         var $gmScnt = $('.googlemapSpot').length;
         for($i=0;$i<$gmScnt;$i++){
-        //$('.googlemapSpot').each(function(){
             var $latval = parseFloat($('#googlemapLat'+$i).val());
             var $lngval = parseFloat($('#googlemapLng'+$i).val());
             var centerPosition = {lat: $latval, lng: $lngval};
             var googlemap = new google.maps.Map(document.getElementById("googlemapSpotID"+$i),
-            //var googlemap = new google.maps.Map($(this),
                     {
                       zoom : 8,
                       center : centerPosition,
@@ -131,12 +167,9 @@ $(function(){
                             position: centerPosition,
                             map: googlemap
                         });
-
             google.maps.event.addDomListener(window, "resize", function() {
-    	           //var center = marker.getPosition();//googlemap.getCenter();
     	            google.maps.event.trigger(googlemap, "resize");
     	             googlemap.setCenter(centerPosition);
-                   //$("#mapzoom").val(googlemap.getZoom());
               });
         }
         //});
@@ -154,8 +187,8 @@ $(function(){
                 //};
                 //var googlemap = new google.maps.Map($(this), option);
         //mapInit();
-///////////////////////////
-/*
+        ///////////////////////////
+        /*
         function mapInit() {//
         if($('#ido').val()!="" && $('#keido').val()!=""){
             console.log($('#keido').val());
@@ -180,12 +213,12 @@ $(function(){
             zoomControl: true,//
         };
         var googlemap = new google.maps.Map(document.getElementById("photoSpotSetArea"), option);
-/////////////////////////////////////////////////
+        /////////////////////////////////////////////////
         var marker = new google.maps.Marker({
                         position: centerPosition,
                         map: googlemap
                     });
-//////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////
         google.maps.event.addListener(googlemap, 'click', function (e) {
                         marker.position = e.latLng;
                         //googlemap.getPosition(loc);
@@ -196,7 +229,6 @@ $(function(){
                         googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
                         $("#mapzoom").val(googlemap.getZoom());
                     });
-
         google.maps.event.addDomListener(window, "resize", function() {
 	           var center = marker.getPosition();//googlemap.getCenter();
 	            google.maps.event.trigger(googlemap, "resize");
@@ -212,15 +244,14 @@ $(function(){
 	            //return false;
           });
     }
-
         //mapInit();
     */
     }
 });
 //////////  アバター変更時
-$(function(){
+$(function(){///アバター画像変更サムネイル
     if($('#avatarBeforeChangeArea').length && $('#avatarAfterChangeArea').length){
-$('#avatarForm').on('change', 'input[type="file"]', function(e) {
+        $('#avatarForm').on('change', 'input[type="file"]', function(e) {
             var file = e.target.files[0],
                 reader = new FileReader(),
                 $preview = $("#avatarAfterChangeArea");
@@ -239,13 +270,11 @@ $('#avatarForm').on('change', 'input[type="file"]', function(e) {
           });
 }});
 ////////////////////////////////////////////////////////////////////////
-$(function(){
+$(function(){///アップロード画像サムネイル
     if($('#createPhotoSpotSetArea0').length){
         var $pSS = $('#createPhotoSpotSetArea0');
         $pSS.css('height','40vh');
-//////////////////////////////////////////////
         mapInit();
-///////////////////////////
         function mapInit() {//
         if($('#ido0').val()!="" && $('#keido0').val()!=""){
             var centerPosition = {lat: parseFloat($('#ido0').val()), lng: parseFloat($('#keido0').val())};
@@ -269,12 +298,10 @@ $(function(){
             zoomControl: true,//
         };
         var googlemap = new google.maps.Map(document.getElementById("createPhotoSpotSetArea0"), option);
-/////////////////////////////////////////////////
         var marker = new google.maps.Marker({
                         position: centerPosition,
                         map: googlemap
                     });
-//////////////////////////////////////////////////////////
         google.maps.event.addListener(googlemap, 'click', function (e) {
                         marker.position = e.latLng;
                         //googlemap.getPosition(loc);
@@ -285,14 +312,12 @@ $(function(){
                         googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
                         //$("#mapzoom"+no).val(googlemap.getZoom());
                     });
-
         google.maps.event.addDomListener(window, "resize", function() {
 	           var center = marker.getPosition();//googlemap.getCenter();
 	            google.maps.event.trigger(googlemap, "resize");
 	             googlemap.setCenter(center);
                //$("#mapzoom"+no).val(googlemap.getZoom());
           });
-
         if($('#logtabs a').length){
         $('#logtabs a').on('shown.bs.tab', function(){
               var center = marker.getPosition();//
@@ -302,11 +327,8 @@ $(function(){
               $("#mapzoom0").val(googlemap.getZoom());
 	            //return false;
           });
-
         }
     }
-
-        //mapInit();
     }
 });
 /*
@@ -389,7 +411,7 @@ $(function(){
 */
 /////////////////////////////////////////////////////////////////////////////////////////
 /////生年月日のうるう年設定
-$(function(){
+$(function(){//生年月日うるう年
     if($('#monthSelectBox').length && $('#daySelectBox').length && $('#yearSelectBox').length){
     var $month = $('#monthSelectBox');
    var $day = $('#daySelectBox');
@@ -432,39 +454,27 @@ $(function(){
 }});
 ///////////////////////////////////////////////////
 /////////都道府県セレクトボックス
-$(function(){
-  if($('#cityselect').length && $('#prefselect').length){
-var $city = $('#cityselect'); //都道府県の要素を変数に入れます。
-var original = $city.html(); //後のイベントで、不要なoption要素を削除するため、オリジナルをとっておく
-
-//地方側のselect要素が変更になるとイベントが発生
-$('#prefselect').change(function() {
-
-  //選択された地方のvalueを取得し変数に入れる
-  var val1 = $(this).val();
-
-  //削除された要素をもとに戻すため.html(original)を入れておく
-  $city.html(original).find('option').each(function() {
-    var val2 = $(this).data('val'); //data-valの値を取得
-
-    //valueと異なるdata-valを持つ要素を削除
-    if (val1 != val2) {
-      $(this).not(':first-child').remove();
-    }
-
-  });
-
-  //地方側のselect要素が未選択の場合、都道府県をdisabledにする
-  if ($(this).val() == "") {
-    $city.attr('disabled', 'disabled');
-  } else {
-    $city.removeAttr('disabled');
-  }
-
-});
+$(function(){/////////////都道府県セレクトボックス
+    if($('#cityselect').length && $('#prefselect').length){
+        var $city = $('#cityselect');
+        var original = $city.html();
+        $('#prefselect').change(function() {
+            var val1 = $(this).val();
+            $city.html(original).find('option').each(function() {
+                var val2 = $(this).data('val');
+                if (val1 != val2) {
+                    $(this).not(':first-child').remove();
+                }
+            });
+            if ($(this).val() == "") {
+                $city.attr('disabled', 'disabled');
+            } else {
+            $city.removeAttr('disabled');
+            }
+        });
 }});
 //////////////////////////////////////////////////////////////////////////////
-$(function(){
+$(function(){/////カレンダー表示
   if($('.datepicker').length && $('#firstday0').length && $('#lastday0').length){
     //$('.class-sunday').css('color','red !important');
     //$('.class-saturday').css('color','blue !important');
@@ -496,7 +506,6 @@ $(function(){
         selectTheDateSetCreate();
         $('#firstday0').change(selectTheDateSetCreate);
         $('#lastday0').change(selectTheDateSetCreate);
-        $('#edittheday0').change(selectTheDateSetCreate);
 /////////////////////////////////////
         function selectTheDateSetCreate(){
             var $firstday = $('#firstday0').val();
@@ -504,11 +513,6 @@ $(function(){
             var $firstdayParse = dateToParse($firstday);
             var $lastdayParse = dateToParse($lastday);
             var $difference = ($lastdayParse - $firstdayParse)/1000/60/60/24;
-            if($('#edittheday0').length){
-                var $theday = $('#edittheday0').val();
-                var $thedayParse = dateToParse($theday);
-                var $editdifference = ($thedayParse - $firstdayParse)/1000/60/60/24;
-            }
             var $oneday = 1000*60*60*24;
             $('#theday0').empty();
             for($d=0;$d<=$difference;$d++){
@@ -516,11 +520,7 @@ $(function(){
                 var $optionYear = $optionday.getFullYear();
                 var $optionMonth = $optionday.getMonth() + 1;
                 var $optionDay = $optionday.getDate();
-                if($('#edittheday0').length && $d==$editdifference){
-                    $('#theday0').append('<option selected  value="'+$optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2)+'">'+$optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日'+'</option>');
-                }else{
                     $('#theday0').append('<option value="'+$optionYear+'-'+("0"+$optionMonth.toString()).slice(-2)+'-'+("0"+$optionDay.toString()).slice(-2)+'">'+$optionYear+'年'+("0"+$optionMonth.toString()).slice(-2)+'月'+("0"+$optionDay.toString()).slice(-2)+'日'+'</option>');
-                }
             }
         }
 //////////////////////////////////////////////////////////////////

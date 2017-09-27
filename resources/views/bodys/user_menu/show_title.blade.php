@@ -88,7 +88,8 @@
                             data-lng="{{$scene->lng}}"
                             data-score="{{$scene->score}}"
                             data-comment="{{$scene->comment}}"
-                            data-theday="{{$thedayarray[0]}}年{{$thedayarray[1]}}月{{$thedayarray[2]}}日"
+                            data-oldtheday="{{$thedayarray[0]}}年{{$thedayarray[1]}}月{{$thedayarray[2]}}日"
+                            data-sceneid="{{$scene->scene_id}}"
                               >編集</button>
                             &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                         </div>
@@ -154,9 +155,10 @@
           <h4 class="modal-title">シーンの編集</h4>
       </div>
       <div class="modal-body">
-          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>$scene->scene_id],'files'=>'true','id'=>'myLogForm0','class'=>'myLogForm']) !!}
+          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>'sceneID'],'files'=>'true','id'=>'myLogForm0','class'=>'myLogForm']) !!}
           {!! csrf_field() !!}
           {!! Form::hidden('title',$title->title) !!}
+          {!! Form::hidden('title_id',$title->title_id,['id'=>'titleIdAction']) !!}
           <div class="form-group form-inline">
               {!! Form::label('NewScene','シーン：') !!}
               {!! Form::text('NewScene','hoge',['class'=>'form-control','id'=>'NewScene0']) !!}
@@ -174,7 +176,7 @@
               {!! Form::hidden('firstday',$OldFirstday,['id'=>'firstday0']) !!}
               {!! Form::hidden('lastday',$OldLastday,['id'=>'lastday0']) !!}
               {!! Form::hidden('oldtheday',$today,['id'=>'edittheday0']) !!}
-                {!! Form::label('date','日付：') !!}
+                {!! Form::label('theday','日付：') !!}
                 <select id="theday0" class="form-control theday" name="theday">
                 </select>
           </div>
@@ -182,7 +184,7 @@
               <div class="col-xs-12">
                   @foreach($photos as $photo)
                       <div class="col-xs-4">
-                          <img class="img-responsive imgPhotos" src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" style="margin-top:10px;margin-bottom:10px;" />
+                          <img class="img-responsive imgPhotos" src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" style="margin-top:10px;margin-bottom:10px;" data-sceneID="{{$photo->scene_id}}" />
                       </div>
                   @endforeach
               </div>
