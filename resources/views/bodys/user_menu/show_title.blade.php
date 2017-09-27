@@ -194,9 +194,7 @@
           @if(isset($photos))
               <div class="col-xs-12" id="photosField">
                   @foreach($photos as $photo)
-                      <div class="col-xs-4" data-sceneID="{{$photo->scene_id}}">
-                          <img class="img-responsive imgPhotos" src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" style="margin-top:10px;margin-bottom:10px;max-height:20vh;" />
-                      </div>
+                      <img class="img-responsive imgPhotos" src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" style="margin:10px;max-height:20vh;float:left;" sceneID="{{$photo->scene_id}}" photoID="{{$photo->id}}" />
                   @endforeach
               </div>
           @endif

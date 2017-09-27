@@ -2,17 +2,15 @@
 $(function(){
     if($('#fixScene0').length){
         var originalImg = $('#photosField').html();
-        $('#fixScene0').on('hidden.bs.modal', function () {
-            $('#photosField').html(originalImg);
-        });
         $('#fixScene0').on('show.bs.modal', function (event) {
-            var $sceneID = $(event.relatedTarget).data('sceneid');
-            $('#photosField').find('div').each(function(){
-                if($(this).data('sceneID') != $sceneID){
+            var button = $(event.relatedTarget);
+            var $sceneID = parseInt(button.data('sceneid'));
+            $('#photosField').html(originalImg).find('img').each(function(){
+                var $photoSceneId = parseInt($(this).attr('sceneID'));
+                if($photoSceneId != $sceneID){
                     $(this).remove();
                 }
             });
-            $('#photosField').append('hoge');
         });
         $('#fixScene0').on('shown.bs.modal', function (event) {
             var button = $(event.relatedTarget);
@@ -30,6 +28,26 @@ $(function(){
             $('#oldScore').val(oldScore);
             $('#edittheday0').val(oldTheday);
             $('#comment0').val(oldComment);
+
+            if($('#photosField').length){
+                var num = 0;
+                $('#photosField img').on('click',function(){
+                    $(this).data("click",++num);
+                    var clickcnt = $(this).data("click");
+                    if(clickcnt % 2 ==1){
+                        $(this).css({'filter':'alpha(opacity=20)',
+                                      '-moz-opacity':'0.2',
+                                      'opacity':'0.2'});
+                    }else{
+                        $(this).css({'filter':'alpha(opacity=100)',
+                                      '-moz-opacity':'1',
+                                      'opacity':'1'});
+                    }
+                    return false;
+                });
+            }
+
+
             var originalurl = $('#myLogForm0').attr('action');
             var editreplace = 'title/'+titleId+'/'+Sceneid+'/edit';
             var editurl = originalurl.replace(/(title\/)(.*?)(\/edit)/,editreplace);
