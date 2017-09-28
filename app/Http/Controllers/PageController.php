@@ -150,16 +150,24 @@ class PageController extends Controller
     public function showUserItems($id){
       $user = Profile::where('user_id',$id)->first();
       $mylogsByTitle = Mylog::where('user_id',$id)
-                      ->where('publish','public')
+                      //->where('publish','public')
                       ->groupBy('title_id')
-                      ->select('title_id','title','firstday','lastday','user_id')//->get();
-                      ->paginate(10);
+                      ->select('title_id','title','firstday','lastday','user_id');
+      if(\Auth::user()->id != $id){
+            $mylogsByTitle = $mylogsByTitle->where('publish','public');
+      }
+      $mylogsByTitle = $mylogsByTitle->paginate(10);
       foreach($mylogsByTitle as $key => $mylogByTitle){
+          $arr = [];
           $data['logtitle'][$key] = Mylog::where('user_id',$id)
-                                ->where('publish','public')
+                                //->where('publish','public')
                                 ->where('title_id',$mylogByTitle->title_id)
                                 ->groupBy('scene_id')
-                                ->select('scene')->get();
+                                ->select('scene');
+          if(\Auth::user()->id!=$id){
+              $data['logtitle'][$key] = $data['logtitle'][$key]->where('publish','public');
+          }
+          $data['logtitle'][$key]=$data['logtitle'][$key]->get();
           $thumbIDs = Mylog::where('user_id',$id)
                             //->whereNotNull('mime')
                             ->where('publish','public')
@@ -235,7 +243,7 @@ class PageController extends Controller
             if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                 $file = $files[$i];//\Input::file('image');
                 $filename = public_path() . '/image/upload' . $id . '-' . $request->title_id . '-' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
-                $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
+                $image = \Image::make($file->getRealPath())->resize(600, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($filename);
                 $mylog = new Mylog;
@@ -353,16 +361,21 @@ class PageController extends Controller
       $user = Profile::where('user_id',$id)->first();
       $data['title'] = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
-                              ->where('publish','public')
-                              ->select('title','firstday','lastday','title_id')
-                              ->first();
+                              //->where('publish','public')
+                              ->select('title','firstday','lastday','title_id');
+      if(\Auth::user()->id != $id){
+          $data['title'] = $data['title']->where('publish','public');
+      }
+      $data['title'] = $data['title']->first();
       $scenes = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
-                              ->where('publish','public')
                               ->groupBy('scene_id')
                               ->orderBy('theday')
-                              ->select('scene','theday','lat','lng','score','comment','scene_id')
-                              ->paginate(5);
+                              ->select('publish','scene','theday','lat','lng','score','comment','scene_id','title');
+      if(\Auth::user()->id != $id){
+          $scenes = $scenes->where('publish','public');
+      }
+      $scenes = $scenes->paginate(5);
       $data['scenes'] = $scenes;
       $data['scoreAve'] = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
@@ -372,16 +385,23 @@ class PageController extends Controller
       $data['photos'] = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
                               ->whereNotNull('data')
-                              ->select('mime','data','scene_id','id')
-                              ->get();
+                              ->select('mime','data','scene_id','id');
+      if(\Auth::user()->id != $id){
+          $data['photos'] = $data['photos']->where('publish','public');
+      }
+      $data['photos'] = $data['photos']->get();
       foreach($scenes as $key => $scene){
+          $arr=[];
           $thumbIDs = Mylog::where('user_id',$id)
                                   ->where('title_id',$title_id)
-                                  ->where('publish','public')
                                   ->where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->select('id')
-                                  ->get();
+                                  ->orderBy('theday');
+          if(\Auth::user()->id != $id){
+              $thumbIDs = $thumbIDs->where('publish','public');
+          }
+          $thumbIDs = $thumbIDs->get();
           if(isset($thumbIDs)){
               foreach($thumbIDs as $thumbID){
                   $arr[] = $thumbID->id;
@@ -394,7 +414,6 @@ class PageController extends Controller
       }
       $data['user']=$user;
       $data['id']=$id;
-      //$data['title_id']=$title_id;
       $data['thisyear']=Carbon::now()->year;
       return view('bodys.user_menu.show_title',$data);
     }
@@ -425,6 +444,15 @@ class PageController extends Controller
                         ->where('title_id',$title_id)
                         ->where('scene_id',$scene_id)
                         ->get();
+        $postDelNos = $_POST['deletePhotoNo'];
+        if(isset($postDelNos)){
+            foreach($postDelNos as $no => $postDelNo){
+                $bool = $postDelNo;
+                if($bool == 'true'){
+                    Mylog::find($no)->delete();
+                }
+            }
+        }
         foreach($changes as $change){
               $change->update([ 'scene'=>$request->NewScene,
                                 'theday'=>replaceDate($request->theday),
@@ -458,7 +486,7 @@ class PageController extends Controller
               if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                   $file = $files[$i];//\Input::file('image');
                   $filename = public_path() . '/image/upload' . $id . '-' . $request->title_id . '-' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
-                  $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
+                  $image = \Image::make($file->getRealPath())->resize(600, null, function ($constraint) {
                         $constraint->aspectRatio();
                       })->orientate()->save($filename);
                   $mylog = new Mylog;
@@ -468,18 +496,10 @@ class PageController extends Controller
                   $mylog['title_id'] = $title_id;
                   $mylog['scene_id'] = $scene_id;
                   $mylog['photo_id'] = $i+$photoCnt;
-                  //if(isset($request->title)){
-                      $mylog['title'] = $request->title;
-                  //}
-                  //if(isset($request->scene)){
-                      $mylog['scene'] = $request->scene;
-                  //}
-                  //if(isset($request->firstday)){
-                      $mylog['firstday'] = replaceDate($request->firstday);
-                  //}
-                  //if(isset($request->lastday)){
-                      $mylog['lastday'] = replaceDate($request->lastday);
-                  //}
+                  $mylog['title'] = $request->title;
+                  $mylog['scene'] = $request->scene;
+                  $mylog['firstday'] = replaceDate($request->firstday);
+                  $mylog['lastday'] = replaceDate($request->lastday);
                   if(isset($request->theday)){
                       $mylog['theday'] = replaceDate($request->theday);
                   }

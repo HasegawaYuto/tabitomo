@@ -42,16 +42,16 @@
                   {!! Link_to_route('show_title',$mylog->title,['id'=>$mylog->user_id,'title_id'=>$mylog->title_id],['style'=>'color:white;']) !!}
                       </div>
                       <div class="panel-body">
-                            <div class="col-xs-3">
+                            <div class="titleImageDiv">
                           @if(isset($thumb[$key]->data))
                           <?php
                             $mime = $thumb[$key]->mime;
                             $dataImage = base64_encode($thumb[$key]->data);
                           ?>
-                          <img class="img-responsive" src="data:{{$mime}};base64,{{$dataImage}}" style="vertical-align:middle;"/>
+                          <img class="img-responsive titleImage" src="data:{{$mime}};base64,{{$dataImage}}"/>
                           @endif
                             </div>
-                            <div class="col-xs-9">
+                            <div class="titleContents">
                                 <table>
                                     <tr>
                                         <td>{{$firstdayarray[0]}}年</td>
@@ -169,10 +169,6 @@
                               {!! Form::submit('&nbsp;保存&nbsp;',['class'=>'btn btn-info','name'=>'fin','value'=>'Fin']) !!}
                               {!! Form::submit('続ける',['value'=>'Con','class'=>'btn btn-warning','name'=>'con']) !!}
                         {!! Form::close() !!}
-                        <!--div class="col-xs-12" id="photoSpotSetArea">
-                            {!! Form::hidden('spotNS', null, ['id' => 'ido']) !!}
-                            {!! Form::hidden('spotEW', null, ['id' => 'keido']) !!}
-                        </div-->
                     </div>
                 </div>
             </div>

@@ -30,8 +30,13 @@ AIzaSyBQb3VgyoduOCh4x0clSJxw8yuzQvd1Zkw
         <link rel="stylesheet" href="{{asset('raty/lib/jquery.raty.css')}}">
         <script src="{{asset('raty/lib/jquery.raty.js')}}"></script>
 
-        <script src="{{asset('myjs/app.js')}}"></script>
+        <script src="{{asset('lazysizes/lazysizes.min.js')}}" async=""></script>
 
+        <link href="{{asset('bootstrap-modal-carousel/bootstrap-modal-carousel.min.css')}}" rel="stylesheet" />
+        <script src="{{asset('bootstrap-modal-carousel/bootstrap-modal-carousel.min.js')}}"/></script/>
+
+        <script src="{{asset('myjs/app.js')}}"></script>
+        <link rel="stylesheet" type="text/css" href="{{asset('mycss/app.css')}}">
     </head>
     <body>
         @include('commons.navbar')

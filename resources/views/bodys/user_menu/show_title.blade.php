@@ -6,7 +6,7 @@
 @include('bodys.user_menu.contents_menu',['user'=>$user])
 <div class="col-md-9">
     <div class="panel panel-info">
-        <div class="panel-heading" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">
+        <div class="panel-heading titleString">
                 {!! Link_to_route('show_user_items','マイログ',['id'=>$id]) !!}
                 &nbsp;&nbsp; ≫
                 @if(Auth::user()->id == $id)
@@ -98,6 +98,7 @@
                             data-comment="{{$scene->comment}}"
                             data-oldtheday="{{$thedayarray[0]}}年{{$thedayarray[1]}}月{{$thedayarray[2]}}日"
                             data-sceneid="{{$scene->scene_id}}"
+                            data-publish="{{$scene->publish}}"
                               >編集</button>
                           @else
                             「お気に入りボタン」
@@ -112,7 +113,10 @@
                                       $mime = $thumb[$key]->mime;
                                       $dataImage = base64_encode($thumb[$key]->data);
                                     ?>
-                                    <img class="img-responsive" src="data:{{$mime}};base64,{{$dataImage}}"  style="height:25vh;"/>
+                                    <a href="#modal_carousel" data-toggle="modal" data-local="#myCarousel"><img class="img-responsive showPhotos lazyload" data-src="data:{{$mime}};base64,{{$dataImage}}" style="height:25vh;" sceneID="{{$scene->scene_id}}"
+                                    sceneStr="{{$scene->scene}}"
+                                    titleStr="{{$scene->title}}" /></a>
+                                    <small>↑クリック</small>
                                     @endif
                                 </div>
                                     <input type="hidden" value="{{$scene->lat}}" id="googlemapLat{{$key}}" />
@@ -193,16 +197,19 @@
           </div>
           @if(isset($photos))
               <div class="col-xs-12" id="photosField">
+                  <p>消去する画像をクリックして選択してください</p>
                   @foreach($photos as $photo)
-                      <img class="img-responsive imgPhotos" src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" style="margin:10px;max-height:20vh;float:left;" sceneID="{{$photo->scene_id}}" photoID="{{$photo->id}}" />
+                      <img class="img-responsive imgPhotos lazyload" data-src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" sceneID="{{$photo->scene_id}}" photoID="{{$photo->id}}" />
+                      <input type=hidden name="deletePhotoNo[{{$photo->id}}]" value="false" id="deletePhotoNo{{$photo->id}}">
+                      <div id="deletePhotoDivNo{{$photo->id}}"></div>
                   @endforeach
               </div>
           @endif
           <div class="form-group form-inline">
                 {!! Form::label('publish','公開設定') !!}
-                {!! Form::radio('publish','public',true) !!}
+                {!! Form::radio('publish','public',true,['id'=>'radioPublic']) !!}
                 <label>公開</label>
-                {!! Form::radio('publish','private',false) !!}
+                {!! Form::radio('publish','private',false,['id'=>'radioPrivate']) !!}
                 <label>非公開</label>
           </div>
           <div class="form-group">
@@ -237,5 +244,49 @@
   </div>
 </div>
 
+
+@if(isset($photos))
+<div class="modal fade modal-fullscreen force-fullscreen" id="modal_carousel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+      </div>
+      <div class="modal-body">
+        <div id="myCarousel" class="carousel slide carousel-fit" data-ride="carousel">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            @foreach($photos as $key => $photo)
+              <li data-target="#myCarousel" data-slide-to="{{$key}}" sceneID="{{$photo->scene_id}}" {{ $key == 0 ? 'class="active"' : ''}}></li>
+            @endforeach
+          </ol>
+
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+            @foreach($photos as $key => $photo)
+            <?php
+              $dataPhoto = base64_encode($photo->data);
+            ?>
+            <div class="item {{ $key == 0 ? 'active':''}}" sceneID="{{$photo->scene_id}}">
+              <img data-src="data:{{$photo->mime}};base64,{{$dataPhoto}}" class="lazyload img-responsive">
+            </div>
+            @endforeach
+          </div>
+          <!-- Controls -->
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@endif
 
 @endsection

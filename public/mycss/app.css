@@ -1,0 +1,75 @@
+#avatarBeforeChange{
+    padding:50% 0 0;
+    position:relative;
+    width:50%;
+    height:50%;
+    left:25%;
+}
+#avatarBeforeChangeArea{
+    width:100%;
+    background-size:cover;
+    background-position:center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#avatarAfterChangeArea{
+    height:100%;
+    width:100%;
+    background-size:cover;
+    background-position:center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#avatarAfterChange{
+    padding:50% 0 0;
+    position:relative;
+    width:50%;
+    height:50%;
+    left:25%;
+}
+#menuavatarBeforeChange{
+    padding:50% 0 0 ;
+    width:50%;
+    height:100%;
+    position: relative;
+    left:25%;
+}
+#menuavatarBeforeChangeArea{
+    height:100%;
+    width:100%;
+    background-size:cover;
+    background-position:center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.titleImageDiv{
+    padding:25% 0 0;
+    position:relative;
+    width:25%;
+    height:25%;
+    float:left;
+}
+.titleImage{
+    position: absolute;
+    max-height:100%;
+    max-width:100%;
+    top: 0;
+    left: 0;
+}
+.titleContents{
+    width:70%;
+    margin-left:30%;
+}
+.titleString{
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.imgPhotos{
+    margin:10px;
+    max-height:15vh;
+    float:left;
+}

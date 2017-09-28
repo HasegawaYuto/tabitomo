@@ -1,3 +1,31 @@
+$(function(){
+    if($('.showPhotos').length){
+        var originalPhoto = $('.carousel-inner').html();
+        var originalOl = $('.carousel-indicators').html();
+        $('.showPhotos').on('click',function(){
+            var scene = $(this).attr('sceneStr');
+            var title = $(this).attr('titleStr');
+            var dataSceneID = $(this).attr('sceneID');
+            $('.modal-header').html('【'+title+'】'+scene);
+            //$('.carousel-inner').empty();
+            //$('.carousel-indicators').empty();
+            $('.carousel-inner').html(originalPhoto).find('div').each(function(){
+                var photoSceneID = parseInt($(this).attr('sceneID'));
+                if(dataSceneID != photoSceneID){
+                    $(this).remove();
+                }
+            });
+            //$('.carousel-inner div:first').addClass('active');
+            $('.carousel-indicators').html(originalOl).find('li').each(function(){
+                var liSceneID = parseInt($(this).attr('sceneID'));
+                if(dataSceneID != liSceneID){
+                    $(this).remove();
+                }
+            });
+            //$('.carousel-indicators li:first').addClass('item active');
+        })
+    }
+});
 //////////////////////////////////////////////////
 $(function(){
     if($('#fixScene0').length){
@@ -19,6 +47,7 @@ $(function(){
             var oldLat = button.data('lat');
             var oldLng = button.data('lng');
             var oldScore = button.data('score');
+            var oldPublish = button.data('publish');
             var oldComment = button.data('comment');
             var oldTheday = button.data('oldtheday');
             var titleId = $('#titleIdAction').val();
@@ -28,21 +57,33 @@ $(function(){
             $('#oldScore').val(oldScore);
             $('#edittheday0').val(oldTheday);
             $('#comment0').val(oldComment);
+            if(oldPublish=='public'){
+                $('#radioPublic').attr('checked','checked');
+                $('#radioPrivate').removeAttr('checked');
+            }
+            if(oldPublish=='private'){
+                $('#radioPrivate').attr('checked','checked');
+                $('#radioPublic').removeAttr('checked');
+            }
 
             if($('#photosField').length){
                 var num = 0;
                 $('#photosField img').on('click',function(){
                     $(this).data("click",++num);
                     var clickcnt = $(this).data("click");
+                    var $no = $(this).attr('photoID');
                     if(clickcnt % 2 ==1){
                         $(this).css({'filter':'alpha(opacity=20)',
                                       '-moz-opacity':'0.2',
                                       'opacity':'0.2'});
+                        $('#deletePhotoNo'+$no).val('true');
                     }else{
                         $(this).css({'filter':'alpha(opacity=100)',
                                       '-moz-opacity':'1',
                                       'opacity':'1'});
+                        $('#deletePhotoNo'+$no).val('false');
                     }
+                    //$('#deletePhotoDivNo'+$no).html($('#deletePhotoNo'+$no).val());
                     return false;
                 });
             }
