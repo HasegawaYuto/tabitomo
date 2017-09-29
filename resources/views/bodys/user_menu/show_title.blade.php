@@ -113,7 +113,7 @@
                                       $mime = $thumb[$key]->mime;
                                       $dataImage = base64_encode($thumb[$key]->data);
                                     ?>
-                                    <a href="#modal_carousel" data-toggle="modal" data-local="#myCarousel"><img class="img-responsive showPhotos lazyload" data-src="data:{{$mime}};base64,{{$dataImage}}" style="height:25vh;" sceneID="{{$scene->scene_id}}"
+                                    <a href="#modal_carousel{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->scene_id}}"><img class="img-responsive showPhotos lazyload" data-src="data:{{$mime}};base64,{{$dataImage}}" style="height:25vh;" sceneID="{{$scene->scene_id}}"
                                     sceneStr="{{$scene->scene}}"
                                     titleStr="{{$scene->title}}" /></a>
                                     <small>↑クリック</small>
@@ -246,36 +246,46 @@
 
 
 @if(isset($photos))
-<div class="modal fade modal-fullscreen force-fullscreen" id="modal_carousel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+@foreach($scenes as $scene)
+<div class="modal fade modal-fullscreen force-fullscreen" id="modal_carousel{{$scene->scene_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel{{$scene->scene_id}}" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
+          {{$scene->scene}}
       </div>
       <div class="modal-body">
-        <div id="myCarousel" class="carousel slide carousel-fit" data-ride="carousel">
+        <div id="myCarousel{{$scene->scene_id}}" class="carousel slide carousel-fit" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
-            @foreach($photos as $key => $photo)
-              <li data-target="#myCarousel" data-slide-to="{{$key}}" sceneID="{{$photo->scene_id}}" {{ $key == 0 ? 'class="active"' : ''}}></li>
+            <?php $cnt = -1; ?>
+            @foreach($photos as $photo)
+            @if($photo->scene_id == $scene->scene_id)
+              <?php $cnt++; ?>
+              <li data-target="#myCarousel{{$scene->scene_id}}" data-slide-to="{{$cnt}}" {{ $cnt == 0 ? 'class="active"' : ''}}></li>
+            @endif
             @endforeach
           </ol>
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-            @foreach($photos as $key => $photo)
+            <?php $cnt = -1; ?>
+            @foreach($photos as $photo)
+            @if($photo->scene_id == $scene->scene_id)
             <?php
               $dataPhoto = base64_encode($photo->data);
+              $cnt++;
             ?>
-            <div class="item {{ $key == 0 ? 'active':''}}" sceneID="{{$photo->scene_id}}">
+            <div class="item {{ $cnt == 0 ? 'active':''}}">
               <img data-src="data:{{$photo->mime}};base64,{{$dataPhoto}}" class="lazyload img-responsive">
             </div>
+            @endif
             @endforeach
           </div>
           <!-- Controls -->
-          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+          <a class="left carousel-control" href="#myCarousel{{$scene->scene_id}}" data-slide="prev">
             <span class="glyphicon glyphicon-chevron-left"></span>
           </a>
-          <a class="right carousel-control" href="#myCarousel" data-slide="next">
+          <a class="right carousel-control" href="#myCarousel{{$scene->scene_id}}" data-slide="next">
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </div>
@@ -287,6 +297,7 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+@endforeach
 @endif
 
 @endsection
