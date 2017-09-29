@@ -10,12 +10,29 @@
                 {!! Link_to_route('show_user_items','マイログ',['id'=>$id]) !!}
                 &nbsp;&nbsp; ≫
                 @if(Auth::user()->id == $id)
+                  <?php
+                        //$today = Carbon\Carbon::now()->format('Y年m月d日');
+                        $oldfirstday = new Carbon\Carbon($title->firstday);
+                        //$oldlastday = new Carbon\Carbon($title->lastday);
+                        $OldFirstday = $oldfirstday->format('Y年m月d日');
+                        //$OldLastday = $oldlastday->format('Y年m月d日');
+                  ?>
                     &nbsp;&nbsp;
                     <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fixTitle">編集</button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#fixScene0"
+                      data-scene="New Scene"
+                      data-lat="36"
+                      data-lng="136"
+                      data-score="0"
+                      data-comment=""
+                      data-oldtheday="{{$OldFirstday}}"
+                      data-sceneid="{{$newsceneid}}"
+                      data-publish="public"
+                      data-editTypeFixOrAdd="add"><i class="fa fa-plus-square-o fa-green" aria-hidden="true"></i></button>
                 @else
-                    「お気に入ボタン」
+                    @include('parts.favorite_button',['unit'=>'title','data'=>$title])
                 @endif
-                &nbsp;&nbsp;
                 {{$title->title}}
 
 @if(Auth::user()->id == $id)
@@ -99,9 +116,9 @@
                             data-oldtheday="{{$thedayarray[0]}}年{{$thedayarray[1]}}月{{$thedayarray[2]}}日"
                             data-sceneid="{{$scene->scene_id}}"
                             data-publish="{{$scene->publish}}"
-                              >編集</button>
+                            data-editTypeFixOrAdd="fix">編集</button>
                           @else
-                            「お気に入りボタン」
+                            @include('parts.favorite_button',['unit'=>'scene','data'=>$scene])
                           @endif
                             &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                         </div>
@@ -113,9 +130,7 @@
                                       $mime = $thumb[$key]->mime;
                                       $dataImage = base64_encode($thumb[$key]->data);
                                     ?>
-                                    <a href="#modal_carousel{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->scene_id}}"><img class="img-responsive showPhotos lazyload" data-src="data:{{$mime}};base64,{{$dataImage}}" style="height:25vh;" sceneID="{{$scene->scene_id}}"
-                                    sceneStr="{{$scene->scene}}"
-                                    titleStr="{{$scene->title}}" /></a>
+                                    <a href="#modal_carousel{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->scene_id}}"><img class="img-responsive showPhotos lazyload" data-src="data:{{$mime}};base64,{{$dataImage}}" style="height:25vh;margin:auto;" /></a>
                                     <small>↑クリック</small>
                                     @endif
                                 </div>
@@ -174,6 +189,7 @@
           {!! csrf_field() !!}
           {!! Form::hidden('title',$title->title) !!}
           {!! Form::hidden('title_id',$title->title_id,['id'=>'titleIdAction']) !!}
+          {!! Form::hidden('editType','somestring',['id'=>'editType']) !!}
           <div class="form-group form-inline">
               {!! Form::label('NewScene','シーン：') !!}
               {!! Form::text('NewScene','hoge',['class'=>'form-control','id'=>'NewScene0']) !!}
@@ -244,60 +260,5 @@
   </div>
 </div>
 
-
-@if(isset($photos))
-@foreach($scenes as $scene)
-<div class="modal fade modal-fullscreen force-fullscreen" id="modal_carousel{{$scene->scene_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel{{$scene->scene_id}}" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-          {{$scene->scene}}
-      </div>
-      <div class="modal-body">
-        <div id="myCarousel{{$scene->scene_id}}" class="carousel slide carousel-fit" data-ride="carousel">
-          <!-- Indicators -->
-          <ol class="carousel-indicators">
-            <?php $cnt = -1; ?>
-            @foreach($photos as $photo)
-            @if($photo->scene_id == $scene->scene_id)
-              <?php $cnt++; ?>
-              <li data-target="#myCarousel{{$scene->scene_id}}" data-slide-to="{{$cnt}}" {{ $cnt == 0 ? 'class="active"' : ''}}></li>
-            @endif
-            @endforeach
-          </ol>
-
-          <!-- Wrapper for slides -->
-          <div class="carousel-inner">
-            <?php $cnt = -1; ?>
-            @foreach($photos as $photo)
-            @if($photo->scene_id == $scene->scene_id)
-            <?php
-              $dataPhoto = base64_encode($photo->data);
-              $cnt++;
-            ?>
-            <div class="item {{ $cnt == 0 ? 'active':''}}">
-              <img data-src="data:{{$photo->mime}};base64,{{$dataPhoto}}" class="lazyload img-responsive">
-            </div>
-            @endif
-            @endforeach
-          </div>
-          <!-- Controls -->
-          <a class="left carousel-control" href="#myCarousel{{$scene->scene_id}}" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-          </a>
-          <a class="right carousel-control" href="#myCarousel{{$scene->scene_id}}" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </a>
-        </div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-@endforeach
-@endif
-
+@include('parts.modal_carousel',['photos'=>$photos,'scenes'=>$scenes])
 @endsection

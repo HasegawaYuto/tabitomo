@@ -73,3 +73,6 @@
     max-height:15vh;
     float:left;
 }
+.btn-ghost{
+     background: transparent;
+}

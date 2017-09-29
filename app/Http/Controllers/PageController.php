@@ -227,8 +227,6 @@ class PageController extends Controller
             $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
             return $theday;
       }
-      //$mylog = new Mylog;
-/////////////////////////////////////////////
       if(\Input::hasFile('image')){
         $files = \Input::file('image');
         $typearray = [
@@ -325,7 +323,6 @@ class PageController extends Controller
             }
             $mylog->save();
       }
-////////////////////////////////////////////
       if(\Input::get('fin')){
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
@@ -362,7 +359,7 @@ class PageController extends Controller
       $data['title'] = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
                               //->where('publish','public')
-                              ->select('title','firstday','lastday','title_id');
+                              ->select('title','firstday','lastday','title_id','user_id');
       if(\Auth::user()->id != $id){
           $data['title'] = $data['title']->where('publish','public');
       }
@@ -377,6 +374,9 @@ class PageController extends Controller
       }
       $scenes = $scenes->paginate(5);
       $data['scenes'] = $scenes;
+      $data['newsceneid'] = Mylog::where('user_id',$id)
+                                  ->where('title_id',$title_id)
+                                  ->max('scene_id')+1;
       $data['scoreAve'] = Mylog::where('user_id',$id)
                               ->where('title_id',$title_id)
                               ->where('publish','public')
@@ -418,6 +418,9 @@ class PageController extends Controller
       return view('bodys.user_menu.show_title',$data);
     }
 
+
+
+
     public function editTitle(Request $request ,$id,$title_id){
         function replaceDate($DateString){
               $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
@@ -435,15 +438,21 @@ class PageController extends Controller
         return redirect()->back();
     }
 
+
+
     public function editScene(Request $request ,$id,$title_id,$scene_id){
         function replaceDate($DateString){
               $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
               return $theday;
         }
+
+        
+        if($request->editType=='fix'){
         $changes = Mylog::where('user_id',$id)
                         ->where('title_id',$title_id)
                         ->where('scene_id',$scene_id)
                         ->get();
+        if(isset($_POST['deletePhotoNo'])){
         $postDelNos = $_POST['deletePhotoNo'];
         if(isset($postDelNos)){
             foreach($postDelNos as $no => $postDelNo){
@@ -452,7 +461,7 @@ class PageController extends Controller
                     Mylog::find($no)->delete();
                 }
             }
-        }
+        }}
         foreach($changes as $change){
               $change->update([ 'scene'=>$request->NewScene,
                                 'theday'=>replaceDate($request->theday),
@@ -461,7 +470,7 @@ class PageController extends Controller
                                 'lng'=>$request->spotEW,
                                 'score'=>$request->score,
                               ]);
-        }
+        }}
         if(\Input::hasFile('image')){
           $files = \Input::file('image');
           $typearray = [

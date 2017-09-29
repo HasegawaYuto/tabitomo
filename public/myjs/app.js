@@ -1,33 +1,4 @@
 $(function(){
-    if($('.showPhotos').length){
-        var originalPhoto = $('.carousel-inner').html();
-        var originalOl = $('.carousel-indicators').html();
-        //$('.showPhotos').on('click',function(){
-            //var scene = $(this).attr('sceneStr');
-            //var title = $(this).attr('titleStr');
-            //var dataSceneID = $(this).attr('sceneID');
-            //$('.modal-header').html('【'+title+'】'+scene);
-            //$('.carousel-inner').empty();
-            //$('.carousel-indicators').empty();
-            //$('.carousel-inner').html(originalPhoto).find('div').each(function(){
-            //    var photoSceneID = parseInt($(this).attr('sceneID'));
-            //    if(dataSceneID != photoSceneID){
-            //        $(this).remove();
-            //    }
-            //});
-            //$('.carousel-inner div:first').addClass('active');
-            //$('.carousel-indicators').html(originalOl).find('li').each(function(){
-            //    var liSceneID = parseInt($(this).attr('sceneID'));
-            //    if(dataSceneID != liSceneID){
-            //        $(this).remove();
-            //    }
-            //});
-            //$('.carousel-indicators li:first').addClass('item active');
-        //})
-    }
-});
-//////////////////////////////////////////////////
-$(function(){
     if($('#fixScene0').length){
         var originalImg = $('#photosField').html();
         $('#fixScene0').on('show.bs.modal', function (event) {
@@ -50,8 +21,12 @@ $(function(){
             var oldPublish = button.data('publish');
             var oldComment = button.data('comment');
             var oldTheday = button.data('oldtheday');
+            var editTypeFixOrAdd = button.data('editTypeFixOrAdd');
             var titleId = $('#titleIdAction').val();
-            $('#NewScene0').val(oldScene);
+            //$('.modal-title').html(editType);
+            $('#editType').val(editType);
+            //$('#NewScene0').val(oldScene);
+            $('#NewScene0').val(editTypeFixOrAdd);
             $('#ido0').val(oldLat);
             $('#keido0').val(oldLng);
             $('#oldScore').val(oldScore);

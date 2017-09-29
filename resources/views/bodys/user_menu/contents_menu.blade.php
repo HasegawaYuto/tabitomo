@@ -9,7 +9,7 @@
 <div class="col-md-3">
 <div class="text-left panel panel-info">
   <div class="panel-heading">
-      {{$user->nickname or '未設定'}}
+      <i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>{{$user->nickname or '未設定'}}
   </div>
   <div class="panel-body text-center">
     <div id="menuavatarBeforeChange">
@@ -18,11 +18,11 @@
     </div>
   </div>
   <div class="list-group">
-      {!! Link_to_route('show_user_profile','プロフィール',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
-      {!! Link_to_route('show_user_matching','マッチング',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
-      {!! Link_to_route('show_user_messages','メッセージ',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
-      {!! Link_to_route('show_user_items','マイログ',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
-      {!! Link_to_route('show_user_favorites','お気に入り',['id'=>$user->user_id],['class'=>'list-group-item text-center']) !!}
+      <a href="{{ route('show_user_profile',['id'=>$user->user_id]) }}" class="list-group-item text-center"><i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>プロフィール</a>
+      <a href="{{ route('show_user_matching',['id'=>$user->user_id]) }}" class="list-group-item text-center"><i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング</a>
+      <a href="{{ route('show_user_messages',['id'=>$user->user_id]) }}" class="list-group-item text-center">メッセージ</a>
+      <a href="{{ route('show_user_items',['id'=>$user->user_id]) }}" class="list-group-item text-center">マイログ</a>
+      <a href="{{ route('show_user_favorites',['id'=>$user->user_id]) }}" class="list-group-item text-center">お気に入り</a>
   </div>
 </div>
 </div>
