@@ -100,7 +100,8 @@
                 </div>
             </div>
             <div class="col-xs-3">
-                <label>お気に入り</label>〇
+                <label>お気に入り</label>
+                <span class="badge">{{max($favuser)}}</span>
             </div>
         </div>
         <div class="col-xs-12">
@@ -172,7 +173,8 @@
                                         @endif
                                     </div><br>
                                     <div>
-                                        <label>お気に入り</label>〇
+                                        <label>お気に入り</label>
+                                        <span class="badge">{{$favuser[$key]}}</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">

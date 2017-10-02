@@ -137,8 +137,8 @@ class PageController extends Controller
       }
       $data['photos'] = $data['photos']->get();
       foreach($scenes as $key => $scene){
-          //$newmylog = new Mylog;
-          $data['favcount'][$key] = Mylog::getFavoredCount($scene->user_id,$scene->title_id,$scene->scene_id);
+          //$sceneids = Mylog::getScenes($scene->user_id,$scene->title_id,$scene->scene_id)->get();
+          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
           $data['user'][$scene->user_id]=Profile::select('data','mime','nickname')->find($scene->user_id);
           $arr=[];
           $thumbIDs = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
@@ -267,7 +267,7 @@ class PageController extends Controller
       $scenes = $user->title($title_id)
                       ->groupBy('scene_id')
                       ->orderBy('theday')
-                      ->select('publish','scene','theday','lat','lng','score','comment','scene_id','title','user_id','title_id','firstday','lastday','theday');
+                      ->select('publish','scene','theday','lat','lng','score','comment','scene_id','title','user_id','title_id','firstday','lastday','theday','id');
       if(\Auth::user()->id != $id){
           $scenes = $scenes->where('publish','public');
       }
@@ -286,6 +286,7 @@ class PageController extends Controller
       }
       $data['photos'] = $data['photos']->get();
       foreach($scenes as $key => $scene){
+          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
           $arr=[];
           $thumbIDs = $user->scene($title_id,$scene->scene_id)
                                   ->whereNotNull('data')

@@ -80,7 +80,8 @@
                             @endif
                         </div><br>
                         <div>
-                            <label>お気に入り</label>[{{$favcount[$key]}}]
+                            <label>お気に入り</label>
+                            <span class="badge">{{$favuser[$key]}}</span>
                         </div>
                     </div>
                     <div class="col-xs-12">
@@ -89,7 +90,14 @@
                     </div>
                     <div>
                         <div id="demo{{$key}}" class="collapse col-xs-12">
-                            <p>他のユーザのコメント</p>
+                            @if(Auth::check())
+                                {!! Form::open() !!}
+                                <div class="form-group">
+                                    {!! Form::textarea('comment',null,['placeholder'=>'コメント','class'=>'form-control','rows'=>'3']) !!}
+                                </div>
+                                {!! Form::submit('書き込み',['class'=>'btn btn-xs btn-warning']) !!}
+                                {!! Form::close() !!}
+                            @endif
                         </div>
                         <button type="button" class="btn btn-block" data-toggle="collapse" data-target="#demo{{$key}}"><span class="caret"></span></button>
                     </div>
