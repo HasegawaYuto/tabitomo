@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
     <div class="col-md-6">

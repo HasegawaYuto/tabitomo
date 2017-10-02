@@ -18,13 +18,13 @@
             <div class="panel panel-heading text-center">
                 マイログ
             </div>
-            @if($id == Auth::user()->id)
+            @if($user->user_id == Auth::user()->id)
                 <ul class="nav nav-tabs nav-justified" id="logtabs">
                     <li class="{{ $activetab == '1' ? 'active' : ''}}"><a href="#tab1-1" data-toggle="tab">一覧</a></li>
                     <li class="{{ $activetab == '2' ? 'active' : ''}}"><a href="#tab1-2" data-toggle="tab">アップロード</a></li>
                 </ul>
             @endif
-            @if($id == Auth::user()->id)
+            @if($user->user_id == Auth::user()->id)
                 <div class="tab-content">
                     <div class="tab-pane {{ $activetab == '1' ? 'active' : ''}}" id="tab1-1">
             @endif
@@ -37,9 +37,10 @@
                     $firstdayarray = explode('-',$mylog->firstday);
                     $lastdayarray = explode('-',$mylog->lastday);
                 ?>
+                <a href="{{route('show_title',['id'=>$mylog->user_id,'title_id'=>$mylog->title_id])}}">
                 <div class="panel panel-primary">
                       <div class="panel-heading">
-                  {!! Link_to_route('show_title',$mylog->title,['id'=>$mylog->user_id,'title_id'=>$mylog->title_id],['style'=>'color:white;']) !!}
+                        {{$mylog->title}}
                       </div>
                       <div class="panel-body">
                             <div class="titleImageDiv">
@@ -68,17 +69,18 @@
                                 <label>シーン</label>
                                 <ul>
                                 @foreach($logtitle[$key] as $thelogtitle)
-                                    <li style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">{{$thelogtitle->scene}}</li>
+                                    <li style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">{{$thelogtitle->scene!= "" ? $thelogtitle->scene : 'No Title' }}</li>
                                 @endforeach
                                 </ul>
                                 @endif
                             </div>
                       </div>
                 </div>
+                </a>
                 @endforeach
                 @endif
             </div>
-            @if($id == Auth::user()->id)
+            @if($user->user_id == Auth::user()->id)
           </div>
             <div class="tab-pane {{ $activetab == '2' ? 'active' : ''}}" id="tab1-2">
                 <div class="panel panel-body">

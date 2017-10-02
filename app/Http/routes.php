@@ -30,15 +30,24 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
-        Route::post('mylog/title/{title_id}/edit','PageController@editTitle')->name('edit_title');
-        Route::post('mylog/title/{title_id}/{scene_id}/edit','PageController@editScene')->name('edit_scene');
+        Route::post('mylog/title/{title_id}/{scene_id}/delete','ItemPostController@deleteScene')->name('scene_delete');
+        Route::post('mylog/title/{title_id}/delete','ItemPostController@deleteTitle')->name('title_delete');
+        Route::post('mylog/title/{title_id}/edit','ItemPostController@editTitle')->name('edit_title');
+        Route::post('mylog/title/{title_id}/{scene_id}/edit','ItemPostController@editScene')->name('edit_scene');
         Route::post('profile/edit','UserOptionController@edit')->name('edit_user_profile');
         Route::get('profile','PageController@showUserProfile')->name('show_user_profile');
         Route::get('message','PageController@showUserMessages')->name('show_user_messages');
         Route::get('favorite','PageController@showUserFavorites')->name('show_user_favorites');
         Route::get('matching','PageController@showUserMatching')->name('show_user_matching');
         Route::get('mylog','PageController@showUserItems')->name('show_user_items');
-        Route::post('mylog/creating','PageController@createItems')->name('create_items');
+        Route::post('mylog/creating','ItemPostController@createItems')->name('create_items');
         Route::get('mylog/title/{title_id}','PageController@showTitle')->name('show_title');
+        Route::get('mylog/title/',function($id){
+            return redirect('user/' . $id .'/mylog');
+        });
+        Route::post('mylog/title/{title_id}/{scene_id}/favorite','ItemPostController@favoriteScene')->name('favorite_scene');
+        Route::post('mylog/title/{title_id}/{scene_id}/unfavorite','ItemPostController@unfavoriteScene')->name('unfavorite_scene');
+        Route::post('mylog/title/{title_id}/favorite','ItemPostController@favoriteTitle')->name('favorite_title');
+        Route::post('mylog/title/{title_id}/unfavorite','ItemPostController@unfavoriteTitle')->name('unfavorite_title');
       });
 });

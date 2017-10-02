@@ -3,35 +3,57 @@ $(function(){
         var originalImg = $('#photosField').html();
         $('#fixScene0').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
-            var $sceneID = parseInt(button.data('sceneid'));
+            var $sceneID = button.data('userid')+'-'+button.data('titleid')+'-'+button.data('sceneid');
             $('#photosField').html(originalImg).find('img').each(function(){
-                var $photoSceneId = parseInt($(this).attr('sceneID'));
+                var $photoSceneId = $(this).attr('sceneID');
                 if($photoSceneId != $sceneID){
                     $(this).remove();
                 }
             });
+            if($('#photosField > img').length){
+                $('#photosField').prepend('<div><small>消去する画像をクリック</small></div>');
+            }
         });
         $('#fixScene0').on('shown.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var oldScene = button.data('scene');
-            var Sceneid = button.data('sceneid');
+            var sceneid = button.data('sceneid');
+            var sceneid = button.data('sceneid');
+            var titleid = button.data('titleid');
+            var userid = button.data('userid');
+            var titleStr = button.data('title');
             var oldLat = button.data('lat');
             var oldLng = button.data('lng');
             var oldScore = button.data('score');
             var oldPublish = button.data('publish');
             var oldComment = button.data('comment');
             var oldTheday = button.data('oldtheday');
-            var editTypeFixOrAdd = button.data('editTypeFixOrAdd');
-            var titleId = $('#titleIdAction').val();
-            //$('.modal-title').html(editType);
-            $('#editType').val(editType);
-            //$('#NewScene0').val(oldScene);
-            $('#NewScene0').val(editTypeFixOrAdd);
+            var editstyle = button.data('editstyle');
+            var $firstday = button.data('firstday');
+            var $lastday = button.data('lastday');
+            var $theday = oldTheday;
+            $('#firstday0').val($firstday);
+            $('#lastday0').val($lastday);
+            //var titleId = $('#titleIdAction').val();
+            $('#editstyle').val(editstyle);
+            $('#editTitleName').val(titleStr);
+            if(editstyle == 'fix'){
+                $('#NewScene0').val(oldScene);
+                $('#comment0').val(oldComment);
+                $('.modal-title').html('シーンの編集');
+                $('#sceneEditSubmit').val('更新');
+            }else{
+                $('#NewScene0').val('');
+                $('#NewScene0').attr('placeholder',oldScene);
+                $('#comment0').val('');
+                $('#comment0').attr('placeholder',oldComment);
+                $('.modal-title').html('シーンの追加');
+                $('#sceneEditSubmit').val('追加');
+            }
             $('#ido0').val(oldLat);
             $('#keido0').val(oldLng);
             $('#oldScore').val(oldScore);
             $('#edittheday0').val(oldTheday);
-            $('#comment0').val(oldComment);
             if(oldPublish=='public'){
                 $('#radioPublic').attr('checked','checked');
                 $('#radioPrivate').removeAttr('checked');
@@ -65,9 +87,10 @@ $(function(){
 
 
             var originalurl = $('#myLogForm0').attr('action');
-            var editreplace = 'title/'+titleId+'/'+Sceneid+'/edit';
-            var editurl = originalurl.replace(/(title\/)(.*?)(\/edit)/,editreplace);
+            var editreplace = 'user/'+userid+'/mylog/title/'+titleid+'/'+sceneid+'/edit';
+            var editurl = originalurl.replace(/(user\/)(.*?)(\/edit)/,editreplace);
             $("#myLogForm0").attr("action",editurl);
+            //$('.modal-title').html(editurl);
 
             function dateToParse(date){
                 date=date.replace('月','/');
@@ -76,9 +99,9 @@ $(function(){
                 date=Date.parse(date);
                 return date;
             }
-            var $firstday = $('#firstday0').val();
-            var $lastday = $('#lastday0').val();
-            var $theday = $('#edittheday0').val();
+            //var $firstday = $('#firstday0').val();
+            //var $lastday = $('#lastday0').val();
+            //var $theday = $('#edittheday0').val();
             var $firstdayParse = dateToParse($firstday);
             var $lastdayParse = dateToParse($lastday);
             var $thedayParse = dateToParse($theday);

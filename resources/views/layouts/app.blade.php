@@ -32,8 +32,14 @@ AIzaSyBQb3VgyoduOCh4x0clSJxw8yuzQvd1Zkw
 
         <script src="{{asset('lazysizes/lazysizes.min.js')}}" async=""></script>
 
-        <!--link href="{{asset('bootstrap-modal-carousel/bootstrap-modal-carousel.min.css')}}" rel="stylesheet" />
-        <script src="{{asset('bootstrap-modal-carousel/bootstrap-modal-carousel.min.js')}}"/></script/-->
+        <script>
+            document.addEventListener('lazybeforeunveil', function(e){
+            var bg = e.target.getAttribute('data-bg');
+            if(bg){
+                e.target.style.backgroundImage = 'url(' + bg + ')';
+            }
+        });
+        </script>
 
         <script src="{{asset('myjs/app.js')}}"></script>
         <link rel="stylesheet" type="text/css" href="{{asset('mycss/app.css')}}">

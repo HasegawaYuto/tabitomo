@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
 <div class="row">
 @include('bodys.user_menu.contents_menu',['user'=>$user])
 <div class="col-md-9">
     <div class="panel panel-info">
         <div class="panel-heading titleString">
-                {!! Link_to_route('show_user_items','マイログ',['id'=>$id]) !!}
+                {!! Link_to_route('show_user_items','マイログ',['id'=>$user->user_id]) !!}
                 &nbsp;&nbsp; ≫
-                @if(Auth::user()->id == $id)
+                @if(Auth::user()->id == $user->user_id)
                   <?php
                         //$today = Carbon\Carbon::now()->format('Y年m月d日');
                         $oldfirstday = new Carbon\Carbon($title->firstday);
@@ -19,23 +19,29 @@
                   ?>
                     &nbsp;&nbsp;
                     <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fixTitle">編集</button>
-                    &nbsp;&nbsp;
+                    &nbsp;
                     <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#fixScene0"
                       data-scene="New Scene"
+                      data-title="{{$title->title}}"
                       data-lat="36"
                       data-lng="136"
                       data-score="0"
-                      data-comment=""
+                      data-comment="no comment"
                       data-oldtheday="{{$OldFirstday}}"
                       data-sceneid="{{$newsceneid}}"
+                      data-titleid="{{$title->title_id}}"
+                      data-userid="{{$title->user_id}}"
                       data-publish="public"
-                      data-editTypeFixOrAdd="add"><i class="fa fa-plus-square-o fa-green" aria-hidden="true"></i></button>
+                      data-firstday="{{$title->firstday}}"
+                      data-lastday="{{$title->lastday}}"
+                      data-editstyle="add">シーン追加</button>
+                      @include('parts.delete_button',['title'=>$title])
                 @else
-                    @include('parts.favorite_button',['unit'=>'title','data'=>$title])
+                    @include('parts.favorite_title_button',['title'=>$title])
                 @endif
-                {{$title->title}}
+                &nbsp;{{$title->title}}
 
-@if(Auth::user()->id == $id)
+@if(Auth::user()->id == $user->user_id)
 <div class="modal fade" id="fixTitle">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -97,8 +103,9 @@
                 <label>お気に入り</label>〇
             </div>
         </div>
-
+        <div class="col-xs-12">
             {!! $scenes->render() !!}
+        </div>
 
             @foreach($scenes as $key => $scene)
             <?php
@@ -107,18 +114,24 @@
                 <div class="col-xs-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">
-                          @if(Auth::user()->id == $id)
+                          @if(Auth::user()->id == $user->user_id)
                             <button type="button" class="btn btn-warning btn-xs"  data-toggle="modal" data-target="#fixScene0" data-scene="{{$scene->scene}}"
+                            data-title="{{$scene->title}}"
                             data-lat="{{$scene->lat}}"
                             data-lng="{{$scene->lng}}"
                             data-score="{{$scene->score}}"
                             data-comment="{{$scene->comment}}"
-                            data-oldtheday="{{$thedayarray[0]}}年{{$thedayarray[1]}}月{{$thedayarray[2]}}日"
+                            data-oldtheday="{{$scene->theday}}"
                             data-sceneid="{{$scene->scene_id}}"
+                            data-titleid="{{$scene->title_id}}"
+                            data-userid="{{$scene->user_id}}"
                             data-publish="{{$scene->publish}}"
-                            data-editTypeFixOrAdd="fix">編集</button>
+                            data-firstday="{{$scene->firstday}}"
+                            data-lastday="{{$scene->lastday}}"
+                            data-editstyle="fix">編集</button>
+                            @include('parts.delete_button',['scene'=>$scene])
                           @else
-                            @include('parts.favorite_button',['unit'=>'scene','data'=>$scene])
+                            @include('parts.favorite_scene_button',['scene'=>$scene])
                           @endif
                             &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                         </div>
@@ -127,11 +140,16 @@
                                 <dvi class="col-xs-4">
                                     @if(isset($thumb[$key]->data))
                                     <?php
-                                      $mime = $thumb[$key]->mime;
-                                      $dataImage = base64_encode($thumb[$key]->data);
+                                        $mime = $thumb[$key]->mime;
+                                        $dataImage = base64_encode($thumb[$key]->data);
                                     ?>
-                                    <a href="#modal_carousel{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->scene_id}}"><img class="img-responsive showPhotos lazyload" data-src="data:{{$mime}};base64,{{$dataImage}}" style="height:25vh;margin:auto;" /></a>
-                                    <small>↑クリック</small>
+                                    <a href="#modal_carousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}">
+                                        <div class="ItemImageShow lazyload" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                    </a>
+                                    <p class="text-center"><small>↑クリック</small></p>
+                                    @else
+                                    <div class="ItemImageShow lazyload" data-bg="{{asset('noimage.png')}}"></div>
+                                    <p class="text-center"><small>No Image</small></p>
                                     @endif
                                 </div>
                                     <input type="hidden" value="{{$scene->lat}}" id="googlemapLat{{$key}}" />
@@ -177,88 +195,11 @@
 </div>
 </div>
 
+@if(isset($photos))
+    @include('parts.modal_scene_edit',['photos'=>$photos])
+@endif
 
-<div class="modal fade" id="fixScene0">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-          <h4 class="modal-title">シーンの編集</h4>
-      </div>
-      <div class="modal-body">
-          {!! Form::open(['route'=>['edit_scene','id'=>Auth::user()->id,'title_id'=>$title->title_id,'scene_id'=>'sceneID'],'files'=>'true','id'=>'myLogForm0','class'=>'myLogForm']) !!}
-          {!! csrf_field() !!}
-          {!! Form::hidden('title',$title->title) !!}
-          {!! Form::hidden('title_id',$title->title_id,['id'=>'titleIdAction']) !!}
-          {!! Form::hidden('editType','somestring',['id'=>'editType']) !!}
-          <div class="form-group form-inline">
-              {!! Form::label('NewScene','シーン：') !!}
-              {!! Form::text('NewScene','hoge',['class'=>'form-control','id'=>'NewScene0']) !!}
-          </div>
-          <div class="form-group form-inline">
-          <?php
-                $today = Carbon\Carbon::now()->format('Y年m月d日');
-                $oldfirstday = new Carbon\Carbon($title->firstday);
-                $oldlastday = new Carbon\Carbon($title->lastday);
-                //$oldlastday = new Carbon\Carbon($title->theday);
-                $OldFirstday = $oldfirstday->format('Y年m月d日');
-                $OldLastday = $oldlastday->format('Y年m月d日');
-                //$OldTheday = $oldtheday->format('Y/m/d');
-          ?>
-              {!! Form::hidden('firstday',$OldFirstday,['id'=>'firstday0']) !!}
-              {!! Form::hidden('lastday',$OldLastday,['id'=>'lastday0']) !!}
-              {!! Form::hidden('oldtheday',$today,['id'=>'edittheday0']) !!}
-                {!! Form::label('theday','日付：') !!}
-                <select id="theday0" class="form-control theday" name="theday">
-                </select>
-          </div>
-          @if(isset($photos))
-              <div class="col-xs-12" id="photosField">
-                  <p>消去する画像をクリックして選択してください</p>
-                  @foreach($photos as $photo)
-                      <img class="img-responsive imgPhotos lazyload" data-src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" sceneID="{{$photo->scene_id}}" photoID="{{$photo->id}}" />
-                      <input type=hidden name="deletePhotoNo[{{$photo->id}}]" value="false" id="deletePhotoNo{{$photo->id}}">
-                      <div id="deletePhotoDivNo{{$photo->id}}"></div>
-                  @endforeach
-              </div>
-          @endif
-          <div class="form-group form-inline">
-                {!! Form::label('publish','公開設定') !!}
-                {!! Form::radio('publish','public',true,['id'=>'radioPublic']) !!}
-                <label>公開</label>
-                {!! Form::radio('publish','private',false,['id'=>'radioPrivate']) !!}
-                <label>非公開</label>
-          </div>
-          <div class="form-group">
-                {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*']) !!}
-          </div>
-          <div id="imageThumbnailField0" class="col-xs-12 imageThumbnailField">
-          </div>
-          <div class="form-group">
-              <label>スポット</label>
-              <!--div class="row"-->
-                  {!! Form::hidden('spotNS', 30, ['id' => 'ido0']) !!}
-                  {!! Form::hidden('spotEW', 135, ['id' => 'keido0']) !!}
-                  {!! Form::hidden('mapzoom', 8, ['id' => 'mapzoom0']) !!}
-                <div id="editPhotoSpotSetArea0" class="col-xs-12 photoSpotSetArea">
-                </div>
-              <!--/div-->
-          </div>
-          <div class="form-group">
-              <label>おすすめ度</label>
-              {!! Form::hidden('score',2,['id'=>'oldScore']) !!}
-              <div id="editRateField0" class="rateField">
-              </div>
-          </div>
-          <div class="form-group">
-                {!! Form::label('comment','コメント') !!}
-                {!! Form::textarea('comment',null,['class'=>"form-control",'rows'=>'3','id'=>'comment0']) !!}
-          </div>
-          {!! Form::submit('更新',['class'=>'btn btn-primary btn-xs']) !!}
-          {!! Form::close() !!}
-      </div>
-    </div>
-  </div>
-</div>
-
-@include('parts.modal_carousel',['photos'=>$photos,'scenes'=>$scenes])
+@foreach($scenes as $scene)
+@include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene])
+@endforeach
 @endsection

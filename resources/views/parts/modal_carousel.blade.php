@@ -1,52 +1,61 @@
+<?php $checkPhotos = 'false'; ?>
 @if(isset($photos))
-@foreach($scenes as $scene)
-<div class="modal fade" id="modal_carousel{{$scene->scene_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel{{$scene->scene_id}}" aria-hidden="true">
-  <!--div class="modal-dialog"-->
-    <div class="modal-content" style="height:100vh;width:100vw;">
-      <div class="modal-header" style="background-color:red;">
-          【{{$scene->title}}】{{$scene->scene}}
-          <button type="button" class="btn btn-default close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+    @foreach($photos as $photo)
+        @if($photo->scene_id == $scene->scene_id)
+            <?php $checkPhotos = 'true'; ?>
+        @endif
+    @endforeach
+@endif
+
+<div class="modal fade" id="modal_carousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" aria-hidden="true">
+    <div class="modal-content" id="modal-carousel-content">
+      <div class="modal-header" style="height:50px;">
+          <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button>【{{$scene->title}}】{{$scene->scene}}
       </div>
-      <div class="modal-body" style="background-color:blue;">
-        <div id="myCarousel{{$scene->scene_id}}" class="carousel slide carousel-fit" data-ride="carousel">
-          <!-- Indicators -->
+      <div class="modal-body" style="padding:0" id="modal-carousel-body">
+        <div id="myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" class="carousel slide carousel-fit" data-ride="carousel">
           <ol class="carousel-indicators">
-            <?php $cnt = -1; ?>
-            @foreach($photos as $photo)
-            @if($photo->scene_id == $scene->scene_id)
-              <?php $cnt++; ?>
-              <li data-target="#myCarousel{{$scene->scene_id}}" data-slide-to="{{$cnt}}" {{ $cnt == 0 ? 'class="active"' : ''}}></li>
-            @endif
-            @endforeach
+              @if($checkPhotos == 'true')
+                  <?php $cnt = -1; ?>
+                  @foreach($photos as $photo)
+                      @if($photo->scene_id == $scene->scene_id && $photo->title_id == $scene->title_id && $photo->user_id == $scene->user_id)
+                      <?php $cnt++; ?>
+                      <li data-target="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" data-slide-to="{{$cnt}}" {{ $cnt == 0 ? 'class="active"' : ''}}></li>
+                      @endif
+                  @endforeach
+              @else
+                  <li data-target="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" data-slide-to="0" class="active"></li>
+              @endif
           </ol>
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-            <?php $cnt = -1; ?>
-            @foreach($photos as $photo)
-            @if($photo->scene_id == $scene->scene_id)
-            <?php
-              $dataPhoto = base64_encode($photo->data);
-              $cnt++;
-            ?>
-            <div class="item {{ $cnt == 0 ? 'active':''}}" style="height:80vh;width:100vw;text-align:center;">
-              <img data-src="data:{{$photo->mime}};base64,{{$dataPhoto}}" class="lazyload img-responsive" style="max-height:100%;max-width:100%;height:100%;margin:auto;">
-            </div>
+              @if($checkPhotos == 'true')
+                  <?php $cnt = -1; ?>
+                  @foreach($photos as $photo)
+                      @if($photo->scene_id == $scene->scene_id && $photo->title_id == $scene->title_id && $photo->user_id == $scene->user_id)
+                          <?php
+                            $dataPhoto = base64_encode($photo->data);
+                            $cnt++;
+                          ?>
+                          <div class="item {{ $cnt == 0 ? 'active':''}}">
+                              <img data-src="data:{{$photo->mime}};base64,{{$dataPhoto}}" class="lazyload" style="margin:auto;">
+                          </div>
+                      @endif
+                  @endforeach
+            @else
+                <div class="item active">
+                    <img data-src="http://placehold.it/640x640/27709b/ffffff" class="lazyload" data-sizes="auto" style="margin:auto;">
+                </div>
             @endif
-            @endforeach
           </div>
-          <!-- Controls -->
-          <a class="left carousel-control" href="#myCarousel{{$scene->scene_id}}" data-slide="prev">
+          <a class="left carousel-control" href="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" data-slide="prev">
             <span class="glyphicon glyphicon-chevron-left"></span>
           </a>
-          <a class="right carousel-control" href="#myCarousel{{$scene->scene_id}}" data-slide="next">
+          <a class="right carousel-control" href="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" data-slide="next">
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </div>
-
       </div>
-    </div><!-- /.modal-content -->
-  <!--/div--><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-@endforeach
-@endif
+    </div>
+</div>

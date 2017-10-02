@@ -76,3 +76,72 @@
 .btn-ghost{
      background: transparent;
 }
+a:hover{
+    text-decoration:none;
+}
+.titleContents {
+    color:black;
+}
+.titleContents {
+    color:black;
+}
+#modal-carousel-content{
+    height:100vh;
+}
+#modal-carousel-body{
+    height:calc(100vh - 50px);
+}
+.carousel-inner div{
+    height:calc(100vh - 50px);
+    padding:auto;
+}
+.carousel-inner div img{
+    max-height:100%;
+    max-width:100%;
+}
+.ItemImageShow {
+    position:relative;
+    width:100%;
+    height:67%;
+    padding:67% 0 0;
+    max-height:100%;
+    max-width:100%;
+    background-position:center;
+    background-size:contain;
+    background-repeat:no-repeat;
+    -moz-background-size:contain;
+    -webkit-background-size:contain;
+    -o-background-size:contain;
+    -ms-background-size:contain;
+}
+.modal-header{
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.titleName{
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration:none;
+
+}
+.black{
+    color:black;
+}
+.itemAvatar {
+    position:relative;
+    width:25%;
+    height:25%;
+    padding:25% 0 0;
+    max-height:100%;
+    max-width:100%;
+    float:right;
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    -o-background-size:cover;
+    -ms-background-size:cover;
+}
