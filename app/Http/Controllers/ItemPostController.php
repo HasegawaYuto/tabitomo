@@ -384,4 +384,8 @@ class ItemPostController extends Controller
         return redirect()->back();
     }
 
+    public function postComment($userid,$titleid,$sceneid){
+        return redirect()->back();
+    }
+
 }

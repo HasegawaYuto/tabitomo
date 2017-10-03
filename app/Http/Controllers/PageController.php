@@ -114,53 +114,44 @@ class PageController extends Controller
 
     public function showItems(){
       $scenes = Mylog::select('scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
-                      ->orderBy('updated_at','desc')
-                      ->groupBy('user_id','title_id','scene_id');
-      if(\Auth::check()){
-          $scenes = $scenes->where(function($query){
-              $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
-          });
-      }else{
-          $scenes = $scenes->where('publish','public');
-      }
-      $scenes = $scenes->paginate(24);
-                      //->get();
+            ->where(function($query){
+                if(\Auth::check()){
+                    $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                }else{
+                    $query->where('publish','public');
+                }
+            })
+            ->orderBy('updated_at','desc')
+            ->groupBy('user_id','title_id','scene_id')
+            ->paginate(24);
       $data['scenes'] = $scenes;
       $data['photos'] = Mylog::select('mime','data','scene_id','id','user_id','title_id')
-                                ->whereNotNull('data');
-      if(\Auth::check()){
-          $data['photos'] = $data['photos']->where(function($query){
-              $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
-          });
-      }else{
-          $data['photos'] = $data['photos']->where('publish','public');
-      }
-      $data['photos'] = $data['photos']->get();
+                                ->whereNotNull('data')
+                                ->where(function($query){
+                                    if(\Auth::check()){
+                                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                    }else{
+                                        $query->where('publish','public');
+                                    }
+                                })
+                                ->get();
+      $data['userComments'] = ['hoge','fuga'];
       foreach($scenes as $key => $scene){
-          //$sceneids = Mylog::getScenes($scene->user_id,$scene->title_id,$scene->scene_id)->get();
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
           $data['user'][$scene->user_id]=Profile::select('data','mime','nickname')->find($scene->user_id);
-          $arr=[];
-          $thumbIDs = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
+          $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
                                   ->whereNotNull('data')
-                                  ->select('id');
-                                  //->orderBy('theday');
-          if(\Auth::check()){
-              $thumbIDs = $thumbIDs->where(function($query){
-                  $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
-              });
-          }else{
-              $thumbIDs = $thumbIDs->where('publish','public');
-          }
-          $thumbIDs = $thumbIDs->get();
-          if(isset($thumbIDs)){
-              foreach($thumbIDs as $thumbID){
-                  $arr[] = $thumbID->id;
-              }
-              if(isset($arr[0])){
-                  $thumbIDrand = array_rand($arr);
-                  $data['thumb'][$key] = Mylog::select('mime','data')->find($arr[$thumbIDrand]);
-              }
+                                  ->select('id')
+                                  ->where(function($query){
+                                      if(\Auth::check()){
+                                          $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                      }else{
+                                          $query->where('publish','public');
+                                      }
+                                    })
+                                  ->orderByRaw("RAND()")->first();
+          if(isset($thumbID)){
+              $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
           }
       }
       return view('bodys.show_items',$data);
@@ -198,42 +189,43 @@ class PageController extends Controller
 
     public function showUserItems($id){
       $user = User::find($id);
-      $mylogsByTitle = $user->mylogs()
+      $titles = $user->mylogs()
+                      ->where(function($query)use($id){
+                          if(\Auth::user()->id != $id){
+                                $query->where('publish','public');
+                          }else{
+                              $query;
+                          }
+                      })
                       ->groupBy('title_id')
                       ->select('title_id','title','firstday','lastday','user_id')
-                      ->orderBy('theday','desc');
-      if(\Auth::user()->id != $id){
-            $mylogsByTitle = $mylogsByTitle->where('publish','public');
-      }
-      $mylogsByTitle = $mylogsByTitle->paginate(10);
+                      ->orderBy('theday','desc')
+                      ->paginate(10);
 
-      foreach($mylogsByTitle as $key => $mylogByTitle){
-          $arr = [];
-          $data['logtitle'][$key] = $user->title($mylogByTitle->title_id)
+      foreach($titles as $key => $title){
+          $data['logtitle'][$key] = $user->title($title->title_id)
+                                ->where(function($query)use($id){
+                                    if(\Auth::user()->id!=$id){
+                                        $query->where('publish','public');
+                                    }else{
+                                        $query;
+                                    }
+                                })
                                 ->groupBy('scene_id')
                                 ->select('scene')
-                                ->orderBy('theday');
-          if(\Auth::user()->id!=$id){
-              $data['logtitle'][$key] = $data['logtitle'][$key]->where('publish','public');
-          }
-          $data['logtitle'][$key]=$data['logtitle'][$key]->get();
-          $thumbIDs = $user->title($mylogByTitle->title_id)->where('publish','public')
+                                ->orderBy('theday')
+                                ->get();
+          $thumbID = $user->title($title->title_id)->where('publish','public')
                             ->whereNotNull('data')
                             ->select('id')
-                            ->get();
-          //$thumbID = array_rand($thumbIDs[$key],1);
-          if(isset($thumbIDs)){
-              foreach($thumbIDs as $thumbID){
-                  $arr[]=$thumbID->id;
-              }
-              if(isset($arr[0])){
-                  $thumbIDrand = array_rand($arr);
-                  $data['thumb'][$key] = Mylog::select('mime','data')->find($arr[$thumbIDrand]);
-              }
+                            ->orderByRaw("RAND()")
+                            ->first();
+          if(isset($thumbID)){
+              $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
           }
       }
       $data['user']=$user->profile;
-      $data['mylogs']=$mylogsByTitle;
+      $data['titles']=$titles;
       return view('bodys.user_menu.items',$data);
     }
 
@@ -259,19 +251,27 @@ class PageController extends Controller
     public function showTitle($id,$title_id){
       $user = User::find($id);
       $data['title'] = $user->title($title_id)
-                              ->select('title','firstday','lastday','title_id','user_id');
-      if(\Auth::user()->id != $id){
-          $data['title'] = $data['title']->where('publish','public');
-      }
-      $data['title'] = $data['title']->first();
+                              ->select('title','firstday','lastday','title_id','user_id')
+                              ->where(function($query)use($id){
+                                  if(\Auth::user()->id != $id){
+                                      $query->where('publish','public');
+                                  }else{
+                                      $query;
+                                  }
+                              })
+                              ->first();
       $scenes = $user->title($title_id)
                       ->groupBy('scene_id')
                       ->orderBy('theday')
-                      ->select('publish','scene','theday','lat','lng','score','comment','scene_id','title','user_id','title_id','firstday','lastday','theday','id');
-      if(\Auth::user()->id != $id){
-          $scenes = $scenes->where('publish','public');
-      }
-      $scenes = $scenes->paginate(5);
+                      ->select('publish','scene','theday','lat','lng','score','comment','scene_id','title','user_id','title_id','firstday','lastday','theday','id')
+                      ->where(function($query)use($id){
+                          if(\Auth::user()->id != $id){
+                              $query->where('publish','public');
+                          }else{
+                              $query;
+                          }
+                      })
+                      ->paginate(5);
       $data['scenes'] = $scenes;
       $data['newsceneid'] = $user->title($title_id)->max('scene_id')+1;
       $data['scoreAve'] = $user->title($title_id)
@@ -280,30 +280,29 @@ class PageController extends Controller
                               ->avg('score');
       $data['photos'] = $user->title($title_id)
                               ->whereNotNull('data')
-                              ->select('mime','data','scene_id','id','user_id','title_id');
-      if(\Auth::user()->id != $id){
-          $data['photos'] = $data['photos']->where('publish','public');
-      }
-      $data['photos'] = $data['photos']->get();
+                              ->select('mime','data','scene_id','id','user_id','title_id')
+                              ->where(function($query)use($id){
+                                  if(\Auth::user()->id != $id){
+                                      $query->where('publish','public');
+                                  }
+                              })
+                              ->get();
       foreach($scenes as $key => $scene){
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
           $arr=[];
-          $thumbIDs = $user->scene($title_id,$scene->scene_id)
+          $thumbID = $user->scene($title_id,$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->select('id')
-                                  ->orderBy('theday');
-          if(\Auth::user()->id != $id){
-              $thumbIDs = $thumbIDs->where('publish','public');
-          }
-          $thumbIDs = $thumbIDs->get();
-          if(isset($thumbIDs)){
-              foreach($thumbIDs as $thumbID){
-                  $arr[] = $thumbID->id;
-              }
-              if(isset($arr[0])){
-                  $thumbIDrand = array_rand($arr);
-                  $data['thumb'][$key] = Mylog::select('mime','data')->find($arr[$thumbIDrand]);
-              }
+                                  ->orderBy('theday')
+                                  ->where(function($query)use($id){
+                                      if(\Auth::user()->id != $id){
+                                          $query->where('publish','public');
+                                      }
+                                  })
+                                  ->orderByRaw("RAND()")
+                                  ->first();
+          if(isset($thumbID)){
+              $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
           }
       }
       $data['user']=$user->profile;

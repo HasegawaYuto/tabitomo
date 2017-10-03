@@ -40,6 +40,7 @@
                 <div class="panel-body">
                     <div class="col-xs-12 titleName">
                     {!! Link_to_route('show_title',$scene->title,['id'=>$scene->user_id,'title_id'=>$scene->title_id],['class'=>'black']) !!}
+                    @if(isset($user[$scene->user_id]->data))
                         <?php
                             $mime = $user[$scene->user_id]->mime;
                             $dataImage = base64_encode($user[$scene->user_id]->data);
@@ -47,6 +48,7 @@
                         <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}" class="black">
                         <div class="lazyload itemAvatar img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                         </a>
+                    @endif
                     </div>
                     <div class="col-xs-12">
                     @if(isset($thumb[$key]->data))
@@ -90,8 +92,15 @@
                     </div>
                     <div>
                         <div id="demo{{$key}}" class="collapse col-xs-12">
+                            @if(isset($userComments))
+                                @foreach($userComments as $userComment)
+                                <div class="panel panel-default">
+                                    {{$userComment}}
+                                </div>
+                                @endforeach
+                            @endif
                             @if(Auth::check())
-                                {!! Form::open() !!}
+                                {!! Form::open(['route'=>'add_comment','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene_id'=>$scene->scene_id,'style'=>'display:inline;float:right;']) !!}
                                 <div class="form-group">
                                     {!! Form::textarea('comment',null,['placeholder'=>'コメント','class'=>'form-control','rows'=>'3']) !!}
                                 </div>

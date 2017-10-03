@@ -49,5 +49,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('mylog/title/{title_id}/{scene_id}/unfavorite','ItemPostController@unfavoriteScene')->name('unfavorite_scene');
         Route::post('mylog/title/{title_id}/favorite','ItemPostController@favoriteTitle')->name('favorite_title');
         Route::post('mylog/title/{title_id}/unfavorite','ItemPostController@unfavoriteTitle')->name('unfavorite_title');
+        Route::post('mylog/title/{title_id}/{scene_id}/comments','ItemPostController@postComment')->name('add_comment');
       });
 });

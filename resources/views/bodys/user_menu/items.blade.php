@@ -29,10 +29,10 @@
                     <div class="tab-pane {{ $activetab == '1' ? 'active' : ''}}" id="tab1-1">
             @endif
             <div class="panel-body">
-                {!! $mylogs->render() !!}
-                @if(isset($mylogs))
+                {!! $titles->render() !!}
+                @if(isset($titles))
                 <?php $cnt = 0; ?>
-                @foreach($mylogs as $key => $mylog)
+                @foreach($titles as $key => $mylog)
                 <?php
                     $firstdayarray = explode('-',$mylog->firstday);
                     $lastdayarray = explode('-',$mylog->lastday);
