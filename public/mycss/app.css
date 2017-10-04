@@ -150,3 +150,29 @@ a:hover{
     overflow: hidden;
     white-space: nowrap;
 }
+.CommentUserAvatar {
+    position:relative;
+    float:left;
+    width:20%;
+    height:20%;
+    padding:20% 0 0;
+    max-height:100%;
+    max-width:100%;
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    -o-background-size:cover;
+    -ms-background-size:cover;
+}
+.commentContent{
+    word-wrap: break-word;
+}
+.clearfix:before {
+    display:block;
+    clear:both;
+    height:0px;
+    visibility:hidden;
+    content:".";
+}

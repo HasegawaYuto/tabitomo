@@ -38,30 +38,47 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
     ///
     //
-    public function mylogs()
-    {
+    public function mylogs(){
         return $this->hasMany(Mylog::class);
     }
-    public function title($titleid)
-    {
+    public function title($titleid){
         return $this->hasMany(Mylog::class)->where('title_id',$titleid);
     }
-    public function scene($titleid,$sceneid)
-    {
+    public function scene($titleid,$sceneid){
         return $this->hasMany(Mylog::class)->where('title_id',$titleid)->where('scene_id',$sceneid);
     }
 
-    public function profile()
-    {
+    public function profile(){
         return $this->hasOne(Profile::class);
     }
 
-    public function favors()
-    {
+    public function favors(){
         return $this->belongsToMany(Mylog::class,'mylog_user','user_id','scene_id')->withTimestamps();
     }
+    public function comments(){
+        return $this->belongsToMany(Mylog::class,'comments','user_id','scene_id')->withPivot('comment','comment_id')->withTimestamps();
+    }
+    public function commentTo($userid,$titleid,$sceneid,$comment){
+        $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
+        $latestCommentId = $this->comments()->whereIn('comments.scene_id',$sceneidLists)->max('comment_id');
+        if(!isset($latestCommentId)){
+            $latestCommentId = 0;
+        }
+        foreach($sceneidLists as $sceneidList){
+            $this->comments()->attach($sceneidList,['comments.comment'=>$comment,'comment_id'=>$latestCommentId+1]);
+        }
+        return true;
+    }
+    public function commentDel($userid,$titleid,$sceneid,$commentuserid,$commentid){
+        //$sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
+        //foreach($sceneidLists as $sceneidList){
+        //$this->comments()->where('comments.scene_id',$sceneidList)->wherePivot('comment_id',$commentid)->detach();
+        //}
+        //return true;
+    }
+
     public function is_favoritesScene($userid,$titleid,$sceneid){
-        $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('id');
+        $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
         return $this->favors()->whereIn('mylog_user.scene_id',$sceneidLists)->exists();
     }
     public function favoringScene($userid,$titleid,$sceneid){
@@ -69,7 +86,7 @@ class User extends Model implements AuthenticatableContract,
         if($exists){
             return false;
         }else{
-            $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('id');
+            $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
             foreach($sceneidLists as $sceneidList){
                 $this->favors()->attach($sceneidList);
             }
@@ -82,7 +99,7 @@ class User extends Model implements AuthenticatableContract,
         if(!$exists){
             return false;
         }else{
-            $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('id');
+            $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
             foreach($sceneidLists as $sceneidList){
                 $this->favors()->detach($sceneidList);
             }
@@ -92,7 +109,7 @@ class User extends Model implements AuthenticatableContract,
 
 
     public function is_favoritesTitle($userid,$titleid){
-        $titleidLists = $this->find($userid)->title($titleid)->lists('id');
+        $titleidLists = $this->find($userid)->title($titleid)->lists('mylogs.id');
         return $this->favors()->whereIn('mylog_user.scene_id',$titleidLists)->exists();
     }
     public function favoringTitle($userid,$titleid,$sceneid){
@@ -100,7 +117,7 @@ class User extends Model implements AuthenticatableContract,
         if($exists){
             return false;
         }else{
-            $titleidLists = $this->find($userid)->title($titleid)->lists('id');
+            $titleidLists = $this->find($userid)->title($titleid)->lists('mylogs.id');
             foreach($titleidLists as $titleidList){
                 $this->favors()->attach($titleidList);
             }
@@ -113,7 +130,7 @@ class User extends Model implements AuthenticatableContract,
         if(!$exists){
             return false;
         }else{
-            $titleidLists = $this->find($userid)->title($titleid)->lists('id');
+            $titleidLists = $this->find($userid)->title($titleid)->lists('mylogs.id');
             foreach($titleidLists as $titleidList){
                 $this->favors()->detach($titleidList);
             }

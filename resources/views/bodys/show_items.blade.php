@@ -96,12 +96,34 @@
                     </div>
                     <div>
                         <div id="demo{{$key}}" class="collapse col-xs-12">
-                            @if(isset($userComments))
-                                @foreach($userComments as $userComment)
-                                <div class="panel panel-default">
-                                    {{$userComment}}
-                                </div>
+                            @if(isset($userComments[$key]))
+                            <ul class="list-group">
+                                @foreach($userComments[$key] as $kkey => $userComment)
+                                    <?php
+                                        $mime = $commentUser[$key][$kkey]->mime;
+                                        $dataImage = base64_encode($commentUser[$key][$kkey]->data);
+                                    ?>
+                                    <li class="list-group-item">
+                                    <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->user_id])}}" class="black">
+                                    <div style="width:100%;">
+                                    @if(isset($dataImage))
+                                        <div class="CommentUserAvatar lazyload img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                    @else
+                                        <div class="CommentUserAvatar lazyload img-circle" data-bg="{{asset('noimage.png')}}"></div>
+                                    @endif
+                                    {{$commentUser[$key][$kkey]->nickname or '未設定'}}
+                                    @if(Auth::check())
+                                    @if(Auth::user()->id == $commentUser[$key][$kkey]->user_id || Auth::user()->id==$scene->user_id)
+                                        @include('parts.comment_delete_button',['scene'=>$scene,'commentUser'=>$commentUser[$key][$kkey],'comment'=>$userComment])
+                                    @endif
+                                    @endif
+                                    </div></a>
+                                    <div class="commentContent clearfix">
+                                    {{$userComment->comment}}
+                                    </div>
+                                    </li>
                                 @endforeach
+                            </ul>
                             @endif
                             @if(Auth::check())
                                 {!! Form::open(['route'=>['add_comment','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene_id'=>$scene->scene_id],'style'=>'display:inline;float:right;']) !!}

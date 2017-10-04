@@ -135,10 +135,13 @@ class PageController extends Controller
                                     }
                                 })
                                 ->get();
-      $data['userComments'] = ['hoge','fuga'];
       foreach($scenes as $key => $scene){
+          $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
+          foreach($data['userComments'][$key] as $kkey => $userComment){
+              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID)->profile;
+          }
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
-          $data['user'][$scene->user_id]=Profile::select('data','mime','nickname')->find($scene->user_id);
+          $data['user'][$scene->user_id]=Profile::select('data','mime','nickname')->where('user_id',$scene->user_id)->first();
           $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->select('id')
@@ -201,7 +204,6 @@ class PageController extends Controller
                       ->select('title_id','title','firstday','lastday','user_id')
                       ->orderBy('theday','desc')
                       ->paginate(10);
-
       foreach($titles as $key => $title){
           $data['scenes'][$key] = $user->title($title->title_id)
                                 ->where(function($query)use($id){
@@ -284,12 +286,13 @@ class PageController extends Controller
                               ->where(function($query)use($id){
                                   if(\Auth::user()->id != $id){
                                       $query->where('publish','public');
+                                  }else{
+                                      $query;
                                   }
                               })
                               ->get();
       foreach($scenes as $key => $scene){
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
-          $arr=[];
           $thumbID = $user->scene($title_id,$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->select('id')
@@ -297,6 +300,8 @@ class PageController extends Controller
                                   ->where(function($query)use($id){
                                       if(\Auth::user()->id != $id){
                                           $query->where('publish','public');
+                                      }else{
+                                          $query;
                                       }
                                   })
                                   ->orderByRaw("RAND()")

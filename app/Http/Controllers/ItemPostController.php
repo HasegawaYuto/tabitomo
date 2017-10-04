@@ -209,7 +209,7 @@ class ItemPostController extends Controller
       if(\Input::get('fin')){
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
-          $user = Profile::where('user_id',$id)->first();
+          //$user = Profile::where('user_id',$id)->first();
           $data['user']=$user->profile;
           //$data['id']=$id;
           $data['title'] = $request->title;
@@ -269,12 +269,6 @@ class ItemPostController extends Controller
 
 
     public function editScene(Request $request ,$id,$title_id,$scene_id){
-        function replaceDate($DateString){
-              $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
-              return $theday;
-        }
-
-
         if($request->editstyle=='fix'){
             $user = User::find($id);
             $changes = $user->scene($title_id,$scene_id)->get();
@@ -396,10 +390,25 @@ class ItemPostController extends Controller
         return redirect()->back();
     }
 
-    public function postComment($id,$title_id,$scene_id){
+    public function postComment(Request $request,$id,$title_id,$scene_id){
+         $this->validate($request, [
+            'comment' => 'required|max:255',
+          ]);
         $user=User::find($id);
-        $sceneids=$user->scene($title_id,$scene_id)->pluck('id');
+        \Auth::user()->commentTo($id,$title_id,$scene_id,$request->comment);
         return redirect()->back();
+    }
+
+    public function deleteComment($id,$title_id,$scene_id,$comment_user_id,$comment_id){
+      $delSceneCommentIds=User::find($id)->scene($title_id,$scene_id)->lists('mylogs.id');
+      foreach($delSceneCommentIds as $delSceneCommentId){
+        //User::find($comment_user_id)->comments()->where('comments.scene_id',$delSceneCommentId)->wherePivot('comment_id',$comment_id)->detach();
+        \DB::table('comments')->where('user_id',$comment_user_id)
+                              ->where('scene_id',$delSceneCommentId)
+                              ->where('comment_id',$comment_id)
+                              ->delete();
+      }
+      return redirect()->back();
     }
 
 }
