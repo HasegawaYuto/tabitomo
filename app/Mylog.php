@@ -19,4 +19,9 @@ class Mylog extends Model
         return $this->belongsToMany(User::class,'mylog_user','scene_id','user_id')->withTimestamps();
     }
 
+    public function commented()
+    {
+        return $this->belongsToMany(User::class,'comments','scene_id','user_id')->withPivot('comment_id','comment')->withTimestamps();
+    }
+
 }

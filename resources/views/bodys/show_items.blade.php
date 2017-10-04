@@ -48,6 +48,10 @@
                         <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}" class="black">
                         <div class="lazyload itemAvatar img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                         </a>
+                    @else
+                        <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}" class="black">
+                        <div class="lazyload itemAvatar img-circle" data-bg="{{asset('noimage.png')}}"></div>
+                        </a>
                     @endif
                     </div>
                     <div class="col-xs-12">
@@ -100,7 +104,7 @@
                                 @endforeach
                             @endif
                             @if(Auth::check())
-                                {!! Form::open(['route'=>'add_comment','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene_id'=>$scene->scene_id,'style'=>'display:inline;float:right;']) !!}
+                                {!! Form::open(['route'=>['add_comment','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene_id'=>$scene->scene_id],'style'=>'display:inline;float:right;']) !!}
                                 <div class="form-group">
                                     {!! Form::textarea('comment',null,['placeholder'=>'コメント','class'=>'form-control','rows'=>'3']) !!}
                                 </div>

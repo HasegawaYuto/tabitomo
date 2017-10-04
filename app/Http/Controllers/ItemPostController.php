@@ -210,8 +210,8 @@ class ItemPostController extends Controller
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
           $user = Profile::where('user_id',$id)->first();
-          $data['user']=$user;
-          $data['id']=$id;
+          $data['user']=$user->profile;
+          //$data['id']=$id;
           $data['title'] = $request->title;
           $data['activetab'] = '2';
           $data['scene_id'] = $request->scene_id+1;
@@ -220,18 +220,31 @@ class ItemPostController extends Controller
           $data['firstday'] = $request->firstday;
           $data['lastday'] = $request->lastday;
           $data['mapzoom'] = $request->mapzoom;
-          $mylogsByTitle = Mylog::where('user_id',$id)
-                          ->where('publish','public')
+          $mylogsByTitle = $user->mylogs()
+                          ->where(function($query)use($id){
+                              if(\Auth::user()->id != $id){
+                                  $query->where('publish','public');
+                              }else{
+                                  $query;
+                              }
+                          })
                           ->groupBy('title_id')
                           ->select('title_id','title','firstday','lastday','user_id')
                           ->paginate(10);
           foreach($mylogsByTitle as $key => $mylogByTitle){
-              $data['logtitle'][$key] = Mylog::where('user_id',$id)
-                                    ->where('publish','public')
-                                    ->where('title_id',$mylogByTitle->title_id)
-                                    ->groupBy('scene_id')->get();
+              $data['scenes'][$key] = $user->title($mylogByTitle->title_id)
+                                    ->where(function($query)use($id){
+                                        if(\Auth::user()->id != $id){
+                                            $query->where('publish','public');
+                                        }else{
+                                            $query;
+                                        }
+                                    })
+                                    ->groupBy('scene_id')
+                                    ->orderBy('theday')
+                                    ->get();
           }
-          $data['mylogs']=$mylogsByTitle;
+          $data['titles']=$mylogsByTitle;
           return view('bodys.user_menu.items',$data);
       }
     }
@@ -242,9 +255,8 @@ class ItemPostController extends Controller
               $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
               return $theday;
         }
-        $changes = Mylog::where('user_id',$id)
-                        ->where('title_id',$title_id)
-                        ->get();
+        $user = User::find($id);
+        $changes = $user->title($title_id)->get();
         foreach($changes as $change){
               $change->update([ 'title'=>$request->NewTitle,
                                 'firstday'=>replaceDate($request->firstday),
@@ -384,7 +396,9 @@ class ItemPostController extends Controller
         return redirect()->back();
     }
 
-    public function postComment($userid,$titleid,$sceneid){
+    public function postComment($id,$title_id,$scene_id){
+        $user=User::find($id);
+        $sceneids=$user->scene($title_id,$scene_id)->pluck('id');
         return redirect()->back();
     }
 

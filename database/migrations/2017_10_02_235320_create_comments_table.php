@@ -28,7 +28,8 @@ class CreateCommentsTable extends Migration
                   ->on('mylogs')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->text('comment')->index();
+            $table->integer('commnt_id')->unsigned()->index();
+            $table->text('comment');
             $table->timestamps();
         });
     }

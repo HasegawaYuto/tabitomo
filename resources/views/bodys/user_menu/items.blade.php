@@ -65,11 +65,11 @@
                                         <td>{{(int)$lastdayarray[1]}}月{{(int)$lastdayarray[2]}}日</td>
                                     </tr>
                                 </table>
-                                @if(isset($logtitle))
+                                @if(isset($scenes))
                                 <label>シーン</label>
-                                <ul>
-                                @foreach($logtitle[$key] as $thelogtitle)
-                                    <li style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">{{$thelogtitle->scene!= "" ? $thelogtitle->scene : 'No Title' }}</li>
+                                <ul class="sceneList">
+                                @foreach($scenes[$key] as $scene)
+                                    <li>{{$scene->scene!= "" ? $scene->scene : 'No Title' }}</li>
                                 @endforeach
                                 </ul>
                                 @endif

@@ -203,7 +203,7 @@ class PageController extends Controller
                       ->paginate(10);
 
       foreach($titles as $key => $title){
-          $data['logtitle'][$key] = $user->title($title->title_id)
+          $data['scenes'][$key] = $user->title($title->title_id)
                                 ->where(function($query)use($id){
                                     if(\Auth::user()->id!=$id){
                                         $query->where('publish','public');
