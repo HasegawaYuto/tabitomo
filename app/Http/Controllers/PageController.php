@@ -292,6 +292,10 @@ class PageController extends Controller
                               })
                               ->get();
       foreach($scenes as $key => $scene){
+          $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
+          foreach($data['userComments'][$key] as $kkey => $userComment){
+              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID)->profile;
+          }
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
           $thumbID = $user->scene($title_id,$scene->scene_id)
                                   ->whereNotNull('data')

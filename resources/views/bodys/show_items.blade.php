@@ -39,7 +39,12 @@
                 </div>
                 <div class="panel-body">
                     <div class="col-xs-12 titleName">
-                    {!! Link_to_route('show_title',$scene->title,['id'=>$scene->user_id,'title_id'=>$scene->title_id],['class'=>'black']) !!}
+                    <a href="{{route('show_title',['id'=>$scene->user_id,'title_id'=>$scene->title_id],['class'=>'black'])}}"
+                     class="black">
+                     <div>
+                      【タイトル】<br>
+                    <p class="titleString">{{$scene->title}}</p>
+                  </div></a>
                     @if(isset($user[$scene->user_id]->data))
                         <?php
                             $mime = $user[$scene->user_id]->mime;
@@ -96,6 +101,7 @@
                     </div>
                     <div>
                         <div id="demo{{$key}}" class="collapse col-xs-12">
+                            <label>ユーザーコメント</label>
                             @if(isset($userComments[$key]))
                             <ul class="list-group">
                                 @foreach($userComments[$key] as $kkey => $userComment)
@@ -126,7 +132,7 @@
                             </ul>
                             @endif
                             @if(Auth::check())
-                                {!! Form::open(['route'=>['add_comment','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene_id'=>$scene->scene_id],'style'=>'display:inline;float:right;']) !!}
+                                {!! Form::open(['route'=>['add_comment','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene_id'=>$scene->scene_id]]) !!}
                                 <div class="form-group">
                                     {!! Form::textarea('comment',null,['placeholder'=>'コメント','class'=>'form-control','rows'=>'3']) !!}
                                 </div>

@@ -63,7 +63,7 @@
     width:70%;
     margin-left:30%;
 }
-.titleString{
+.titleStringL{
     text-overflow:ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -136,7 +136,6 @@ a:hover{
     padding:25% 0 0;
     max-height:100%;
     max-width:100%;
-    float:right;
     background-position:center;
     background-size:cover;
     background-repeat:no-repeat;
@@ -175,4 +174,26 @@ a:hover{
     height:0px;
     visibility:hidden;
     content:".";
+}
+.titleString{
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display:inline;
+}
+.CommentUserAvatarInTitle{
+    position:relative;
+    float:left;
+    width:50px;
+    height:50px;
+    padding:50px% 0 0;
+    max-height:100%;
+    max-width:100%;
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    -o-background-size:cover;
+    -ms-background-size:cover;
 }

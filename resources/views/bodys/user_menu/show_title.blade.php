@@ -6,7 +6,7 @@
 @include('bodys.user_menu.contents_menu',['user'=>$user])
 <div class="col-md-9">
     <div class="panel panel-info">
-        <div class="panel-heading titleString">
+        <div class="panel-heading titleStringL">
                 {!! Link_to_route('show_user_items','マイログ',['id'=>$user->user_id]) !!}
                 &nbsp;&nbsp; ≫
                 @if(Auth::user()->id == $user->user_id)
@@ -183,7 +183,42 @@
                                 </div>
                             <div>
                                 <div id="demo{{$key}}" class="collapse col-xs-12">
-                                    <p>他のユーザのコメント</p>
+                                    <label>ユーザーコメント</label>
+                                    @if(isset($userComments[$key]))
+                                    <ul class="list-group">
+                                        @foreach($userComments[$key] as $kkey => $userComment)
+                                            <?php
+                                                $mime = $commentUser[$key][$kkey]->mime;
+                                                $dataImage = base64_encode($commentUser[$key][$kkey]->data);
+                                            ?>
+                                            <li class="list-group-item">
+                                            <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->user_id])}}" class="black">
+                                            <div style="width:100%;">
+                                            @if(isset($dataImage))
+                                                <div class="CommentUserAvatarInTitle lazyload img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                            @else
+                                                <div class="CommentUserAvatarInTitle lazyload img-circle" data-bg="{{asset('noimage.png')}}"></div>
+                                            @endif
+                                            {{$commentUser[$key][$kkey]->nickname or '未設定'}}
+                                            @if(Auth::check())
+                                            @if(Auth::user()->id == $commentUser[$key][$kkey]->user_id || Auth::user()->id==$scene->user_id)
+                                                @include('parts.comment_delete_button',['scene'=>$scene,'commentUser'=>$commentUser[$key][$kkey],'comment'=>$userComment])
+                                            @endif
+                                            @endif
+                                            </div></a>
+                                            <div class="commentContent clearfix">
+                                            {{$userComment->comment}}
+                                            </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    @endif
+      {!! Form::open(['route'=>['add_comment','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene_id'=>$scene->scene_id]]) !!}
+                                        <div class="form-group">
+                                            {!! Form::textarea('comment',null,['placeholder'=>'コメント','class'=>'form-control','rows'=>'3']) !!}
+                                        </div>
+                                        {!! Form::submit('書き込み',['class'=>'btn btn-xs btn-warning']) !!}
+                                        {!! Form::close() !!}
                                 </div>
                                 <button type="button" class="btn btn-block" data-toggle="collapse" data-target="#demo{{$key}}"><span class="caret"></span></button>
                             </div>
