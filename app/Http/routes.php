@@ -26,7 +26,8 @@ Route::post('/login','Auth\AuthController@postLogin')->name('login.post');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/newprofilecreate','PageController@newProfileCreate');
     Route::get('/guides','PageController@showGuides')->name('show_guides');
-    Route::get('/travelers','PageController@showTravelers')->name('show_travelers');
+    Route::get('/guests','PageController@showTravelers')->name('show_travelers');
+    Route::post('/guides/{guide_id}/candidate','GuestGuideController@candidateGuide')->name('guide_candidate');
 
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
@@ -51,5 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('mylog/title/{title_id}/unfavorite','ItemPostController@unfavoriteTitle')->name('unfavorite_title');
         Route::post('mylog/title/{title_id}/{scene_id}/comments','ItemPostController@postComment')->name('add_comment');
         Route::post('mylog/title/{title_id}/{scene_id}/comments/{comment_user_id}/{comment_id}/delete','ItemPostController@deleteComment')->name('delete_comment');
+        Route::post('guestpost','GuestGuideController@guestPost')->name('guest_post');
+        Route::post('guidepost','GuestGuideController@guidePost')->name('guide_post');
       });
 });

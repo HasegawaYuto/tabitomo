@@ -137,4 +137,8 @@ class User extends Model implements AuthenticatableContract,
             return true;
         }
     }
+
+    public function guestguide(){
+        return $this->hasMany(Guestguide::class);
+    }
 }

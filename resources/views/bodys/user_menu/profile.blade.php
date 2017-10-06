@@ -5,7 +5,7 @@
 <div class="row">
   <?php
       if(!isset($user->data) && !isset($user->mime)){
-          $src = 'http://placehold.it/640x640/27709b/ffffff';
+          $src = asset('noimage.png');
       }else{
           $src = 'data:' . $user->mime . ';base64,' . base64_encode($user->data);
       }
@@ -15,6 +15,7 @@
   <div class="text-center col-md-6">
     <div class="panel panel-info">
       <div class="panel panel-heading">
+        <i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>
         @if(Auth::user()->id==$user->user_id)
             プロフィールの編集
         @else

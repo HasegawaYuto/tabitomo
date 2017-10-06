@@ -14,8 +14,8 @@
               <ul class="nav navbar-nav navbar-left">
                   <li>{!! link_to_route('show_items', '旅先一覧') !!}</li>
                   @if(Auth::check())
-                      <li>{!! link_to_route('show_guides', 'ガイドを探す') !!}</li>
-                      <li>{!! link_to_route('show_travelers', '旅行者を探す') !!}</li>
+                      <li>{!! link_to_route('show_guides', 'ガイド募集') !!}</li>
+                      <li>{!! link_to_route('show_travelers', 'ゲスト募集') !!}</li>
                   @endif
               </ul>
                 <ul class="nav navbar-nav navbar-right">

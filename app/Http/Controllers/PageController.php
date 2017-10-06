@@ -12,7 +12,7 @@ use App\User;
 use Carbon\Carbon;
 use App\Location;
 use App\Pref;
-use App\Profile,App\Mylog;
+use App\Profile,App\Mylog,App\Guestguide;
 use Illuminate\Support\Facades\Log;
 
 class PageController extends Controller
@@ -105,11 +105,13 @@ class PageController extends Controller
 
 
     public function showGuides(){
-      return view('bodys.show_guides');
+      $data['recruitments']=Guestguide::where('type','guide')->orderBy('created_at','desc')->paginate(30);
+      return view('bodys.show_guides',$data);
     }
 
     public function showTravelers(){
-      return view('bodys.show_travelers');
+      $data['recruitments']=Guestguide::where('type','guest')->orderBy('created_at','desc')->paginate(30);
+      return view('bodys.show_travelers',$data);
     }
 
     public function showItems(){
@@ -243,9 +245,9 @@ class PageController extends Controller
 
 
     public function showUserMatching($id){
-      $user = Profile::where('user_id',$id)->first();
-      $data['user']=$user;
-      $data['id']=$id;
+      $user=User::find($id);
+      $data['user']=$user->profile;
+      $data['recruitments']=$user->guestguide()->orderBy('created_at','desc')->paginate(15);
       return view('bodys.user_menu.matching',$data);
     }
 

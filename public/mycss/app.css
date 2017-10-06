@@ -197,3 +197,6 @@ a:hover{
     -o-background-size:cover;
     -ms-background-size:cover;
 }
+.wrap{
+    word-wrap: break-word;
+}

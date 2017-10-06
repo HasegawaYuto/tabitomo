@@ -1,4 +1,153 @@
 $(function(){
+    if($('.recruitmentMap').length){
+        var Mapcnt = $('.recruitmentMap').length;
+        for($i=0;$i<Mapcnt;$i++){
+        var centerLat = parseFloat($('#recruitmentLat'+$i).val());
+        var centerLng = parseFloat($('#recruitmentLng'+$i).val());
+        var circRadius = parseFloat($('#recruitmentRadius'+$i).val());
+        var centerPosition = {lat:centerLat, lng:centerLng};
+        var googlemap = new google.maps.Map(document.getElementById("recruitmentMap"+$i),
+                {
+                  zoom : 5,
+                  center : centerPosition,
+                  mapTypeId: google.maps.MapTypeId.TERRAIN,//
+                  mapTypeControl: false,//
+                  fullscreenControl: true,
+                  streetViewControl: false,//
+                  scrollwheel: true,//
+                  zoomControl: true
+                });
+        Marker = new google.maps.Marker({
+                position: centerPosition,
+                map: googlemap
+                });
+        Circle = new google.maps.Circle({
+                    center: centerPosition,
+                    map: googlemap,
+                    radius: circRadius,
+                    fillColor: '#FF0000', 		// 塗りつぶし色
+                    fillOpacity: 0.5,
+                    strokeColor: '#FF0000',		// 外周色
+                    strokeOpacity: 1,	// 外周透過度（0: 透明 ⇔ 1:不透明）
+                    strokeWeight: 1,
+                    //editable: true
+                  });
+        var minX = centerLng-(circRadius/111325);
+        var maxX = centerLng+(circRadius/111325);
+        var minY = centerLat-(circRadius/111136);
+        var maxY = centerLat+(circRadius/111136);
+        var sw = new google.maps.LatLng(maxY, minX);
+        var ne = new google.maps.LatLng(minY, maxX);
+        var bounds = new google.maps.LatLngBounds(sw, ne);
+        googlemap.fitBounds(bounds);
+        }
+    }
+});
+$(function(){
+    if($('#Relimitdate').length){
+        $('#Relimitdate').datepicker({
+            format: "yyyy年mm月dd日",
+            language: "ja",
+            daysOfWeekHighlighted: "0,6",
+            useCurrent: false
+            }
+        );
+    }
+    if($('#GuestGuideSpotMap').length){
+        $('#GuestGuidePost').on('show.bs.modal',function(event){
+            //var $URL = $('#GuestGuideForm').attr('action');
+            //$('.modal-header').html($URL);
+            $('#spotdata').empty();
+            /*
+            var button = $(event.relatedTarget);
+            var userid = button.data('userid');
+            var man = button.data('man');
+            var originalurl = $('#GuestGuideForm').attr('action');
+            var editreplace = 'user/'+userid+'/'+man+'post';
+            var editurl = originalurl.replace(/(user\/)(.*?)(post)/,editreplace);
+            $("#GuestGuideForm").attr("action",editurl);
+            if(man=='guide'){
+                //$('.modal-header').html('ガイド募集');
+                $('.modal-header').html(editurl);
+            }else{
+                //$('.modal-header').html('ゲスト募集');
+                $('.modal-header').html(editurl);
+            }*/
+        });
+        $('#GuestGuidePost').on('shown.bs.modal', function(event){
+            var button = $(event.relatedTarget);
+            var userid = button.data('userid');
+            var man = button.data('man');
+            var originalurl = $('#GuestGuideForm').attr('action');
+            var editreplace = 'user/'+userid+'/'+man+'post';
+            var editurl = originalurl.replace(/(user\/)(.*?)(post)/,editreplace);
+            $("#GuestGuideForm").attr("action",editurl);
+            if(man=='guide'){
+                $('.modal-header').html('ガイド募集');
+                //$('.modal-header').html(editurl);
+            }else{
+                $('.modal-header').html('ゲスト募集');
+                //$('.modal-header').html(editurl);
+            }
+            var centerPosition = {lat:35, lng: 136};
+            var googlemap = new google.maps.Map(document.getElementById("GuestGuideSpotMap"),
+                    {
+                      zoom : 5,
+                      center : centerPosition,
+                      mapTypeId: google.maps.MapTypeId.TERRAIN,//
+                      mapTypeControl: false,//
+                      fullscreenControl: true,
+                      streetViewControl: false,//
+                      scrollwheel: true,//
+                      zoomControl: true
+                    });
+            var Marker = new Array;
+            var Circle = new Array;
+            var cnt = -1;
+            google.maps.event.addListener(googlemap,'click', function(e){
+                    cnt++;
+                    Marker[cnt] = new google.maps.Marker({
+                            position: e.latLng,
+                            draggable: true,
+                            map: googlemap
+                            });
+                    Circle[cnt] = new google.maps.Circle({
+	                            center: e.latLng,
+	                            map: googlemap,
+                              radius: parseInt(parseFloat(20)*1000),
+                              fillColor: '#FF0000', 		// 塗りつぶし色
+	                            fillOpacity: 0.5,
+                              strokeColor: '#FF0000',		// 外周色
+	                            strokeOpacity: 1,	// 外周透過度（0: 透明 ⇔ 1:不透明）
+	                            strokeWeight: 1,
+                              editable: true
+                            });
+                    Circle[cnt].bindTo("center", Marker[cnt], "position");
+                    $('#cnt').val(cnt);
+                    $('.modal-header').html(cnt);
+                    $('#spotdata').append('<input type="hidden" value="'+e.latLng.lat()+'" name="centerLat[]" id="centerLat'+cnt+'">');
+                    $('#spotdata').append('<input type="hidden" value="'+e.latLng.lng()+'" name="centerLng[]" id="centerLng'+cnt+'">');
+                    $('#spotdata').append('<input type="hidden" value="20000" name="circleRadius[]" id="circleRadius'+cnt+'">');
+                    google.maps.event.addListener(Marker[cnt],'drag',function(){
+                      var marker = Marker[cnt].getPosition();
+                      var circle = Circle[cnt].getRadius();
+                      $('#centerLat'+cnt).val(marker.lat());
+                      $('#centerLng'+cnt).val(marker.lng());
+                      $('#circleRadius'+cnt).val(circle);
+                    });
+                    google.maps.event.addListener(Circle[cnt],'radius_changed',function(){
+                        var marker = Marker[cnt].getPosition();
+                        var circle = Circle[cnt].getRadius();
+                        $('#centerLat'+cnt).val(marker.lat());
+                        $('#centerLng'+cnt).val(marker.lng());
+                        $('#circleRadius'+cnt).val(circle);
+                    });
+                });
+        });
+    }
+});
+
+$(function(){
     if($('#fixScene0').length){
         var originalImg = $('#photosField').html();
         $('#fixScene0').on('show.bs.modal', function (event) {
@@ -231,10 +380,10 @@ $(function(){///グーグルマップ表示
                             position: centerPosition,
                             map: googlemap
                         });
-            google.maps.event.addDomListener(window, "resize", function() {
-    	            google.maps.event.trigger(googlemap, "resize");
-    	             googlemap.setCenter(centerPosition);
-              });
+            //google.maps.event.addDomListener(window, "resize", function() {
+    	      //      google.maps.event.trigger(googlemap, "resize");
+    	      //       googlemap.setCenter(centerPosition);
+            //  });
         }
         //});
             //var centerPosition = {lat: 36, lng: 136};
