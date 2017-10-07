@@ -30,7 +30,6 @@ $(function(){
                     strokeColor: '#FF0000',		// 外周色
                     strokeOpacity: 1,	// 外周透過度（0: 透明 ⇔ 1:不透明）
                     strokeWeight: 1,
-                    //editable: true
                   });
         var minX = centerLng-(circRadius/111325);
         var maxX = centerLng+(circRadius/111325);
@@ -55,24 +54,7 @@ $(function(){
     }
     if($('#GuestGuideSpotMap').length){
         $('#GuestGuidePost').on('show.bs.modal',function(event){
-            //var $URL = $('#GuestGuideForm').attr('action');
-            //$('.modal-header').html($URL);
             $('#spotdata').empty();
-            /*
-            var button = $(event.relatedTarget);
-            var userid = button.data('userid');
-            var man = button.data('man');
-            var originalurl = $('#GuestGuideForm').attr('action');
-            var editreplace = 'user/'+userid+'/'+man+'post';
-            var editurl = originalurl.replace(/(user\/)(.*?)(post)/,editreplace);
-            $("#GuestGuideForm").attr("action",editurl);
-            if(man=='guide'){
-                //$('.modal-header').html('ガイド募集');
-                $('.modal-header').html(editurl);
-            }else{
-                //$('.modal-header').html('ゲスト募集');
-                $('.modal-header').html(editurl);
-            }*/
         });
         $('#GuestGuidePost').on('shown.bs.modal', function(event){
             var button = $(event.relatedTarget);
@@ -84,10 +66,8 @@ $(function(){
             $("#GuestGuideForm").attr("action",editurl);
             if(man=='guide'){
                 $('.modal-header').html('ガイド募集');
-                //$('.modal-header').html(editurl);
             }else{
                 $('.modal-header').html('ゲスト募集');
-                //$('.modal-header').html(editurl);
             }
             var centerPosition = {lat:35, lng: 136};
             var googlemap = new google.maps.Map(document.getElementById("GuestGuideSpotMap"),
@@ -124,7 +104,7 @@ $(function(){
                             });
                     Circle[cnt].bindTo("center", Marker[cnt], "position");
                     $('#cnt').val(cnt);
-                    $('.modal-header').html(cnt);
+                    //$('.modal-header').html(cnt);
                     $('#spotdata').append('<input type="hidden" value="'+e.latLng.lat()+'" name="centerLat[]" id="centerLat'+cnt+'">');
                     $('#spotdata').append('<input type="hidden" value="'+e.latLng.lng()+'" name="centerLng[]" id="centerLng'+cnt+'">');
                     $('#spotdata').append('<input type="hidden" value="20000" name="circleRadius[]" id="circleRadius'+cnt+'">');
