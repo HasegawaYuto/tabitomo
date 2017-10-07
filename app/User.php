@@ -141,4 +141,28 @@ class User extends Model implements AuthenticatableContract,
     public function guestguide(){
         return $this->hasMany(Guestguide::class);
     }
+    public function recruites(){
+        return $this->belongsToMany(Guestguide::class,'recruitments','user_id','recruitment_id')->withTimestamps();
+    }
+    public function is_recruite($itemid){
+        return $this->recruites()->where('recruitment_id',$itemid)->exists();
+    }
+    public function candidating($itemid){
+        $exists = $this->is_recruite($itemid);
+        if(!$exists){
+            $this->recruites()->attach($itemid);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public function uncandidating($itemid){
+        $exists = $this->is_recruite($itemid);
+        if($exists){
+            $this->recruites()->detach($itemid);
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

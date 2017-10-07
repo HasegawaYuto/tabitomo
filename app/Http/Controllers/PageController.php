@@ -105,12 +105,18 @@ class PageController extends Controller
 
 
     public function showGuides(){
-      $data['recruitments']=Guestguide::where('type','guide')->orderBy('created_at','desc')->paginate(30);
+      $data['recruitments']=Guestguide::where('type','guide')->where('user_id','!=',\Auth::user()->id)->orderBy('created_at','desc')->paginate(30);
+      foreach($data['recruitments'] as $key => $recruitment){
+          $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
+      }
       return view('bodys.show_guides',$data);
     }
 
     public function showTravelers(){
-      $data['recruitments']=Guestguide::where('type','guest')->orderBy('created_at','desc')->paginate(30);
+      $data['recruitments']=Guestguide::where('type','guest')->where('user_id','!=',\Auth::user()->id)->orderBy('created_at','desc')->paginate(30);
+      foreach($data['recruitments'] as $key => $recruitment){
+          $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
+      }
       return view('bodys.show_travelers',$data);
     }
 
@@ -236,9 +242,14 @@ class PageController extends Controller
 
 
     public function showUserFavorites($id){
-      $user = Profile::where('user_id',$id)->first();
-      $data['user']=$user;
-      $data['id']=$id;
+      $user = User::find($id);
+      $data['user']=$user->profile;
+      $sceneids = $user->favors()->lists('mylog_user.scene_id');
+      $data['scenes'] = Mylog::select('title_id','scene_id','user_id','scene','title','id')
+                                      ->whereIn('id',$sceneids)
+                                      ->groupBy('user_id','title_id','scene_id')
+                                      ->orderBy('updated_at','desc')
+                                      ->get();
       return view('bodys.user_menu.favorites',$data);
     }
 
@@ -248,6 +259,11 @@ class PageController extends Controller
       $user=User::find($id);
       $data['user']=$user->profile;
       $data['recruitments']=$user->guestguide()->orderBy('created_at','desc')->paginate(15);
+      foreach($data['recruitments'] as $key => $recruitment){
+          $candidateuserids = Guestguide::find($recruitment->id)->recruited()->lists('user_id');
+          $data['candidateusers'][$key]=Profile::whereIn('user_id',$candidateuserids)->get();
+          $data['candidatecnt'][$key]=Guestguide::find($recruitment->id)->recruited()->count();
+      }
       return view('bodys.user_menu.matching',$data);
     }
 

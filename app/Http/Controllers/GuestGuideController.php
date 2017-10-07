@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\User;
+use App;
 
 function replaceDate($DateString){
       $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
@@ -127,6 +129,19 @@ class GuestGuideController extends Controller
         return redirect()->back();
     }
     public function candidateGuide($guide_id){
+        \Auth::user()->candidating($guide_id);
+        return redirect()->back();
+    }
+    public function candidateGuest($guest_id){
+        \Auth::user()->candidating($guest_id);
+        return redirect()->back();
+    }
+    public function uncandidateGuide($guide_id){
+        \Auth::user()->uncandidating($guide_id);
+        return redirect()->back();
+    }
+    public function uncandidateGuest($guest_id){
+        \Auth::user()->uncandidating($guest_id);
         return redirect()->back();
     }
 }

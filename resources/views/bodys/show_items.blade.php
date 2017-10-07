@@ -92,12 +92,16 @@
                         </div><br>
                         <div>
                             <label>お気に入り</label>
-                            <span class="badge">{{$favuser[$key]}}</span>
+                            <div style="margin-bottom:10px;">
+                              <span class="badge">{{$favuser[$key]}}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xs-12">
-                        <label>コメント</label><br>
+                        <label>コメント</label>
+                        <div class="list-group wrap">
                         {{$scene->comment != "" ? $scene->comment: 'No comment'}}
+                        </div>
                     </div>
                     <div>
                         <div id="demo{{$key}}" class="collapse col-xs-12">

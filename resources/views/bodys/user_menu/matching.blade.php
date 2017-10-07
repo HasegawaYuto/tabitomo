@@ -18,19 +18,45 @@
                     $part = explode('-',$date);
                     return $part[0].'年'.(int)$part[1].'月'.(int)$part[2].'日';
                 }
+                function avatarSrc($user){
+                    if(isset($user->data)){
+                        return 'data:'.$user->mime.'base64,'.base64_encode($user->data);
+                    }else{
+                        return "asset('noimage.png')";
+                    }
+                }
             ?>
             @if(isset($recruitments))
             <div>
             {!! $recruitments->render() !!}
             </div>
             @foreach($recruitments as $key => $recruitment)
-            <li class="list-group-item list-group-item-{{$recruitment->type =='guide' ? 'success':'warning'}}">
+            <li class="list-group-item list-group-item-{{$recruitment->type =='guide' ? 'success':'warning'}} border-danger">
                       〆{{$recruitment->limitdate !=0 ? replaceDate($recruitment->limitdate):'なし'}}
+                      @if($candidatecnt[$key]!=0)
+                      <span class="badge pull-left">{{$candidatecnt[$key]}}</span>
+                      @endif
                       <div class="wrap col-xs-12">{{$recruitment->contents}}</div>
                       <div class="recruitmentMap" id="recruitmentMap{{$key}}" style="width:80%;height:130px;"></div>
                       <input type="hidden" value="{{$recruitment->lat}}" id="recruitmentLat{{$key}}">
                       <input type="hidden" value="{{$recruitment->lng}}" id="recruitmentLng{{$key}}">
                       <input type="hidden" value="{{$recruitment->radius}}" id="recruitmentRadius{{$key}}">
+            @if(isset($candidateusers[$key][0]))
+            <div style="margin-top:10px;">【マッチング】</div>
+            @foreach($candidateusers[$key] as $kkey => $candidateuser)
+                <a href="{{route('show_user_profile',['id'=>$candidateuser->user_id])}}">
+                @if(isset($candidateuser->data))
+                <?php
+                    $mime = $candidateuser->mime;
+                    $dataImage = base64_encode($candidateuser->data);
+                ?>
+                <div class="CandidateImage lazyload img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                @else
+                <div class="CandidateImage lazyload img-circle" data-bg="{{asset('noimage.png')}}"></div>
+                @endif
+                </a>
+            @endforeach
+            @endif
             </li>
             @endforeach
             @endif

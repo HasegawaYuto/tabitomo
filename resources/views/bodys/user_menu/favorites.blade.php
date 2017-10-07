@@ -7,27 +7,29 @@
     <div class="col-md-9">
         <div class="panel panel-info">
             <div class="panel panel-heading text-center">
-                お気に入り
+                <i class="fa-fw fa fa-heart-o" aria-hidden="true"></i>お気に入り
             </div>
                 @include('parts.tabs',['tab_names'=>['シーン','ユーザー'],'class'=>'nav-tabs nav-justified','activetab'=>1])
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1-1">
                       <div class="panel-body">
-                        @for($i=1;$i<6;$i++)
+                        @if(isset($scenes))
+                        @foreach($scenes as $scene)
                             <div class="col-xs-4">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
-                                        <span class="glyphicon glyphicon-heart"></span>
-                                        シーンbyユーザー
+                                        @include('parts.favorite_scene_button',['scene'=>$scene])
+                                        {{$scene->scene}}
                                     </div>
                                     <div class="panel-body">
                                         <div class="text-center">
-                                            アバター
+                                            {{$scene->id}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endfor
+                        @endforeach
+                        @endif
                       </div>
                     </div>
                     <div class="tab-pane " id="tab1-2">

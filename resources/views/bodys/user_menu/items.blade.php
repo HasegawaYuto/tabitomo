@@ -16,7 +16,7 @@
     <div class="col-md-6">
         <div class="panel panel-info">
             <div class="panel panel-heading text-center">
-                マイログ
+                <i class="fa fa-camera fa-fw" aria-hidden="true"></i>マイログ
             </div>
             @if($user->user_id == Auth::user()->id)
                 <ul class="nav nav-tabs nav-justified" id="logtabs">

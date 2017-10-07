@@ -28,6 +28,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/guides','PageController@showGuides')->name('show_guides');
     Route::get('/guests','PageController@showTravelers')->name('show_travelers');
     Route::post('/guides/{guide_id}/candidate','GuestGuideController@candidateGuide')->name('guide_candidate');
+    Route::post('/guests/{guest_id}/candidate','GuestGuideController@candidateGuest')->name('guest_candidate');
+    Route::post('/guides/{guide_id}/uncandidate','GuestGuideController@uncandidateGuide')->name('guide_uncandidate');
+    Route::post('/guests/{guest_id}/uncandidate','GuestGuideController@uncandidateGuest')->name('guest_uncandidate');
 
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
