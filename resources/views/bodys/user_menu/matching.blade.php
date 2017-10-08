@@ -31,11 +31,18 @@
             {!! $recruitments->render() !!}
             </div>
             @foreach($recruitments as $key => $recruitment)
-            <li class="list-group-item list-group-item-{{$recruitment->type =='guide' ? 'success':'warning'}} border-danger">
+            <li class="list-group-item list-group-item-{{$recruitment->type =='guide' ? 'success':'warning'}}" style="margin-bottom:10px;">
                       〆{{$recruitment->limitdate !=0 ? replaceDate($recruitment->limitdate):'なし'}}
                       @if($candidatecnt[$key]!=0)
                       <span class="badge pull-left">{{$candidatecnt[$key]}}</span>
                       @endif
+                      @if($recruitment->type=="guide")
+                      {!!Form::open(['route'=>['guide_delete','guide_id'=>$recruitment->id],'style'=>'display:inline;float:right;'])!!}
+                      @else
+                      {!!Form::open(['route'=>['guest_delete','guest_id'=>$recruitment->id],'style'=>'display:inline;float:right;'])!!}
+                      @endif
+                      {!!Form::submit('削除',['class'=>'btn btn-xs btn-danger'])!!}
+                      {!!Form::close()!!}
                       <div class="wrap col-xs-12">{{$recruitment->contents}}</div>
                       <div class="recruitmentMap" id="recruitmentMap{{$key}}" style="width:80%;height:130px;"></div>
                       <input type="hidden" value="{{$recruitment->lat}}" id="recruitmentLat{{$key}}">

@@ -9,6 +9,9 @@
 <div class="col-md-3">
 <div class="text-left panel panel-info">
   <div class="panel-heading">
+      @if($user->user_id != Auth::user()->id)
+      @include('parts.follow_button',['user'=>$user])
+      @endif
       <i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>{{$user->nickname or '未設定'}}
   </div>
   <div class="panel-body text-center">

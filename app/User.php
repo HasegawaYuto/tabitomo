@@ -69,14 +69,6 @@ class User extends Model implements AuthenticatableContract,
         }
         return true;
     }
-    public function commentDel($userid,$titleid,$sceneid,$commentuserid,$commentid){
-        //$sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
-        //foreach($sceneidLists as $sceneidList){
-        //$this->comments()->where('comments.scene_id',$sceneidList)->wherePivot('comment_id',$commentid)->detach();
-        //}
-        //return true;
-    }
-
     public function is_favoritesScene($userid,$titleid,$sceneid){
         $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
         return $this->favors()->whereIn('mylog_user.scene_id',$sceneidLists)->exists();
@@ -160,6 +152,39 @@ class User extends Model implements AuthenticatableContract,
         $exists = $this->is_recruite($itemid);
         if($exists){
             $this->recruites()->detach($itemid);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function follow(){
+        return $this->belongsToMany(User::class,'follows','user_id','follow_id')->withTimestamps();
+    }
+    public function follower(){
+        return $this->belongsToMany(User::class,'follows','follow_id','user_id')->withTimestamps();
+    }
+    public function is_following($id){
+        return $this->follow()->where('follow_id',$id)->exists();
+    }
+    public function is_followed($id){
+        return $this->follower()->where('user_id',$id)->exists();
+    }
+    public function following($id){
+        $exists = $this->is_following($id);
+        $itsme = $this->id!=$id;
+        if(!$exists && $itsme){
+            $this->follow()->attach($id);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public function unfollowing($id){
+        $exists = $this->is_following($id);
+        $itsme = $this->id!=$id;
+        if($exists && $itsme){
+            $this->follow()->detach($id);
             return true;
         }else{
             return false;

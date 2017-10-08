@@ -14,7 +14,7 @@
                     <div class="tab-pane active" id="tab1-1">
                       <div class="panel-body">
                         @if(isset($scenes))
-                        @foreach($scenes as $scene)
+                        @foreach($scenes as $key => $scene)
                             <div class="col-xs-4">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
@@ -22,9 +22,17 @@
                                         {{$scene->scene}}
                                     </div>
                                     <div class="panel-body">
-                                        <div class="text-center">
-                                            {{$scene->id}}
-                                        </div>
+                                      <a href="{{route('show_title',['id'=>$scene->user_id,'title_id'=>$scene->title_id])}}">
+                                              @if(isset($thumb[$key]->data))
+                                                  <?php
+                                                      $mime = $thumb[$key]->mime;
+                                                      $dataImage = base64_encode($thumb[$key]->data);
+                                                  ?>
+                                                  <div class="lazyload col-xs-12 favscene" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                              @else
+                                                  <div class="lazyload col-xs-12 favscene" data-bg="{{asset('noimage.png')}}"></div>
+                                              @endif
+                                      </a>
                                     </div>
                                 </div>
                             </div>
@@ -37,55 +45,55 @@
                               @include('parts.tabs',['tab_names'=>['ともだち','フォロー','フォロワー'],'activetab'=>'1','nest'=>'2'])
                               <div class="tab-content">
                                   <div class="tab-pane active" id="tab2-1">
-                                    @for($i=1;$i<10;$i++)
+                                    @if(isset($mutual))
+                                    @foreach($mutual as $favuser)
                                         <div class="col-xs-4">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">
-                                                    <span class="glyphicon glyphicon-link"></span>
-                                                    ユーザー名
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div class="text-center">
-                                                        アバター
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @if(isset($favuser->data))
+                                                <?php
+                                                    $mime = $favuser->mime;
+                                                    $dataImage = base64_encode($favuser->data);
+                                                ?>
+                                                <div class="lazyload favuser" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                            @else
+                                                <div class="lazyload favuser" data-bg="{{asset('noimage.png')}}"></div>
+                                            @endif
                                         </div>
-                                    @endfor
+                                    @endforeach
+                                    @endif
                                   </div>
                                   <div class="tab-pane" id="tab2-2">
-                                    @for($i=1;$i<10;$i++)
+                                    @if(isset($following))
+                                    @foreach($following as $favuser)
                                         <div class="col-xs-4">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">
-                                                    <span class="glyphicon glyphicon-heart"></span>
-                                                    ユーザー名
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div>
-                                                        アバター
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @if(isset($favuser->data))
+                                                <?php
+                                                    $mime = $favuser->mime;
+                                                    $dataImage = base64_encode($favuser->data);
+                                                ?>
+                                                <div class="lazyload favuser" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                            @else
+                                                <div class="lazyload favuser" data-bg="{{asset('noimage.png')}}"></div>
+                                            @endif
                                         </div>
-                                    @endfor
+                                    @endforeach
+                                    @endif
                                   </div>
                                   <div class="tab-pane" id="tab2-3">
-                                    @for($i=1;$i<10;$i++)
+                                    @if(isset($followed))
+                                    @foreach($followed as $favuser)
                                         <div class="col-xs-4">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">
-                                                    <span class="glyphicon glyphicon-heart-empty"></span>
-                                                    ユーザー名
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div>
-                                                        アバター
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @if(isset($favuser->data))
+                                                <?php
+                                                    $mime = $favuser->mime;
+                                                    $dataImage = base64_encode($favuser->data);
+                                                ?>
+                                                <div class="lazyload favuser" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                            @else
+                                                <div class="lazyload favuser" data-bg="{{asset('noimage.png')}}"></div>
+                                            @endif
                                         </div>
-                                    @endfor
+                                    @endforeach
+                                    @endif
                                   </div>
                               </div>
                         </div>

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\User,App\Guestguide;
 use App;
 
 function replaceDate($DateString){
@@ -92,7 +92,7 @@ class GuestGuideController extends Controller
         //
     }
 
-    public function guestPost(Request $request,$id)
+    public function postGuest(Request $request,$id)
     {
       $cnt = $request->cnt;
       for($i=0;$i<=$cnt;$i++){
@@ -110,7 +110,7 @@ class GuestGuideController extends Controller
       }
         return redirect()->back();
     }
-    public function guidePost(Request $request,$id)
+    public function postGuide(Request $request,$id)
     {
         $cnt = $request->cnt;
         for($i=0;$i<=$cnt;$i++){
@@ -142,6 +142,14 @@ class GuestGuideController extends Controller
     }
     public function uncandidateGuest($guest_id){
         \Auth::user()->uncandidating($guest_id);
+        return redirect()->back();
+    }
+    public function deleteGuest($guest_id){
+        Guestguide::find($guest_id)->delete();
+        return redirect()->back();
+    }
+    public function deleteGuide($guide_id){
+        Guestguide::find($guide_id)->delete();
         return redirect()->back();
     }
 }

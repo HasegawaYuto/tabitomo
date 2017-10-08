@@ -245,11 +245,19 @@ class PageController extends Controller
       $user = User::find($id);
       $data['user']=$user->profile;
       $sceneids = $user->favors()->lists('mylog_user.scene_id');
-      $data['scenes'] = Mylog::select('title_id','scene_id','user_id','scene','title','id')
+      $scenes = Mylog::select('title_id','scene_id','user_id','scene','title','id')
                                       ->whereIn('id',$sceneids)
                                       ->groupBy('user_id','title_id','scene_id')
                                       ->orderBy('updated_at','desc')
                                       ->get();
+      foreach($scenes as $key => $scene){
+          $data['thumb'][$key]=User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
+                                    ->whereNotNull('data')
+                                    ->select('data','mime')
+                                    ->orderByRaw("RAND()")
+                                    ->first();
+      }
+      $data['scenes']=$scenes;
       return view('bodys.user_menu.favorites',$data);
     }
 
@@ -333,7 +341,6 @@ class PageController extends Controller
           }
       }
       $data['user']=$user->profile;
-      //$data['id']=$id;
       $data['thisyear']=Carbon::now()->year;
       return view('bodys.user_menu.show_title',$data);
     }

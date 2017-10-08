@@ -245,3 +245,33 @@ a:hover{
     -ms-background-size:cover;
     margin:10px 5px 10px 5px;
 }
+.favscene{
+    position:relative;
+    width:100%;
+    height:100%;
+    padding:100% 0 0;
+    max-height:100%;
+    max-width:100%;
+    background-position:center;
+    background-size:contain;
+    background-repeat:no-repeat;
+    -moz-background-size:contain;
+    -webkit-background-size:contain;
+    -o-background-size:contain;
+    -ms-background-size:contain;
+}
+.favuser{
+    position:relative;
+    width:100%;
+    height:100%;
+    padding:100% 0 0;
+    max-height:100%;
+    max-width:100%;
+    background-position:center;
+    background-size:contain;
+    background-repeat:no-repeat;
+    -moz-background-size:contain;
+    -webkit-background-size:contain;
+    -o-background-size:contain;
+    -ms-background-size:contain;
+}
