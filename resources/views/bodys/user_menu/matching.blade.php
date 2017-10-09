@@ -52,6 +52,7 @@
             <div style="margin-top:10px;">【マッチング】</div>
             @foreach($candidateusers[$key] as $kkey => $candidateuser)
                 <a href="{{route('show_user_profile',['id'=>$candidateuser->user_id])}}">
+                <div class="candidateImageOuter black text-center overCut">
                 @if(isset($candidateuser->data))
                 <?php
                     $mime = $candidateuser->mime;
@@ -61,6 +62,8 @@
                 @else
                 <div class="CandidateImage lazyload img-circle" data-bg="{{asset('noimage.png')}}"></div>
                 @endif
+                {{$candidateuser->nickname!=""?$candidateuser->nickname:"no name"}}
+              </div>
                 </a>
             @endforeach
             @endif

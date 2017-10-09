@@ -2,7 +2,7 @@
 
 @section('content')
 
-@if(isset($scenes))
+@if(isset($scenes[0]))
 <div class="container-fluid">
     <div class="col-xs-12">
         {!! $scenes->render() !!}
@@ -13,7 +13,7 @@
     ?>
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
             <div class="panel panel-primary">
-                <div class="panel-heading" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">
+                <div class="panel-heading overCut">
                   @if(Auth::check())
                   @if(Auth::user()->id == $scene->user_id)
                     <button type="button" class="btn btn-warning btn-xs"  data-toggle="modal" data-target="#fixScene0" data-scene="{{$scene->scene}}"
@@ -38,27 +38,24 @@
                     &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                 </div>
                 <div class="panel-body">
-                    <div class="col-xs-12 titleName">
-                    <a href="{{route('show_title',['id'=>$scene->user_id,'title_id'=>$scene->title_id],['class'=>'black'])}}"
-                     class="black">
-                     <div>
-                      【タイトル】<br>
-                    <p class="titleString">{{$scene->title}}</p>
+                    <a href="{{route('show_title',['id'=>$scene->user_id,'title_id'=>$scene->title_id])}}">
+                     <div class="black titleFrom overCut">
+                      【FROM】<br>
+                    {{$scene->title}}
                   </div></a>
+                  <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}">
+                  <div class="itemAvatarOuter text-center black">
                     @if(isset($user[$scene->user_id]->data))
                         <?php
                             $mime = $user[$scene->user_id]->mime;
                             $dataImage = base64_encode($user[$scene->user_id]->data);
                         ?>
-                        <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}" class="black">
                         <div class="lazyload itemAvatar img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
-                        </a>
                     @else
-                        <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}" class="black">
                         <div class="lazyload itemAvatar img-circle" data-bg="{{asset('noimage.png')}}"></div>
-                        </a>
                     @endif
-                    </div>
+                    {{$user[$scene->user_id]->nickname!=""?$user[$scene->user_id]->nickname:"未設定"}}
+                  </div>
                     <div class="col-xs-12">
                     @if(isset($thumb[$key]->data))
                     <?php
@@ -140,7 +137,7 @@
                                 <div class="form-group">
                                     {!! Form::textarea('comment',null,['placeholder'=>'コメント','class'=>'form-control','rows'=>'3']) !!}
                                 </div>
-                                {!! Form::submit('書き込み',['class'=>'btn btn-xs btn-warning']) !!}
+                                {!! Form::submit('書き込み',['class'=>'btn btn-xs btn-warning','style'=>'margin-bottom:10px;']) !!}
                                 {!! Form::close() !!}
                             @endif
                         </div>

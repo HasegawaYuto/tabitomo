@@ -12,24 +12,27 @@
         </div>
         <div class="panel-body">
             @if(Auth::user()->id == $user->user_id)
-            <input type="hidden" value="false" id="autoModal">
                 @if(isset($messageUsers[0]))
                     @foreach($messageUsers as $messageUser)
+                        <a data-target="#messageboad" data-toggle="modal">
+                        <div class="messangerImageOuter text-center black">
                         @if(isset($messageUser->data))
                             <?php
                                 $mime = $messageUser->mime;
                                 $dataImage = base64_encode($messageUser->data);
                             ?>
-                            <div class="lazyload CandidateImage img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                            <div class="lazyload messangerImage img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                         @else
-                            <div class="lazyload CandidateImage img-circle" data-bg="{{asset('noimage.png')}}"></div>
+                            <div class="lazyload messangerImage img-circle" data-bg="{{asset('noimage.png')}}"></div>
                         @endif
+                      {{$messageUser->nickname!=""?$messageUser->nickname:"no name"}}
+                      </div>
+                    </a>
                     @endforeach
                 @else
                     メッセージはありません
                 @endif
             @else
-            <input type="hidden" value="true" id="autoModal">
             <button class="btn btn-xs btn-success" type="button" data-toggle="modal" data-target="#messageboad">メッセージ送信</button>
             @endif
         </div>
