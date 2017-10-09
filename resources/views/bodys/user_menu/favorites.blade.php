@@ -45,52 +45,64 @@
                               @include('parts.tabs',['tab_names'=>['ともだち','フォロー','フォロワー'],'activetab'=>'1','nest'=>'2'])
                               <div class="tab-content">
                                   <div class="tab-pane active" id="tab2-1">
-                                    @if(isset($mutual))
+                                    @if(isset($mutual[0]))
+                                    {!! $mutual->render() !!}
                                     @foreach($mutual as $favuser)
-                                        <div class="col-xs-4">
+                                        <div class="followImage text-center">
+                                            <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
                                             @if(isset($favuser->data))
                                                 <?php
                                                     $mime = $favuser->mime;
                                                     $dataImage = base64_encode($favuser->data);
                                                 ?>
-                                                <div class="lazyload favuser" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                                <div class="lazyload favuser img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                                             @else
-                                                <div class="lazyload favuser" data-bg="{{asset('noimage.png')}}"></div>
+                                                <div class="lazyload favuser img-circle" data-bg="{{asset('noimage.png')}}"></div>
                                             @endif
+                                          </a>
+                                        @include('parts.follow_button',['user'=>$favuser])
                                         </div>
                                     @endforeach
                                     @endif
                                   </div>
                                   <div class="tab-pane" id="tab2-2">
-                                    @if(isset($following))
+                                    @if(isset($following[0]))
+                                    {!! $following->render() !!}
                                     @foreach($following as $favuser)
-                                        <div class="col-xs-4">
+                                        <div class="followImage text-center">
+                                            <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
                                             @if(isset($favuser->data))
                                                 <?php
                                                     $mime = $favuser->mime;
                                                     $dataImage = base64_encode($favuser->data);
                                                 ?>
-                                                <div class="lazyload favuser" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                                <div class="lazyload favuser img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                                             @else
-                                                <div class="lazyload favuser" data-bg="{{asset('noimage.png')}}"></div>
+                                                <div class="lazyload favuser img-circle" data-bg="{{asset('noimage.png')}}"></div>
                                             @endif
+                                          </a>
+                                        @include('parts.follow_button',['user'=>$favuser])
                                         </div>
                                     @endforeach
                                     @endif
                                   </div>
                                   <div class="tab-pane" id="tab2-3">
-                                    @if(isset($followed))
+                                    @if(isset($followed[0]))
+                                    {!! $followed->render() !!}
                                     @foreach($followed as $favuser)
-                                        <div class="col-xs-4">
+                                        <div class="followImage text-center">
+                                            <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
                                             @if(isset($favuser->data))
                                                 <?php
                                                     $mime = $favuser->mime;
                                                     $dataImage = base64_encode($favuser->data);
                                                 ?>
-                                                <div class="lazyload favuser" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                                <div class="lazyload favuser img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                                             @else
-                                                <div class="lazyload favuser" data-bg="{{asset('noimage.png')}}"></div>
+                                                <div class="lazyload favuser img-circle" data-bg="{{asset('noimage.png')}}"></div>
                                             @endif
+                                          </a>
+                                        @include('parts.follow_button',['user'=>$favuser])
                                         </div>
                                     @endforeach
                                     @endif

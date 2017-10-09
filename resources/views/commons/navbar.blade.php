@@ -27,15 +27,15 @@
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{Auth::user()->name}}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <?php $id=AUth::user()->id ?>
-                            <li><a href="{{ route('show_user_profile',['id'=>$id]) }}" class="list-group-item"><i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>プロフィール</a></li>
+                            <li><a href="{{ route('show_user_profile',['id'=>$id]) }}" class="list-group-item noborder"><i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>プロフィール</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="{{ route('show_user_matching',['id'=>$id]) }}" class="list-group-item"><i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング</a></li>
+                            <li><a href="{{ route('show_user_matching',['id'=>$id]) }}" class="list-group-item noborder"><i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="{{ route('show_user_messages',['id'=>$id]) }}" class="list-group-item"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ</a></li>
+                            <li><a href="{{ route('show_user_messages',['id'=>$id]) }}" class="list-group-item noborder"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="{{ route('show_user_items',['id'=>$id]) }}" class="list-group-item"><i class="fa fa-camera fa-fw" aria-hidden="true"></i>マイログ</a></li>
+                            <li><a href="{{ route('show_user_items',['id'=>$id]) }}" class="list-group-item noborder"><i class="fa fa-camera fa-fw" aria-hidden="true"></i>マイログ</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="{{ route('show_user_favorites',['id'=>$id]) }}" class="list-group-item"><i class="fa-fw fa fa-heart-o" aria-hidden="true"></i>お気に入り</a></li>
+                            <li><a href="{{ route('show_user_favorites',['id'=>$id]) }}" class="list-group-item noborder"><i class="fa-fw fa fa-heart-o" aria-hidden="true"></i>お気に入り</a></li>
                             <li role="separator" class="divider"></li>
                             <li>{!! link_to_route('logout.get', 'ログアウト') !!}</li>
                         </ul>

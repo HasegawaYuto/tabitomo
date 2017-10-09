@@ -164,6 +164,8 @@ a:hover{
     -webkit-background-size:cover;
     -o-background-size:cover;
     -ms-background-size:cover;
+    margin-right:10px;
+    margin-bottom:5px;
 }
 .commentContent{
     word-wrap: break-word;
@@ -186,7 +188,7 @@ a:hover{
     float:left;
     width:50px;
     height:50px;
-    padding:50px% 0 0;
+    padding:50px 0 0;
     max-height:100%;
     max-width:100%;
     background-position:center;
@@ -275,3 +277,8 @@ a:hover{
     -o-background-size:contain;
     -ms-background-size:contain;
 }
+.followImage{
+    width:80px;
+    margin:10px;}
+.noborder{
+    border:none;}

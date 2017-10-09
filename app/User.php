@@ -190,4 +190,19 @@ class User extends Model implements AuthenticatableContract,
             return false;
         }
     }
+    
+    public function sendTo(){
+        return $this->belongsToMany(User::class,'messages','user_id','send_id')
+                    ->withPivot('message','status')
+                    ->withTimestamps();
+    }
+    public function sendFrom(){
+        return $this->belongsToMany(User::class,'messages','send_id','user_id')
+                    ->withPivot('message','status')
+                    ->withTimestamps();
+    }
+    public function sendMessage($id,$message){
+        $this->sendTo()->attach($id,['message'=>$message]);
+        return true;
+    }
 }

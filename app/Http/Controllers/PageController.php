@@ -190,9 +190,33 @@ class PageController extends Controller
 ///////////////////////////////////////////////////////////////
 
     public function showUserMessages($id){
-      $user = Profile::where('user_id',$id)->first();
-      $data['user']=$user;
-      $data['id']=$id;
+      $user = User::find($id);
+      $data['user']=$user->profile;
+      if(\Auth::user()->id==$id){
+          $messages = \DB::table('messages')
+                            ->where('user_id',$id)
+                            ->orWhere('send_id',$id)
+                            ->orderBy('created_at','desc')
+                            ->groupBy('user_id','send_id')
+                            ->get();
+          $sortIds=[];
+          foreach($messages as $message){
+              if($message->user_id != $id){
+                  $userid = $message->user_id;
+              }else{
+                  $userid = $message->send_id;
+              }
+              if(!in_array($userid,$sortIds)){
+                  $sortIds[]=$userid;
+              }
+          }
+          if(isset($sortIds[0])){
+              foreach($sortIds as $sortId){
+                  $data['messageUsers'][]=User::find($sortId)->profile;
+              }
+          }
+          //$data['messageUsers']=$sortIds;
+      }
       return view('bodys.user_menu.messages',$data);
     }
 
@@ -257,6 +281,18 @@ class PageController extends Controller
                                     ->orderByRaw("RAND()")
                                     ->first();
       }
+      $followingids = User::find($id)->follow()->lists('follow_id');
+      $followerids = User::find($id)->follower()->lists('user_id');
+      $data['following'] = Profile::whereIn('user_id',$followingids)
+                                    ->whereNotIn('user_id',$followerids)
+                                    ->paginate(10);
+      $data['followed'] = Profile::whereIn('user_id',$followerids)
+                                  ->whereNotIn('user_id',$followingids)
+                                  ->paginate(10);
+                                  //->get(['user_id','data','mime']);
+      $data['mutual'] = Profile::whereIn('user_id',$followingids)
+                                ->whereIn('user_id',$followerids)
+                                ->paginate(10);
       $data['scenes']=$scenes;
       return view('bodys.user_menu.favorites',$data);
     }
