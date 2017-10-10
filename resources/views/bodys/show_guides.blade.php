@@ -23,7 +23,7 @@
           <div class="panel-body">
                   <?php $theuser=$recruituser[$key]; ?>
                   <a href="{{route('show_user_profile',['id'=>$theuser->user_id])}}" class="black">
-                  <div class="col-xs-4">
+                  <div class="GuideImageOuter">
                       @if(isset($theuser->data))
                       <?php
                           $mime = $theuser->mime;
@@ -34,9 +34,11 @@
                       <div class="GuideImage lazyload img-circle" data-bg="{{asset('noimage.png')}}"></div>
                       @endif
                   </div>
-                  <div class="col-xs-8">{{$theuser->nickname==""?'ニックネーム未設定':$theuser->nickname}}</div>
-                  <div class="col-xs-8">{{$theuser->sex=="" ? '性別未設定':$theuser->sex}}</div>
-                  <div class="col-xs-8">{{$theuser->birthday=="" ? '年齢未設定':getAge($theuser->birthday)}}</div>
+                  <div class="GuideProfile black overCut">
+                  {{$theuser->nickname==""?'ニックネーム未設定':$theuser->nickname}}<br>
+                  {{$theuser->sex=="" ? '性別未設定':$theuser->sex}}<br>
+                  {{$theuser->birthday=="" ? '年齢未設定':getAge($theuser->birthday)}}<br>
+                  </div>
                   </a>
                   <div class="wrap col-xs-12">{{$recruitment->contents}}</div>
                   <div class="recruitmentMap" id="recruitmentMap{{$key}}" style="width:80%;height:130px;"></div>

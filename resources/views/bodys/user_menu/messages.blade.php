@@ -13,8 +13,8 @@
         <div class="panel-body">
             @if(Auth::user()->id == $user->user_id)
                 @if(isset($messageUsers[0]))
-                    @foreach($messageUsers as $messageUser)
-                        <a data-target="#messageboad" data-toggle="modal">
+                    @foreach($messageUsers as $key => $messageUser)
+                        <a data-target="#messageboad" data-toggle="modal" UserFrom="{{Auth::user()->id}}" UserTo="{{$messageUser->user_id}}" User="{{$messageUser->nickname==''?'No nickname':$messageUser->nickname}}">
                         <div class="messangerImageOuter text-center black">
                         @if(isset($messageUser->data))
                             <?php
@@ -26,6 +26,13 @@
                             <div class="lazyload messangerImage img-circle" data-bg="{{asset('noimage.png')}}"></div>
                         @endif
                       {{$messageUser->nickname!=""?$messageUser->nickname:"no name"}}
+                      <div>
+                      @if($messages[$key][0]->status == 0)
+                          <span class="label label-danger" id="checkNew{{$key}}">New</span>
+                      @else
+                          <span class="label label-default" id="checkNew{{$key}}">新着なし</span>
+                      @endif
+                    </div>
                       </div>
                     </a>
                     @endforeach
@@ -33,7 +40,7 @@
                     メッセージはありません
                 @endif
             @else
-            <button class="btn btn-xs btn-success" type="button" data-toggle="modal" data-target="#messageboad">メッセージ送信</button>
+            <button User="{{$user->nickname==''?'No nickname':$user->nickname}}" UserFrom="{{Auth::user()->id}}" UserTo="{{$user->user_id}}" class="btn btn-xs btn-success" type="button" data-toggle="modal" data-target="#messageboad">メッセージ送信</button>
             @endif
         </div>
     </div>
@@ -42,9 +49,20 @@
 
 <div class="modal fade" id="messageboad">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                タイトル
+        <div class="modal-content" id="messageboadbody">
+            <div class="modal-header wrap">
+                チャット&nbsp;with&nbsp;
+            </div>
+            <div class="modal-body">
+                本体
+            </div>
+            <div class="modal-footer">
+                <form>
+                    <div class="from-group">
+                        {!! Form::textarea('message',null,['class'=>'form-control','id'=>'themessage','rows'=>'3']) !!}
+                    </div>
+                </form>
+                <input type="submit" class="btn btn-primary btn-block" value="送信" id="messageSubmit">
             </div>
         </div>
     </div>

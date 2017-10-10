@@ -114,11 +114,6 @@ a:hover{
     -o-background-size:contain;
     -ms-background-size:contain;
 }
-.modal-header{
-    text-overflow:ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
 .titleName{
     text-overflow:ellipsis;
     overflow: hidden;
@@ -226,6 +221,16 @@ a:hover{
     -o-background-size:cover;
     -ms-background-size:cover;
 }
+.GuideImageOuter{
+    width:50px;
+    display:inline-block;
+    margin:5px;
+}
+.GuideProfile{
+    width:calc(100% - 70px);
+    display:inline-block;
+    margin:0;
+}
 .GuestImage {
     position:relative;
     width:100%;
@@ -313,4 +318,7 @@ a:hover{
     width:80px;
     display:inline-block;
     margin:0 5px 5px 5px;
+}
+#messageboadbody{
+    max-height:90vh;
 }

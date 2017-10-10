@@ -213,8 +213,10 @@ class PageController extends Controller
           if(isset($sortIds[0])){
               foreach($sortIds as $sortId){
                   $data['messageUsers'][]=User::find($sortId)->profile;
+                  $data['messages'][]=$user->getMessages($sortId)->orderBy('created_at','desc')->get();
               }
           }
+
           //$data['messageUsers']=$sortIds;
       }
       return view('bodys.user_menu.messages',$data);

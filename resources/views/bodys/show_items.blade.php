@@ -74,6 +74,7 @@
                     <input type="hidden" value="{{$scene->lat}}" id="googlemapLat{{$key}}" />
                     <input type="hidden" value="{{$scene->lng}}" id="googlemapLng{{$key}}" />
                     <div class="googlemapSpot col-xs-12" style="height:25vh;" id="googlemapSpotID{{$key}}"></div>
+                    <div id="demo{{$key}}" class="collapse col-xs-12">
                     <div class="col-xs-12">
                         <label>日付</label>
                         <div>
@@ -100,8 +101,8 @@
                         {{$scene->comment != "" ? $scene->comment: 'No comment'}}
                         </div>
                     </div>
-                    <div>
-                        <div id="demo{{$key}}" class="collapse col-xs-12">
+                    <!--div-->
+                        <!--div id="demo{{$key}}" class="collapse col-xs-12"-->
                             <label>ユーザーコメント</label>
                             @if(isset($userComments[$key]))
                             <ul class="list-group">
@@ -141,8 +142,8 @@
                                 {!! Form::close() !!}
                             @endif
                         </div>
-                        <button type="button" class="btn btn-block" data-toggle="collapse" data-target="#demo{{$key}}"><span class="caret"></span></button>
-                    </div>
+    <button type="button" class="btn btn-block" data-toggle="collapse" data-target="#demo{{$key}}"><span class="caret"></span></button>
+                    <!--/div-->
                 </div>
             </div>
         </div>

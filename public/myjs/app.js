@@ -1,4 +1,18 @@
 $(function(){
+    if($('#messageboad').length){
+        $('#messageboad').on('show.bs.modal',function(event){
+            var EO = $(event.relatedTarget);
+            var sendFrom = EO.attr("UserFrom");
+            var sendTo = EO.attr("UserTo");
+            var user = EO.attr("User");
+            $('.modal-header').html('チャット&nbsp;with&nbsp;');
+            $('#messageSubmit').on('click',function(){
+                $('.modal-header').append(user);
+            });
+        });
+    }
+});
+$(function(){
     if($('.recruitmentMap').length){
         var Mapcnt = $('.recruitmentMap').length;
         for($i=0;$i<Mapcnt;$i++){

@@ -190,7 +190,7 @@ class User extends Model implements AuthenticatableContract,
             return false;
         }
     }
-    
+
     public function sendTo(){
         return $this->belongsToMany(User::class,'messages','user_id','send_id')
                     ->withPivot('message','status')
@@ -204,5 +204,12 @@ class User extends Model implements AuthenticatableContract,
     public function sendMessage($id,$message){
         $this->sendTo()->attach($id,['message'=>$message]);
         return true;
+    }
+
+    public function getMessages($id){
+        $sendtoids = $this->sendTo()->where('send_id',$id)->lists('messages.id');
+        $sendfromids = $this->sendFrom()->where('user_id',$id)->lists('messages.id');
+        $messageids = $sendtoids->merge($sendfromids);
+        return \DB::table('messages')->whereIn('id',$messageids);
     }
 }
