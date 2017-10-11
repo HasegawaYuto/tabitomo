@@ -26,7 +26,7 @@
                         @endif
                       {{$messageUser->nickname!=""?$messageUser->nickname:"no name"}}
                       <div>
-                      @if($sentmessages[$key][0]->status == 0)
+                      @if(isset($sentmessages[$key][0]) &&$sentmessages[$key][0]->status == 0)
                           <button data-partner="{{$messageUser->user_id}}"
                              class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#messageboad">新着あり</button>
                       @else
