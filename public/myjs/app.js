@@ -46,7 +46,8 @@ $(function(){
                     }
                   }
                 }
-                //$("#messageShow").scrollTop($('#message'+jsonsize-1).offset().top));
+                $("#newTimestamp").val(json[jsonsize-1].created_at);
+                //$(".modal-header").html(json[jsonsize-1].created_at);
               },
               error : function(XMLHttpRequest, textStatus, errorThrown) {
 　　　　              alert(textStatus + ":" + errorThrown);
@@ -58,12 +59,32 @@ $(function(){
             $.ajax({
               url:$('#sendform').attr('action'),
               type:"POST",
+              dataType:"json",
               data:{
                 'id':$('#partnerId').val(),
-                'message':$('#themessage').val()
+                'message':$('#themessage').val(),
+                'chtimestamp':$("#newTimestamp").val()
               },
               success :function(json){
-                  //
+                  //$('.messageShow').append('hoge');
+                  var jsonsize = json.length;
+                  for(i=0;i<jsonsize;i++){
+                    if(json[i].message!=""){
+                      var timestamp = new Date(json[i].created_at);
+                      timestamp.toString();
+                      var h = new Array;
+                      var m = new Array;
+                      var createtime = new Array;
+                      h[i] = timestamp.getHours();
+                      m[i] = timestamp.getMinutes();
+                      createtime[i] = h[i] + ':' + ('0' + m[i]).slice(-2);
+                      //timestamp.toString();
+                    if(json[i].user_id!=partnerid){
+                        $('.messageShow').append('<div class="text-right"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp" id="message'+i+'">'+createtime[i]+'</p></div>');
+                    }else{
+                        $('.messageShow').append('<div class="text-left" id="message'+i+'"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
+                    }
+                  }}
               },
               error : function(XMLHttpRequest, textStatus, errorThrown) {
 　　　　              alert(textStatus + ":" + errorThrown);

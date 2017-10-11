@@ -52,6 +52,7 @@
         <div class="modal-content" id="messageboadbody">
             {!! Form::open(['route'=>['load_message','id'=>Auth::user()->id,'partner_id'=>'num'],'id'=>'loadform']) !!}
             {!! Form::close() !!}
+            <input type="hidden" id="newTimestamp" value="0000-00-00 00:00:00">
             <div class="modal-header wrap" id="messageHeader">
                 メッセージ
             </div>

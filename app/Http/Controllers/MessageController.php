@@ -91,9 +91,15 @@ class MessageController extends Controller
     public function sendMessage(){
         $id = \Input::get('id');
         $message = \Input::get('message');
+        $chtimestamp = \Input::get('chtimestamp');
         \Auth::user()->sendMessage($id,$message);
-        //$tempdata = \Auth::user()->getMessages($id)->get();
-        return $json='Done';
+        $tempdata = DB::table('messages')
+                      //->where('created_at','>=',$chtimestamp)
+                      ->where('user_id',$id)
+                      //->orWhere('send_id',$id)
+                      ->get();
+        return response()->json($tempdata,200);
+        //return $json=$chtimestamp;
     }
     public function loadMessage(){
         $id = \Input::get('id');
