@@ -1,13 +1,35 @@
 $(function(){
     if($('#messageboad').length){
         $('#messageboad').on('show.bs.modal',function(event){
-            var EO = $(event.relatedTarget);
-            var sendFrom = EO.attr("UserFrom");
-            var sendTo = EO.attr("UserTo");
-            var user = EO.attr("User");
-            $('.modal-header').html('チャット&nbsp;with&nbsp;');
-            $('#messageSubmit').on('click',function(){
-                $('.modal-header').append(user);
+            var button = $(event.relatedTarget);
+            var partnerid = button.data('partner');
+            var urlbefore = $('#sendform').attr('action');
+            var editreplace = 'message/'+partnerid+'/send';
+            var urlafter = urlbefore.replace(/(message\/)(.*?)(\/send)/,editreplace);
+            $("#sendform").attr("action",urlafter);
+            $('.modal-body').empty();
+            $('#partnerId').val(partnerid);
+        });
+
+        $('#messageSubmit').on('click',function(){
+            $.ajaxSetup({
+　　            headers: {
+　　　             'X-CSRF-TOKEN': $('#MessageCsrfToken').val()
+　　            }
+　          });
+            $.ajax({
+              url:$('#sendform').attr('action'),
+              type:"POST",
+              dataType:"json",
+              data:{
+                'id':$('#partnerId').val()
+              },
+              success :function(data){
+                  $('.modal-body').html('data取得'+$('#partnerId').val());
+              },
+              error : function(XMLHttpRequest, textStatus, errorThrown) {
+　　　　              alert(textStatus + ":" + errorThrown);
+　　　         }
             });
         });
     }

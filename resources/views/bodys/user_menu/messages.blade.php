@@ -14,7 +14,6 @@
             @if(Auth::user()->id == $user->user_id)
                 @if(isset($messageUsers[0]))
                     @foreach($messageUsers as $key => $messageUser)
-                        <a data-target="#messageboad" data-toggle="modal" UserFrom="{{Auth::user()->id}}" UserTo="{{$messageUser->user_id}}" User="{{$messageUser->nickname==''?'No nickname':$messageUser->nickname}}">
                         <div class="messangerImageOuter text-center black">
                         @if(isset($messageUser->data))
                             <?php
@@ -27,20 +26,26 @@
                         @endif
                       {{$messageUser->nickname!=""?$messageUser->nickname:"no name"}}
                       <div>
-                      @if($messages[$key][0]->status == 0)
-                          <span class="label label-danger" id="checkNew{{$key}}">New</span>
+                      @if($sentmessages[$key][0]->status == 0)
+                          <button data-partner="{{$messageUser->user_id}}"
+                             class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#messageboad">新着あり</button>
                       @else
-                          <span class="label label-default" id="checkNew{{$key}}">新着なし</span>
+                          <button data-partner="{{$messageUser->user_id}}"
+                            class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#messageboad">新着なし</button>
                       @endif
                     </div>
                       </div>
-                    </a>
+                      <div>
+                          <?php
+                            var_dump($messages[$key]);
+                          ?>
+                      </div>
                     @endforeach
                 @else
                     メッセージはありません
                 @endif
             @else
-            <button User="{{$user->nickname==''?'No nickname':$user->nickname}}" UserFrom="{{Auth::user()->id}}" UserTo="{{$user->user_id}}" class="btn btn-xs btn-success" type="button" data-toggle="modal" data-target="#messageboad">メッセージ送信</button>
+            <button data-partner="{{$user->user_id}}" class="btn btn-xs btn-success" type="button" data-toggle="modal" data-target="#messageboad">メッセージ送信</button>
             @endif
         </div>
     </div>
@@ -57,12 +62,14 @@
                 本体
             </div>
             <div class="modal-footer">
-                <form>
+                {!! Form::open(['route'=>['send_message','id'=>Auth::user()->id,'send_id'=>'num'],'id'=>'sendform']) !!}
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}" id="MessageCsrfToken">
+                    <input type="hidden" value="0" id="partnerId">
                     <div class="from-group">
                         {!! Form::textarea('message',null,['class'=>'form-control','id'=>'themessage','rows'=>'3']) !!}
                     </div>
-                </form>
-                <input type="submit" class="btn btn-primary btn-block" value="送信" id="messageSubmit">
+                {!!Form::close()!!}
+                <button type="button" class="btn btn-primary btn-block" id="messageSubmit">送信</button>
             </div>
         </div>
     </div>

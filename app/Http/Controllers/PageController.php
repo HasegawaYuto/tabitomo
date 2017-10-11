@@ -213,7 +213,9 @@ class PageController extends Controller
           if(isset($sortIds[0])){
               foreach($sortIds as $sortId){
                   $data['messageUsers'][]=User::find($sortId)->profile;
-                  $data['messages'][]=$user->getMessages($sortId)->orderBy('created_at','desc')->get();
+                  $data['sentmessages'][]=$user->getMessages($sortId)->where('user_id',$sortId)->orderBy('created_at','desc')->get();
+                  $temppp=$user->getMessages($sortId)->orderBy('created_at','desc')->get();
+                  $data['messages'][]=$temppp;
               }
           }
 
