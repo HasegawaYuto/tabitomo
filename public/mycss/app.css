@@ -320,5 +320,30 @@ a:hover{
     margin:0 5px 5px 5px;
 }
 #messageboadbody{
-    max-height:90vh;
+    height:90vh;
+}
+.ireko{
+    margin:5px;
+    max-width:calc(100% - 10px);
+    display:inline-block;
+    text-align:left;
+    border-radius: 10px;        /* CSS3草案 */
+    -webkit-border-radius: 10px;    /* Safari,Google Chrome用 */
+    -moz-border-radius: 10px;
+    border:ridge 1.5px black ;
+    padding:2px;
+}
+.smallp{
+    font-size:8pt;
+    padding:0 1px 0 1px;
+}
+.messageShow{
+    overflow-y:scroll;
+    height:calc(90vh - 40px - 165px);
+}
+#messageHeader{
+    height:40px;
+}
+#messageFooter{
+    height:165px;
 }

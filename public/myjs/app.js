@@ -7,30 +7,70 @@ $(function(){
             var editreplace = 'message/'+partnerid+'/send';
             var urlafter = urlbefore.replace(/(message\/)(.*?)(\/send)/,editreplace);
             $("#sendform").attr("action",urlafter);
-            $('.modal-body').empty();
+            $('#themessage').val('');
+            var loadurlbefore = $('#loadform').attr('action');
+            var loadreplace = 'message/'+partnerid+'/show';
+            var loadurlafter = loadurlbefore.replace(/(message\/)(.*?)(\/show)/,loadreplace);
+            $("#loadform").attr("action",loadurlafter);
+            $('.messageShow').empty();
             $('#partnerId').val(partnerid);
-        });
-
-        $('#messageSubmit').on('click',function(){
             $.ajaxSetup({
 　　            headers: {
 　　　             'X-CSRF-TOKEN': $('#MessageCsrfToken').val()
 　　            }
 　          });
             $.ajax({
-              url:$('#sendform').attr('action'),
+              url:$('#loadform').attr('action'),
               type:"POST",
               dataType:"json",
               data:{
                 'id':$('#partnerId').val()
               },
-              success :function(data){
-                  $('.modal-body').html('data取得'+$('#partnerId').val());
+              success :function(json){
+                  var jsonsize = json.length;
+                  for(i=0;i<jsonsize;i++){
+                    if(json[i].message!=""){
+                      var timestamp = new Date(json[i].created_at);
+                      timestamp.toString();
+                      var h = new Array;
+                      var m = new Array;
+                      var createtime = new Array;
+                      h[i] = timestamp.getHours();
+                      m[i] = timestamp.getMinutes();
+                      createtime[i] = h[i] + ':' + ('0' + m[i]).slice(-2);
+                      //timestamp.toString();
+                    if(json[i].user_id!=partnerid){
+                        $('.messageShow').append('<div class="text-right"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp" id="message'+i+'">'+createtime[i]+'</p></div>');
+                    }else{
+                        $('.messageShow').append('<div class="text-left" id="message'+i+'"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
+                    }
+                  }
+                }
+                //$("#messageShow").scrollTop($('#message'+jsonsize-1).offset().top));
               },
               error : function(XMLHttpRequest, textStatus, errorThrown) {
 　　　　              alert(textStatus + ":" + errorThrown);
 　　　         }
             });
+        });
+        $('#messageSubmit').on('click',function(){
+            if($('#themessage').val()!=""){
+            $.ajax({
+              url:$('#sendform').attr('action'),
+              type:"POST",
+              data:{
+                'id':$('#partnerId').val(),
+                'message':$('#themessage').val()
+              },
+              success :function(json){
+                  //
+              },
+              error : function(XMLHttpRequest, textStatus, errorThrown) {
+　　　　              alert(textStatus + ":" + errorThrown);
+　　　         }
+            });
+            $('#themessage').val('');
+          }
         });
     }
 });

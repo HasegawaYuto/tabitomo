@@ -35,11 +35,6 @@
                       @endif
                     </div>
                       </div>
-                      <div>
-                          <?php
-                            var_dump($messages[$key]);
-                          ?>
-                      </div>
                     @endforeach
                 @else
                     メッセージはありません
@@ -55,13 +50,15 @@
 <div class="modal fade" id="messageboad">
     <div class="modal-dialog">
         <div class="modal-content" id="messageboadbody">
-            <div class="modal-header wrap">
-                チャット&nbsp;with&nbsp;
+            {!! Form::open(['route'=>['load_message','id'=>Auth::user()->id,'partner_id'=>'num'],'id'=>'loadform']) !!}
+            {!! Form::close() !!}
+            <div class="modal-header wrap" id="messageHeader">
+                メッセージ
             </div>
-            <div class="modal-body">
-                本体
+            <div class="modal-body" id="messageBody">
+              <div class="messageShow"></div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer"  id="messageFooter">
                 {!! Form::open(['route'=>['send_message','id'=>Auth::user()->id,'send_id'=>'num'],'id'=>'sendform']) !!}
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" id="MessageCsrfToken">
                     <input type="hidden" value="0" id="partnerId">

@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
         Route::any('message/{send_id}/send','MessageController@sendMessage')->name('send_message');
+        Route::any('message/{partner_id}/show','MessageController@loadMessage')->name('load_message');
         Route::post('mylog/title/{title_id}/{scene_id}/delete','ItemPostController@deleteScene')->name('scene_delete');
         Route::post('mylog/title/{title_id}/delete','ItemPostController@deleteTitle')->name('title_delete');
         Route::post('mylog/title/{title_id}/edit','ItemPostController@editTitle')->name('edit_title');

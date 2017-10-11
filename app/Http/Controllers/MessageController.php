@@ -90,8 +90,14 @@ class MessageController extends Controller
 
     public function sendMessage(){
         $id = \Input::get('id');
-        $tempp = \Auth::user()->getMessages($id)->get();//最初のメッセージを取得
-        //$temp = $tempp->toJson();
-        return response()->json(['data'=>$tempp]);
+        $message = \Input::get('message');
+        \Auth::user()->sendMessage($id,$message);
+        //$tempdata = \Auth::user()->getMessages($id)->get();
+        return $json='Done';
+    }
+    public function loadMessage(){
+        $id = \Input::get('id');
+        $tempdata = \Auth::user()->getMessages($id)->get();
+        return response()->json($tempdata,200);
     }
 }
