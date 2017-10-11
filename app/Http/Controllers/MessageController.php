@@ -94,9 +94,10 @@ class MessageController extends Controller
         $chtimestamp = \Input::get('chtimestamp');
         \Auth::user()->sendMessage($id,$message);
         $tempdata = DB::table('messages')
-                      ->where('created_at','>=',$chtimestamp)
-                      ->where('user_id',$id)
-                      ->orWhere('send_id',$id)
+                      ->where('created_at','>',$chtimestamp)
+                      ->where(function($query)use($id){
+                        $query->where('user_id',$id)->orWhere('send_id',$id);
+                      })
                       ->get();
         return response()->json($tempdata,200);
         //return $json=$chtimestamp;
