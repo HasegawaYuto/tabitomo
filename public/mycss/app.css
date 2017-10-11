@@ -331,11 +331,11 @@ a:hover{
     -webkit-border-radius: 10px;    /* Safari,Google Chrome用 */
     -moz-border-radius: 10px;
     border:ridge 1.5px black ;
-    padding:2px;
+    padding:2px 5px 2px 5px;
 }
 .smallp{
     font-size:8pt;
-    padding:0 1px 0 1px;
+    margin:0 5px 0 5px;
 }
 .messageShow{
     overflow-y:scroll;

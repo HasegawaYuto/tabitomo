@@ -2,6 +2,11 @@ $(function(){
     if($('#messageboad').length){
         $('#messageboad').on('show.bs.modal',function(event){
             var button = $(event.relatedTarget);
+            button.html('新着なし');
+            if(button.hasClass('btn-danger')){
+                button.removeClass('btn-danger');
+                button.addClass('btn-default');
+            }
             var partnerid = button.data('partner');
             var urlbefore = $('#sendform').attr('action');
             var editreplace = 'message/'+partnerid+'/send';
@@ -16,7 +21,7 @@ $(function(){
             $('#partnerId').val(partnerid);
             $.ajaxSetup({
 　　            headers: {
-　　　             'X-CSRF-TOKEN': $('#MessageCsrfToken').val()
+　　　             'X-CSRF-TOKEN': $('#MessageCsrfTokenGet').val()
 　　            }
 　          });
             $.ajax({
@@ -40,9 +45,9 @@ $(function(){
                       createtime[i] = h[i] + ':' + ('0' + m[i]).slice(-2);
                       //timestamp.toString();
                     if(json[i].user_id!=partnerid){
-                        $('.messageShow').append('<div class="text-right"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp" id="message'+i+'">'+createtime[i]+'</p></div>');
+                        $('.messageShow').append('<div class="text-right forCnt"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp" id="message'+i+'">'+createtime[i]+'</p></div>');
                     }else{
-                        $('.messageShow').append('<div class="text-left" id="message'+i+'"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
+                        $('.messageShow').append('<div class="text-left forCnt" id="message'+i+'"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
                     }
                   }
                 }
@@ -56,6 +61,11 @@ $(function(){
         });
         $('#messageSubmit').on('click',function(){
             if($('#themessage').val()!=""){
+              $.ajaxSetup({
+  　　            headers: {
+  　　　             'X-CSRF-TOKEN': $('#MessageCsrfTokenPost').val()
+  　　            }
+  　          });
             $.ajax({
               url:$('#sendform').attr('action'),
               type:"POST",
@@ -66,9 +76,12 @@ $(function(){
                 'chtimestamp':$("#newTimestamp").val()
               },
               success :function(json){
-                  //$('.messageShow').append('hoge');
+                  var beforeCnt = $('.forCnt').length+1;
+                  //$('.messageShow').append(beforeCnt);
                   var jsonsize = json.length;
                   for(i=0;i<jsonsize;i++){
+                    var fixi = i+beforeCnt;
+                    //$('.messageShow').append(fixi);
                     if(json[i].message!=""){
                       var timestamp = new Date(json[i].created_at);
                       timestamp.toString();
@@ -79,10 +92,10 @@ $(function(){
                       m[i] = timestamp.getMinutes();
                       createtime[i] = h[i] + ':' + ('0' + m[i]).slice(-2);
                       //timestamp.toString();
-                    if(json[i].user_id!=partnerid){
-                        $('.messageShow').append('<div class="text-right"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp" id="message'+i+'">'+createtime[i]+'</p></div>');
+                    if(json[i].user_id!=$('#partnerId').val()){
+                        $('.messageShow').append('<div class="text-right"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp" id="message'+fixi+'">'+createtime[i]+'</p></div>');
                     }else{
-                        $('.messageShow').append('<div class="text-left" id="message'+i+'"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
+                        $('.messageShow').append('<div class="text-left" id="message'+fixi+'"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
                     }
                   }}
               },

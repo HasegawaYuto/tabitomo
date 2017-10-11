@@ -53,6 +53,7 @@
             {!! Form::open(['route'=>['load_message','id'=>Auth::user()->id,'partner_id'=>'num'],'id'=>'loadform']) !!}
             {!! Form::close() !!}
             <input type="hidden" id="newTimestamp" value="0000-00-00 00:00:00">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" id="MessageCsrfTokenGet">
             <div class="modal-header wrap" id="messageHeader">
                 メッセージ
             </div>
@@ -61,7 +62,7 @@
             </div>
             <div class="modal-footer"  id="messageFooter">
                 {!! Form::open(['route'=>['send_message','id'=>Auth::user()->id,'send_id'=>'num'],'id'=>'sendform']) !!}
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}" id="MessageCsrfToken">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}" id="MessageCsrfTokenPost">
                     <input type="hidden" value="0" id="partnerId">
                     <div class="from-group">
                         {!! Form::textarea('message',null,['class'=>'form-control','id'=>'themessage','rows'=>'3']) !!}
