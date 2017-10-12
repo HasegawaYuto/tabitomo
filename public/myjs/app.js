@@ -2,17 +2,13 @@ $(function(){
     if($('#messageboad').length){
         $('#messageboad').on('show.bs.modal',function(event){
             var button = $(event.relatedTarget);
-            button.html('新着なし');
-            if(button.hasClass('btn-danger')){
-                button.removeClass('btn-danger');
-                button.addClass('btn-default');
-            }
             var partnerid = button.data('partner');
             var urlbefore = $('#sendform').attr('action');
             var editreplace = 'message/'+partnerid+'/send';
             var urlafter = urlbefore.replace(/(message\/)(.*?)(\/send)/,editreplace);
             $("#sendform").attr("action",urlafter);
             $('#themessage').val('');
+            $("#newTimestamp").val('0000-00-00 00:00:00');
             var loadurlbefore = $('#loadform').attr('action');
             var loadreplace = 'message/'+partnerid+'/show';
             var loadurlafter = loadurlbefore.replace(/(message\/)(.*?)(\/show)/,loadreplace);
@@ -24,48 +20,61 @@ $(function(){
 　　　             'X-CSRF-TOKEN': $('#MessageCsrfTokenGet').val()
 　　            }
 　          });
-            $.ajax({
-              url:$('#loadform').attr('action'),
-              type:"POST",
-              dataType:"json",
-              data:{
-                'id':$('#partnerId').val()
-              },
-              success :function(json){
-                  var jsonsize = json.length;
-                  for(i=0;i<jsonsize;i++){
-                    if(json[i].message!=""){
-                      var timestamp = new Date(json[i].created_at);
-                      timestamp.toString();
+            loadMessage();
+
+            function loadMessage(){
+                $.ajax({
+                  url:$('#loadform').attr('action'),
+                  type:"POST",
+                  dataType:"json",
+                  data:{
+                    'id':$('#partnerId').val(),
+                    'chtimestamp':$("#newTimestamp").val()
+                  },
+                  success :function(json){
+                      var beforeCnt = $('.forCnt').length;
+                      var jsonsize = json.length;
                       var h = new Array;
                       var m = new Array;
                       var createtime = new Array;
-                      h[i] = timestamp.getHours();
-                      m[i] = timestamp.getMinutes();
-                      createtime[i] = h[i] + ':' + ('0' + m[i]).slice(-2);
-                      //timestamp.toString();
-                    if(json[i].user_id!=partnerid){
-                        $('.messageShow').append('<div class="text-right forCnt"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp" id="message'+i+'">'+createtime[i]+'</p></div>');
-                    }else{
-                        $('.messageShow').append('<div class="text-left forCnt" id="message'+i+'"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
+                      for(i=0;i<jsonsize;i++){
+                        var fixi = i+beforeCnt;
+                        if(json[i].message!=""){
+                          var timestamp = new Date(json[i].created_at);
+                          timestamp.toString();
+                          h[i] = timestamp.getHours();
+                          m[i] = timestamp.getMinutes();
+                          createtime[i] = h[i] + ':' + ('0' + m[i]).slice(-2);
+                        if(json[i].user_id!=$('#partnerId').val()){
+                            $('.messageShow').append('<div class="text-right"><div class="wrap irekoR">'+json[i].message+'</div><p class="smallp" id="message'+fixi+'">'+createtime[i]+'</p></div>');
+                        }else{
+                            $('.messageShow').append('<div class="text-left" id="message'+fixi+'"><div class="wrap irekoL">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
+                        }
+                      }}
+                    if(jsonsize!=0){
+                      $("#newTimestamp").val(json[jsonsize-1].created_at);
+                      $('.messageShow').scrollTop($('.messageShow')[0].scrollHeight);
                     }
-                  }
-                }
-                $("#newTimestamp").val(json[jsonsize-1].created_at);
-                //$(".modal-header").html(json[jsonsize-1].created_at);
-              },
-              error : function(XMLHttpRequest, textStatus, errorThrown) {
-　　　　              alert(textStatus + ":" + errorThrown);
-　　　         }
-            });
+                  },
+                  error : function(XMLHttpRequest, textStatus, errorThrown) {
+    　　　　              alert(textStatus + ":" + errorThrown);
+    　　　         }
+                });
+            }
+
+
+        var setTimer = setInterval(function(){loadMessage();},3000);
+        $('#messageboad').on('hidden.bs.modal',function(){
+            clearInterval(setTimer);
+        });
+        button.html('新着なし');
+        if(button.hasClass('btn-danger')){
+            button.removeClass('btn-danger');
+            button.addClass('btn-default');
+        }
         });
         $('#messageSubmit').on('click',function(){
             if($('#themessage').val()!=""){
-              $.ajaxSetup({
-  　　            headers: {
-  　　　             'X-CSRF-TOKEN': $('#MessageCsrfTokenPost').val()
-  　　            }
-  　          });
             $.ajax({
               url:$('#sendform').attr('action'),
               type:"POST",
@@ -76,28 +85,27 @@ $(function(){
                 'chtimestamp':$("#newTimestamp").val()
               },
               success :function(json){
-                  var beforeCnt = $('.forCnt').length+1;
-                  //$('.messageShow').append(beforeCnt);
+                  var beforeCnt = $('.forCnt').length;
                   var jsonsize = json.length;
+                  var h = new Array;
+                  var m = new Array;
+                  var createtime = new Array;
                   for(i=0;i<jsonsize;i++){
                     var fixi = i+beforeCnt;
-                    //$('.messageShow').append(fixi);
                     if(json[i].message!=""){
                       var timestamp = new Date(json[i].created_at);
                       timestamp.toString();
-                      var h = new Array;
-                      var m = new Array;
-                      var createtime = new Array;
                       h[i] = timestamp.getHours();
                       m[i] = timestamp.getMinutes();
                       createtime[i] = h[i] + ':' + ('0' + m[i]).slice(-2);
-                      //timestamp.toString();
                     if(json[i].user_id!=$('#partnerId').val()){
-                        $('.messageShow').append('<div class="text-right"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp" id="message'+fixi+'">'+createtime[i]+'</p></div>');
+                        $('.messageShow').append('<div class="text-right"><div class="wrap irekoR">'+json[i].message+'</div><p class="smallp" id="message'+fixi+'">'+createtime[i]+'</p></div>');
                     }else{
-                        $('.messageShow').append('<div class="text-left" id="message'+fixi+'"><div class="wrap ireko">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
+                        $('.messageShow').append('<div class="text-left" id="message'+fixi+'"><div class="wrap irekoL">'+json[i].message+'</div><p class="smallp">'+createtime[i]+'</p></div>');
                     }
                   }}
+                  $('.messageShow').scrollTop($('.messageShow')[0].scrollHeight);
+                  $("#newTimestamp").val(json[jsonsize-1].created_at);
               },
               error : function(XMLHttpRequest, textStatus, errorThrown) {
 　　　　              alert(textStatus + ":" + errorThrown);
@@ -348,8 +356,6 @@ $(function(){
             var $editdifference = ($thedayParse - $firstdayParse)/1000/60/60/24;
             var $oneday = 1000*60*60*24;
             $('#theday0').empty();
-            //$('#theday0').append('<option value="0000-00-00">0000年00月00日</option>');
-            //$('#theday0').append('<option value="0000-00-01" selected="selected">0000年00月01日</option>');
             for($d=0;$d<=$difference;$d++){
                 var $optionday = new Date($firstdayParse + ($oneday * $d));
                 var $optionYear = $optionday.getFullYear();
@@ -634,84 +640,6 @@ $(function(){///アップロード画像サムネイル
     }
     }
 });
-/*
-$(function(){
-    $mapSetAreaHeight = $('#mapSetArea').width()  ;
-    $('#mapSetArea').css('height',$mapSetAreaHeight);
-    function mapInit() {
-    var centerPosition = new google.maps.LatLng(38.000, 138.000);
-    var option = {
-        zoom : 4,
-        center : centerPosition,
-        mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
-        mapTypeControl: false,
-        //fullscreenControl: false,
-        streetViewControl: false,
-        scrollwheel: true,
-        zoomControl: true,
-    };
-    //地図本体描画
-    var googlemap = new google.maps.Map(document.getElementById("mapSetArea"), option);
-
-    var styleOptions = [{
-        featureType: 'all',
-        elementType: 'labels',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-          featureType: 'road',
-          elementType: 'road.highway',
-          stylers: [{ visibility: 'off' }]
-        },
-      {
-          featureType: 'road',
-          elementType: 'road.local',
-          stylers: [{ visibility: 'off' }]
-        },
-      {
-          featureType: 'road',
-          elementType: 'road.arterial',
-          stylers: [{ visibility: 'off' }]
-        },
-      {
-          featureType: 'transit',
-          elementType: 'transit.line',
-          stylers: [{ visibility: 'off' }]
-        },
-      {
-          featureType: 'administrative',
-          elementType: 'geometry',
-          stylers: [{ visibility: 'on' },{ weight:2 }]
-        },
-      {
-          featureType: 'administrative',
-          elementType: 'labels',
-          stylers: [{ visibility: 'on' }]
-        }
-    ];
-    var styledMapOptions = { name: '文字なし' }
-    var lopanType = new google.maps.StyledMapType(styleOptions, styledMapOptions);
-    googlemap.mapTypes.set('noText', lopanType);
-    googlemap.setMapTypeId('noText');
-
-    //var marker = new google.maps.Marker({
-    //                position: googlemap.getCenter(),
-    //                map: googlemap
-    //            });
-
-    google.maps.event.addListener(googlemap, 'click', function (e) {
-                    //marker.position = e.latLng;
-                    //googlemap.getPosition(loc);
-                    $("#latitude").val(e.latLng.lat());
-                    $("#longitude").val(e.latLng.lng());
-                    //marker.setMap(googlemap);
-                });
-
-}
- 
-    mapInit();
-});
-*/
 /////////////////////////////////////////////////////////////////////////////////////////
 /////生年月日のうるう年設定
 $(function(){//生年月日うるう年

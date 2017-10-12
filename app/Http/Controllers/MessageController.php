@@ -93,6 +93,10 @@ class MessageController extends Controller
         $message = \Input::get('message');
         $chtimestamp = \Input::get('chtimestamp');
         \Auth::user()->sendMessage($id,$message);
+        DB::table('messages')
+                      ->where('created_at','>',$chtimestamp)
+                      ->where('user_id',$id)
+                      ->update(['status'=>'1']); 
         $tempdata = DB::table('messages')
                       ->where('created_at','>',$chtimestamp)
                       ->where(function($query)use($id){
@@ -104,7 +108,17 @@ class MessageController extends Controller
     }
     public function loadMessage(){
         $id = \Input::get('id');
-        $tempdata = \Auth::user()->getMessages($id)->get();
+        $chtimestamp = \Input::get('chtimestamp');
+        DB::table('messages')
+                      ->where('created_at','>',$chtimestamp)
+                      ->where('user_id',$id)
+                      ->update(['status'=>'1']);
+        $tempdata = DB::table('messages')
+                      ->where('created_at','>',$chtimestamp)
+                      ->where(function($query)use($id){
+                        $query->where('user_id',$id)->orWhere('send_id',$id);
+                      })
+                      ->get();
         return response()->json($tempdata,200);
     }
 }

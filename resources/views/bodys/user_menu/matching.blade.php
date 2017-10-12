@@ -26,7 +26,7 @@
                     }
                 }
             ?>
-            @if(isset($recruitments))
+            @if(isset($recruitments[0]))
             <div>
             {!! $recruitments->render() !!}
             </div>
@@ -43,7 +43,7 @@
                       @endif
                       {!!Form::submit('削除',['class'=>'btn btn-xs btn-danger'])!!}
                       {!!Form::close()!!}
-                      <div class="wrap col-xs-12">{{$recruitment->contents}}</div>
+                      <div class="wrap col-xs-12 Info">{{$recruitment->contents}}</div>
                       <div class="recruitmentMap" id="recruitmentMap{{$key}}" style="width:80%;height:130px;"></div>
                       <input type="hidden" value="{{$recruitment->lat}}" id="recruitmentLat{{$key}}">
                       <input type="hidden" value="{{$recruitment->lng}}" id="recruitmentLng{{$key}}">

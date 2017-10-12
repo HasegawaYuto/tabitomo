@@ -14,7 +14,7 @@
             @if(Auth::user()->id == $user->user_id)
                 @if(isset($messageUsers[0]))
                     @foreach($messageUsers as $key => $messageUser)
-                        <div class="messangerImageOuter text-center black">
+                        <div class="messangerImageOuter text-center black overCut">
                         @if(isset($messageUser->data))
                             <?php
                                 $mime = $messageUser->mime;
@@ -56,13 +56,13 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}" id="MessageCsrfTokenGet">
             <div class="modal-header wrap" id="messageHeader">
                 メッセージ
+                <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal">閉じる</button>
             </div>
             <div class="modal-body" id="messageBody">
               <div class="messageShow"></div>
             </div>
             <div class="modal-footer"  id="messageFooter">
                 {!! Form::open(['route'=>['send_message','id'=>Auth::user()->id,'send_id'=>'num'],'id'=>'sendform']) !!}
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}" id="MessageCsrfTokenPost">
                     <input type="hidden" value="0" id="partnerId">
                     <div class="from-group">
                         {!! Form::textarea('message',null,['class'=>'form-control','id'=>'themessage','rows'=>'3']) !!}

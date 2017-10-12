@@ -8,7 +8,7 @@
 ?>
 <div class="col-md-3">
 <div class="text-left panel panel-info">
-  <div class="panel-heading">
+  <div class="panel-heading overCut">
       @if($user->user_id != Auth::user()->id)
       @include('parts.follow_button',['user'=>$user])
       @endif

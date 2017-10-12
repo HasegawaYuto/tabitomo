@@ -322,7 +322,19 @@ a:hover{
 #messageboadbody{
     height:90vh;
 }
-.ireko{
+.irekoR{
+    margin:5px;
+    max-width:calc(100% - 10px);
+    display:inline-block;
+    text-align:left;
+    border-radius: 10px;        /* CSS3草案 */
+    -webkit-border-radius: 10px;    /* Safari,Google Chrome用 */
+    -moz-border-radius: 10px;
+    border:ridge 1.5px black ;
+    padding:2px 5px 2px 5px;
+    background-color:#87cefa;
+}
+.irekoL{
     margin:5px;
     max-width:calc(100% - 10px);
     display:inline-block;
@@ -339,11 +351,30 @@ a:hover{
 }
 .messageShow{
     overflow-y:scroll;
-    height:calc(90vh - 40px - 165px);
+    height:calc(90vh - 50px - 165px);
 }
 #messageHeader{
-    height:40px;
+    height:50px;
 }
 #messageFooter{
     height:165px;
+}
+.Info{
+    height:100px;
+    overflow-y:scroll;
+    margin:5px 2px 2px 5px;
+}
+.tabArea{
+    width:120px;
+    display:inline-block;
+    float:left;
+}
+.tabArea li{
+    width:120px;
+    display:inline-block;
+}
+.tabContents{
+    width:calc(100% - 120px);
+    display:inline-block;
+    float:left;
 }

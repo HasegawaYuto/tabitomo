@@ -13,7 +13,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1-1">
                       <div class="panel-body">
-                        @if(isset($scenes))
+                        @if(isset($scenes[0]))
                         @foreach($scenes as $key => $scene)
                             <div class="col-xs-4">
                                 <div class="panel panel-primary">

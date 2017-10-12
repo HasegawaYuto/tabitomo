@@ -54,7 +54,7 @@
           </tr>
           <tr>
             <td class="text-left"><p><b>ニックネーム</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile1">編集</button></p>
-              <p class="text-center">{{$user->nickname or '未設定'}}</p>
+              <p class="text-center overCut">{{$user->nickname or '未設定'}}</p>
               <div id="userprofile1" class="collapse text-center">
                   {!! Form::open(['route'=>['edit_user_profile',$user->user_id]])!!}
                   <div class="form-group">
@@ -158,7 +158,7 @@
         <table class="table table-striped">
           <tr>
             <td class="text-left"><p><b>ニックネーム</b></p>
-              <p class="text-center">{{$user->nickname or '未設定'}}</p>
+              <p class="text-center overCut">{{$user->nickname or '未設定'}}</p>
             </td>
           </tr>
           <tr>

@@ -4,6 +4,7 @@
 
 @if(isset($scenes[0]))
 <div class="container-fluid">
+    @include('parts.searchItem')
     <div class="col-xs-12">
         {!! $scenes->render() !!}
     </div>
@@ -44,7 +45,7 @@
                     {{$scene->title}}
                   </div></a>
                   <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}">
-                  <div class="itemAvatarOuter text-center black">
+                  <div class="itemAvatarOuter text-center black overCut">
                     @if(isset($user[$scene->user_id]->data))
                         <?php
                             $mime = $user[$scene->user_id]->mime;
@@ -104,7 +105,7 @@
                     <!--div-->
                         <!--div id="demo{{$key}}" class="collapse col-xs-12"-->
                             <label>ユーザーコメント</label>
-                            @if(isset($userComments[$key]))
+                            @if(isset($userComments[$key][0]))
                             <ul class="list-group">
                                 @foreach($userComments[$key] as $kkey => $userComment)
                                     <?php
@@ -113,7 +114,7 @@
                                     ?>
                                     <li class="list-group-item">
                                     <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->user_id])}}" class="black">
-                                    <div style="width:100%;">
+                                    <div class="overCut" style="width:100%;">
                                     @if(isset($dataImage))
                                         <div class="CommentUserAvatar lazyload img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                                     @else

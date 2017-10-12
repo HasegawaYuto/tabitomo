@@ -30,7 +30,7 @@
             @endif
             <div class="panel-body">
                 {!! $titles->render() !!}
-                @if(isset($titles))
+                @if(isset($titles[0]))
                 <?php $cnt = 0; ?>
                 @foreach($titles as $key => $mylog)
                 <?php
@@ -65,7 +65,7 @@
                                         <td>{{(int)$lastdayarray[1]}}月{{(int)$lastdayarray[2]}}日</td>
                                     </tr>
                                 </table>
-                                @if(isset($scenes))
+                                @if(isset($scenes[0]))
                                 <label>シーン</label>
                                 <ul class="sceneList">
                                 @foreach($scenes[$key] as $scene)

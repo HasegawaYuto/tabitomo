@@ -105,7 +105,15 @@ class PageController extends Controller
 
 
     public function showGuides(){
-      $data['recruitments']=Guestguide::where('type','guide')->where('user_id','!=',\Auth::user()->id)->orderBy('created_at','desc')->paginate(30);
+      $today = Carbon::today();
+      $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . $today->day;
+      $data['recruitments']=Guestguide::where('type','guide')
+                                      ->where('user_id','!=',\Auth::user()->id)
+                                      ->where(function($query)use($chdate){
+                                          $query->whereNull('limitdate')->orWhere('limitdate','>',$chdate);
+                                      })
+                                      ->orderBy('created_at','desc')
+                                      ->paginate(30);
       foreach($data['recruitments'] as $key => $recruitment){
           $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
       }
@@ -113,7 +121,15 @@ class PageController extends Controller
     }
 
     public function showTravelers(){
-      $data['recruitments']=Guestguide::where('type','guest')->where('user_id','!=',\Auth::user()->id)->orderBy('created_at','desc')->paginate(30);
+      $today = Carbon::today();
+      $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . $today->day;
+      $data['recruitments']=Guestguide::where('type','guest')
+                          ->where('user_id','!=',\Auth::user()->id)
+                          ->where(function($query)use($chdate){
+                              $query->whereNull('limitdate')->orWhere('limitdate','>',$chdate);
+                          })
+                          ->orderBy('created_at','desc')
+                          ->paginate(30);
       foreach($data['recruitments'] as $key => $recruitment){
           $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
       }
@@ -196,7 +212,7 @@ class PageController extends Controller
           $messages = \DB::table('messages')
                             ->where('user_id',$id)
                             ->orWhere('send_id',$id)
-                            ->orderBy('created_at','desc')
+                            ->orderBy('created_at')
                             ->groupBy('user_id','send_id')
                             ->get();
           $sortIds=[];

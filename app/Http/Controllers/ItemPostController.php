@@ -251,10 +251,6 @@ class ItemPostController extends Controller
 
 
     public function editTitle(Request $request ,$id,$title_id){
-        function replaceDate($DateString){
-              $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
-              return $theday;
-        }
         $user = User::find($id);
         $changes = $user->title($title_id)->get();
         foreach($changes as $change){

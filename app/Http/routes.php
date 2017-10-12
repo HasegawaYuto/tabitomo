@@ -61,7 +61,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('mylog/title/{title_id}/unfavorite','ItemPostController@unfavoriteTitle')->name('unfavorite_title');
         Route::post('mylog/title/{title_id}/{scene_id}/comments','ItemPostController@postComment')->name('add_comment');
         Route::post('mylog/title/{title_id}/{scene_id}/comments/{comment_user_id}/{comment_id}/delete','ItemPostController@deleteComment')->name('delete_comment');
-        Route::post('postguest','GuestGuideController@postGuest')->name('guest_post');
-        Route::post('postguide','GuestGuideController@postGuide')->name('guide_post');
+        Route::post('guestpost','GuestGuideController@postGuest')->name('guest_post');
+        Route::post('guidepost','GuestGuideController@postGuide')->name('guide_post');
       });
 });

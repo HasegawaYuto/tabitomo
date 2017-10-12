@@ -10,7 +10,7 @@
               return Carbon\Carbon::parse($date)->age.'歳';
           }
       ?>
-      @if(isset($recruitments))
+      @if(isset($recruitments[0]))
       <div>
       {!! $recruitments->render() !!}
       </div>
@@ -40,7 +40,7 @@
                 {{$theuser->birthday=="" ? '年齢未設定':getAge($theuser->birthday)}}<br>
                 </div>
                 </a>
-                <div class="wrap col-xs-12">{{$recruitment->contents}}</div>
+                <div class="wrap col-xs-12 Info">{{$recruitment->contents}}</div>
                 <div class="recruitmentMap" id="recruitmentMap{{$key}}" style="width:80%;height:130px;"></div>
                 <input type="hidden" value="{{$recruitment->lat}}" id="recruitmentLat{{$key}}">
                 <input type="hidden" value="{{$recruitment->lng}}" id="recruitmentLng{{$key}}">
@@ -50,10 +50,9 @@
       </div>
       </div>
       @endforeach
-      @if(!isset($recruitments[0]))
+      @else
       <div class="text-center jumbotron">
           募集はありません
       </div>
-      @endif
       @endif
 @endsection
