@@ -11,6 +11,7 @@
             }
         ?>
         @if(isset($recruitments[0]))
+        @include('parts.searchPlan')
         <div>
         {!! $recruitments->render() !!}
         </div>
@@ -51,8 +52,13 @@
         </div>
         @endforeach
         @else
-          <div class="text-center jumbotron">
+          <div class="center jumbotron">
+          @if(Request::is('guides/search'))
+              @include('parts.searchPlan')
+          @endif
+              <div class="text-center">
               募集はありません
+              </div>
           </div>
         @endif
 @endsection

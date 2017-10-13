@@ -365,16 +365,26 @@ a:hover{
     margin:5px 2px 2px 5px;
 }
 .tabArea{
-    width:120px;
+    width:100px;
     display:inline-block;
     float:left;
 }
 .tabArea li{
-    width:120px;
+    width:100px;
     display:inline-block;
 }
 .tabContents{
-    width:calc(100% - 120px);
+    width:calc(100% - 100px);
     display:inline-block;
     float:left;
+    padding:10px 0 10px 0;
+}
+.searchArea{
+    overflow-y:scroll;
+    height:160px;
+}
+#searchMap{
+    width:100%;
+    height:160px;
+    background-color:red;
 }

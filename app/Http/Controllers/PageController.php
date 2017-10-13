@@ -102,7 +102,86 @@ class PageController extends Controller
         return redirect('/');
     }
 
-
+    public function showItemsSearch(Request $request){
+      $keywordNotExists = $request->keywords=="";
+      $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
+      $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
+      $areaNot = $request->lat=="0"&&$request->lng=="0"&&$request->radius=="0";
+      if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot){
+        return redirect('/');
+      }
+      $scenes = Mylog::select('scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
+            ->where(function($query){
+                if(\Auth::check()){
+                    $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                }else{
+                    $query->where('publish','public');
+                }
+            });
+      if(isset($request->keywords)){
+          $keywords = explode(' ',$request->keywords);
+          foreach($keywords as $keyword){
+            $scenes = $scenes->where(function($query)use($keyword){
+                                    $query->where('title','like','%'.$keyword.'%')
+                                          ->orWhere('scene','like','%'.$keyword.'%')
+                                          ->orWhere('comment','like','%'.$keyword.'%');
+                              });
+          }
+      }
+      if($request->year1!='0000'){
+          $scenes=$scenes->where('theday','like',$request->year1.'-__-__');
+      }
+      if($request->month1!='00'){
+          $scenes=$scenes->where('theday','like','____-'.$request->month1.'-__');
+      }
+      if($request->day1!='00'){
+          $scenes=$scenes->where('theday','like','____-__-'.$request->day1);
+      }
+      $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
+      $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
+      $scenes = $scenes->whereBetween('theday',[$date2,$date3]);
+      if(!$areaNot){
+          $scenes = $scenes
+->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
+      }
+      $scenes=$scenes->orderBy('updated_at','desc')
+                    ->groupBy('user_id','title_id','scene_id')
+                    ->paginate(24);
+      $data['scenes'] = $scenes;
+      $data['photos'] = Mylog::select('mime','data','scene_id','id','user_id','title_id')
+                                ->whereNotNull('data')
+                                ->where(function($query){
+                                    if(\Auth::check()){
+                                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                    }else{
+                                        $query->where('publish','public');
+                                    }
+                                })
+                                ->get();
+      foreach($scenes as $key => $scene){
+          $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
+          foreach($data['userComments'][$key] as $kkey => $userComment){
+              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID)->profile;
+          }
+          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
+          $data['user'][$scene->user_id]=Profile::select('data','mime','nickname')->where('user_id',$scene->user_id)->first();
+          $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
+                                  ->whereNotNull('data')
+                                  ->select('id')
+                                  ->where(function($query){
+                                      if(\Auth::check()){
+                                          $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                      }else{
+                                          $query->where('publish','public');
+                                      }
+                                    })
+                                  ->orderByRaw("RAND()")->first();
+          if(isset($thumbID)){
+              $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
+          }
+      }
+      return view('bodys.show_items',$data);
+    }
 
     public function showGuides(){
       $today = Carbon::today();
@@ -120,6 +199,62 @@ class PageController extends Controller
       return view('bodys.show_guides',$data);
     }
 
+    public function searchGuides(Request $request){
+      $keywordNotExists = $request->keywords=="";
+      $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
+      $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
+      $areaNot = $request->lat=="0"&&$request->lng=="0"&&$request->radius=="0";
+      $personalNot = !isset($request->sex)&&!isset($request->age);
+      if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot && $personalNot){
+        return redirect('/guides');
+      }
+      $today = Carbon::today();
+      $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . str_pad($today->day, 2, 0, STR_PAD_LEFT);
+      $recruitments=Guestguide::where('type','guide')
+                          ->where('user_id','!=',\Auth::user()->id)
+                          ->where(function($query)use($chdate){
+                              $query->whereNull('limitdate')->orWhere('limitdate','>',$chdate);
+                          });
+      if(isset($request->keywords)){
+          $keywords = explode(' ',$request->keywords);
+          foreach($keywords as $keyword){
+            $recruitments = $recruitments->where('contents','like','%'.$keyword.'%');
+          }
+      }
+      if($request->year1!='0000'){
+          $recruitments=$recruitments->where('limitdate','like',$request->year1.'-__-__');
+      }
+      if($request->month1!='00'){
+          $recruitments=$recruitments->where('limitdate','like','____-'.$request->month1.'-__');
+      }
+      if($request->day1!='00'){
+          $recruitments=$recruitments->where('limitdate','like','____-__-'.$request->day1);
+      }
+      $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
+      $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
+      $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
+      if(!$areaNot){
+          $recruitments = $recruitments
+->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
+      }
+      if(isset($request->sex)){
+          $ids = Profile::where('sex',$request->sex)->whereNotNull('sex')->lists('user_id');
+          $recruitments=$recruitments->whereIn('user_id',$ids);
+      }
+      if(isset($request->age)){
+          $dt = Carbon::today()->addYear($request->age)->format('Y-m-d');
+          $ids = Profile::where('birthday',$request->agetype,$dt)->whereNotNull('birthday')->lists('user_id');
+          $recruitments=$recruitments->whereIn('user_id',$ids);
+      }
+      $recruitments = $recruitments->orderBy('created_at','desc')
+                       ->paginate(30);
+      $data['recruitments']=$recruitments;
+      foreach($data['recruitments'] as $key => $recruitment){
+          $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
+      }
+      return view('bodys.show_guides',$data);
+    }
+
     public function showTravelers(){
       $today = Carbon::today();
       $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . $today->day;
@@ -130,6 +265,53 @@ class PageController extends Controller
                           })
                           ->orderBy('created_at','desc')
                           ->paginate(30);
+      foreach($data['recruitments'] as $key => $recruitment){
+          $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
+      }
+      return view('bodys.show_travelers',$data);
+    }
+
+    public function searchTravelers(Request $request){
+      $keywordNotExists = $request->keywords=="";
+      $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
+      $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
+      $areaNot = $request->lat=="0"&&$request->lng=="0"&&$request->radius=="0";
+      $personalNot = !isset($request->sex)&&!isset($request->age);
+      if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot && $personalNot){
+        return redirect('/guests');
+      }
+      $today = Carbon::today();
+      $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . str_pad($today->day, 2, 0, STR_PAD_LEFT);
+      $recruitments=Guestguide::where('type','guest')
+                          ->where('user_id','!=',\Auth::user()->id)
+                          ->where(function($query)use($chdate){
+                              $query->whereNull('limitdate')->orWhere('limitdate','>',$chdate);
+                          });
+      if(isset($request->keywords)){
+          $keywords = explode(' ',$request->keywords);
+          foreach($keywords as $keyword){
+            $recruitments = $recruitments->where('contents','like','%'.$keyword.'%');
+          }
+      }
+      if($request->year1!='0000'){
+          $recruitments=$recruitments->where('limitdate','like',$request->year1.'-__-__');
+      }
+      if($request->month1!='00'){
+          $recruitments=$recruitments->where('limitdate','like','____-'.$request->month1.'-__');
+      }
+      if($request->day1!='00'){
+          $recruitments=$recruitments->where('limitdate','like','____-__-'.$request->day1);
+      }
+      $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
+      $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
+      $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
+      if(!$areaNot){
+          $recruitments = $recruitments
+->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
+      }
+      $recruitments = $recruitments->orderBy('created_at','desc')
+                       ->paginate(30);
+      $data['recruitments']=$recruitments;
       foreach($data['recruitments'] as $key => $recruitment){
           $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
       }

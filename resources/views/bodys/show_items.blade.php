@@ -161,8 +161,11 @@
 
 @else
     <div class="center jumbotron">
+    @if(Request::is('search'))
+        @include('parts.searchItem')
+    @endif
         <div class="text-center">
-            まだシーンが追加されていません
+            シーンがありません
             @if(Auth::check())
                 {!! Link_to_route('show_user_items','シーンを追加する',['id'=>Auth::user()->id]) !!}
             @else

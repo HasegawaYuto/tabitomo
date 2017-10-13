@@ -2,8 +2,12 @@
 <a class="btn btn-default" data-toggle="collapse" href="#collapseExample">
     条件検索
 </a>
-@if(Request::is('search'))
-{!! Form::open(['route'=>'break_condition','style'=>'display:inline;']) !!}
+@if(Request::is('guides/search') || Request::is('guests/search'))
+@if(Request::is('guides/search'))
+{!! Form::open(['route'=>'break_guides_condition','style'=>'display:inline;']) !!}
+@else
+{!! Form::open(['route'=>'break_travelers_condition','style'=>'display:inline;']) !!}
+@endif
 {!! Form::submit('条件取消',['class'=>'btn btn-danger']) !!}
 {!! Form::close() !!}
 @endif
@@ -14,10 +18,15 @@
     </div>
     <ul class="nav nav-pills nav-stacked tabArea">
         <li class="active"><a href="#tab1" data-toggle="tab">ワード</a></li>
-        <li><a href="#tab2" data-toggle="tab">時期</a></li>
+        <li><a href="#tab2" data-toggle="tab">期日</a></li>
         <li><a href="#tab3" data-toggle="tab">地域</a></li>
+        <li><a href="#tab4" data-toggle="tab">人物</a></li>
     </ul>
-    {!! Form::open(['route'=>'show_items_search']) !!}
+    @if(Request::is('guides'))
+    {!! Form::open(['route'=>'search_guides','style'=>'display:inline;']) !!}
+    @else
+    {!! Form::open(['route'=>'search_travelers','style'=>'display:inline;']) !!}
+    @endif
     <div class="tab-content tabContents">
         <div class="tab-pane active" id="tab1">
             <div class="col-xs-10 col-xs-offset-1 searchArea">
@@ -132,6 +141,29 @@
               <input type="hidden" name="lng" id="centerLng" value="0">
               <input type="hidden" name="radius" id="circleRadius" value="0">
               <div id="searchMap"></div>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab4">
+            <div class="col-xs-10 col-xs-offset-1 searchArea">
+                <label>性別</label>
+                <div class="form-group form-inline">
+                  {!!Form::radio('sex', '男性',null,['class'=>'form-control'])!!}
+                  {!!Form::label('sex','男性')!!}
+                  {!!Form::radio('sex', '女性',null,['class'=>'form-control'])!!}
+                  {!!Form::label('sex','女性')!!}
+                  {!!Form::radio('sex', 'その他',null,['class'=>'form-control'])!!}
+                  {!!Form::label('sex','その他')!!}
+                </div>
+                <label>年齢</label>
+                <div class="form-group form-inline">
+                  <input type="number" name="age" class="form-control">
+                  {!!Form::label('age','歳')!!}
+                  {!!Form::select('agetype', [
+                      '=' => '----',
+                      '>=' => '以上',
+                      '<=' => '以下']
+                    ,'=',['class'=>'form-control'])!!}
+                </div>
             </div>
         </div>
     </div>

@@ -78,7 +78,6 @@
                 }
             ?>
             {{isset($user->birthday) ? $age . '歳' : '未設定'}}</p>
-            <div id="errorcheckdiv"></div>
             <div id="userprofile2" class="collapse text-center">
                 <label class="text-left">生年月日</label><br>
                 {!! Form::open(['route'=>['edit_user_profile',$user->user_id]])!!}

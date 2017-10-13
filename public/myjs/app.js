@@ -1,4 +1,207 @@
 $(function(){
+    if($('#searchMap').length){
+        $('.tabArea a[href = "#tab3"]').on('shown.bs.tab', function(){
+            var centerPosition = {lat:35, lng: 136};
+            var googlemap = new google.maps.Map(document.getElementById("searchMap"),
+                    {
+                      zoom : 5,
+                      center : centerPosition,
+                      mapTypeId: google.maps.MapTypeId.TERRAIN,//
+                      mapTypeControl: false,//
+                      fullscreenControl: true,
+                      streetViewControl: false,//
+                      scrollwheel: true,//
+                      zoomControl: true
+                    });
+            var Marker = new google.maps.Marker({
+                    position: centerPosition,
+                    draggable: true,
+                    map: googlemap
+                    });
+            var Circle = new google.maps.Circle({
+                      center: centerPosition,
+                      map: googlemap,
+                      radius: parseInt(parseFloat(20)*1000),
+                      fillColor: '#FF0000', 		// 塗りつぶし色
+                      fillOpacity: 0.5,
+                      strokeColor: '#FF0000',		// 外周色
+                      strokeOpacity: 1,	// 外周透過度（0: 透明 ⇔ 1:不透明）
+                      strokeWeight: 1,
+                      editable: true
+                    });
+            Circle.bindTo("center", Marker, "position");
+            google.maps.event.addListener(Marker,'dragend',function(){
+                  var marker = Marker.getPosition();
+                  var circle = Circle.getRadius();
+                  $('#centerLat').val(marker.lat());
+                  $('#centerLng').val(marker.lng());
+                  $('#circleRadius').val(circle);
+                  Marker.setMap(googlemap);
+                  googlemap.panTo(new google.maps.LatLng(marker.lat(), marker.lng()));
+                });
+            google.maps.event.addListener(Circle,'radius_changed',function(){
+                  var marker = Marker.getPosition();
+                  var circle = Circle.getRadius();
+                  $('#centerLat').val(marker.lat());
+                  $('#centerLng').val(marker.lng());
+                  $('#circleRadius').val(circle);
+                });
+            google.maps.event.addListener(googlemap,'click', function(e){
+                    Marker.position = e.latLng;
+                    var circle = Circle.getRadius();
+                    $('#centerLat').val(e.latLng.lat());
+                    $('#centerLng').val(e.latLng.lng());
+                    $('#circleRadius').val(circle);
+                    Circle.bindTo("center", Marker, "position");
+                    Marker.setMap(googlemap);
+                    googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
+                });
+            google.maps.event.addDomListener(window, "resize", function() {
+    	             var center = Marker.getPosition();//googlemap.getCenter();
+    	             google.maps.event.trigger(googlemap, "resize");
+    	             googlemap.setCenter(center);
+              });
+        });
+        //$('#chlat').html($('#centerLat').val());
+    }
+});
+/////////////////////////////////////////////////////
+$(function(){//生年月日うるう年
+  if($('#monthSelect1').length && $('#daySelect1').length && $('#yearSelect1').length){
+    var $month = $('#monthSelect1');
+   var $day = $('#daySelect1');
+   var $year = $('#yearSelect1');
+   var originaldays = $day.html();
+   $month.change(leapcheck1);
+   $year.change(leapcheck1);
+   function leapcheck1(){
+     var valy = $year.val();
+     var valm = $month.val();
+     $day.html(originaldays).find('option').each(function() {
+         if( valy != "0000" ){
+             var vald = $(this).data('val');
+             if(valm == "04" || valm == "06" || valm == "09" || valm == "11"){
+                 if (vald == "31") {
+                     $(this).not(':last-child').remove();
+                   }
+             } else if(valm == "02"){
+                 if (vald == "31" || vald == "30") {
+                     $(this).not(':last-child').remove();
+                   }
+                 if ( valy % 4 == 0 ){
+                     if(valy % 100 == 0){
+                         if( valy % 400 != 0){
+                             if(vald == "29"){
+                                 $(this).not(':last-child').remove();
+                               }
+                           }
+                       }
+                 } else {
+                     if(vald == "29"){
+                         $(this).not(':last-child').remove();
+                     }
+                 }
+             }
+     }});
+ }
+}
+if($('#monthSelect2').length && $('#daySelect2').length && $('#yearSelect2').length){
+    var $month = $('#monthSelect2');
+   var $day = $('#daySelect2');
+   var $year = $('#yearSelect2');
+   var originaldays = $day.html();
+   $month.change(leapcheck2);
+   $year.change(leapcheck2);
+   function leapcheck2(){
+     var valy = $year.val();
+     var valm = $month.val();
+     $day.html(originaldays).find('option').each(function() {
+         if( valy != "0000" ){
+             var vald = $(this).data('val');
+             if(valm == "04" || valm == "06" || valm == "09" || valm == "11"){
+                 if (vald == "31") {
+                     $(this).not(':last-child').remove();
+                   }
+             } else if(valm == "02"){
+                 if (vald == "31" || vald == "30") {
+                     $(this).not(':last-child').remove();
+                   }
+                 if ( valy % 4 == 0 ){
+                     if(valy % 100 == 0){
+                         if( valy % 400 != 0){
+                             if(vald == "29"){
+                                 $(this).not(':last-child').remove();
+                               }
+                           }
+                       }
+                 } else {
+                     if(vald == "29"){
+                         $(this).not(':last-child').remove();
+                     }
+                 }
+             }
+     }});
+ }
+}
+if($('#monthSelect3').length && $('#daySelect3').length && $('#yearSelect3').length){
+    var $month = $('#monthSelect3');
+   var $day = $('#daySelect3');
+   var $year = $('#yearSelect3');
+   var originaldays = $day.html();
+
+   $month.change(leapcheck3);
+   $year.change(leapcheck3);
+
+   function leapcheck3(){
+     var valy = $year.val();
+     var valm = $month.val();
+     $day.html(originaldays).find('option').each(function() {
+         if( valy != "0000" ){
+             var vald = $(this).data('val');
+             if(valm == "04" || valm == "06" || valm == "09" || valm == "11"){
+                 if (vald == "31") {
+                     $(this).not(':last-child').remove();
+                   }
+             } else if(valm == "02"){
+                 if (vald == "31" || vald == "30") {
+                     $(this).not(':last-child').remove();
+                   }
+                 if ( valy % 4 == 0 ){
+                     if(valy % 100 == 0){
+                         if( valy % 400 != 0){
+                             if(vald == "29"){$(this).not(':last-child').remove();}
+                           }
+                       }
+                 } else {
+                     if(vald == "29"){$(this).not(':last-child').remove();}
+                 }
+             }
+        }
+        $('#daySelect3 option:last-child').val($('#daySelect3 option:first-child').val());
+   });
+ }
+}
+});
+$(function(){
+    if($('#firstdayT').length){
+        $('#firstdayT').datepicker({
+            format: "yyyy年mm月dd日",
+            language: "ja",
+            daysOfWeekHighlighted: "0,6",
+            useCurrent: false
+            }
+        );
+        $('#lastdayT').datepicker({
+            format: "yyyy年mm月dd日",
+            language: "ja",
+            daysOfWeekHighlighted: "0,6",
+            useCurrent: false
+            }
+        );
+    }
+});
+////////////////////////////////////////////////////////////
+$(function(){///////メッセージ
     if($('#messageboad').length){
         $('#messageboad').on('show.bs.modal',function(event){
             var button = $(event.relatedTarget);
@@ -15,13 +218,12 @@ $(function(){
             $("#loadform").attr("action",loadurlafter);
             $('.messageShow').empty();
             $('#partnerId').val(partnerid);
-            $.ajaxSetup({
-　　            headers: {
-　　　             'X-CSRF-TOKEN': $('#MessageCsrfTokenGet').val()
-　　            }
-　          });
+              $.ajaxSetup({
+　　              headers: {
+　　　               'X-CSRF-TOKEN': $('#MessageCsrfTokenGet').val()
+　　              }
+　             });
             loadMessage();
-
             function loadMessage(){
                 $.ajax({
                   url:$('#loadform').attr('action'),
@@ -61,8 +263,6 @@ $(function(){
     　　　         }
                 });
             }
-
-
         var setTimer = setInterval(function(){loadMessage();},3000);
         $('#messageboad').on('hidden.bs.modal',function(){
             clearInterval(setTimer);
@@ -116,7 +316,7 @@ $(function(){
         });
     }
 });
-$(function(){
+$(function(){////マッチングデータ
     if($('.recruitmentMap').length){
         var Mapcnt = $('.recruitmentMap').length;
         for($i=0;$i<Mapcnt;$i++){
@@ -160,7 +360,7 @@ $(function(){
         }
     }
 });
-$(function(){
+$(function(){//////////////マッチングデータ登録
     if($('#Relimitdate').length){
         $('#Relimitdate').datepicker({
             format: "yyyy年mm月dd日",
@@ -245,7 +445,7 @@ $(function(){
     }
 });
 
-$(function(){
+$(function(){/////////////////////シーン更新
     if($('#fixScene0').length){
         var originalImg = $('#photosField').html();
         $('#fixScene0').on('show.bs.modal', function (event) {
@@ -454,7 +654,7 @@ $(function(){///オススメ表示
     }
 });
 ////////////////////////////////////////////////////////////////////////
-$(function(){///グーグルマップ表示
+$(function(){///グーグルマップ複数表示
     if($('.googlemapSpot').length){
         var $gmScnt = $('.googlemapSpot').length;
         for($i=0;$i<$gmScnt;$i++){
@@ -476,85 +676,7 @@ $(function(){///グーグルマップ表示
                             position: centerPosition,
                             map: googlemap
                         });
-            //google.maps.event.addDomListener(window, "resize", function() {
-    	      //      google.maps.event.trigger(googlemap, "resize");
-    	      //       googlemap.setCenter(centerPosition);
-            //  });
         }
-        //});
-            //var centerPosition = {lat: 36, lng: 136};
-            //var option = {//
-                    //zoom : mapzoom,//
-                    //center : centerPosition,//
-                    //mapTypeId: google.maps.MapTypeId.TERRAIN,//
-                    //mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
-                    //mapTypeControl: false,//
-                    //fullscreenControl: false,
-                    //streetViewControl: false,//
-                    //scrollwheel: true,//
-                    //zoomControl: true,//
-                //};
-                //var googlemap = new google.maps.Map($(this), option);
-        //mapInit();
-        ///////////////////////////
-        /*
-        function mapInit() {//
-        if($('#ido').val()!="" && $('#keido').val()!=""){
-            console.log($('#keido').val());
-            var centerPosition = {lat: parseFloat($('#ido').val()), lng: parseFloat($('#keido').val())};
-        }else{
-            var centerPosition = {lat: 36, lng: 136};
-        }
-        if($('#mapzoom').val()!=""){
-            var mapzoom = parseInt($('#mapzoom').val());
-        }else{
-            var mapzoom = 6;
-        }
-        var option = {//
-            zoom : mapzoom,//
-            center : centerPosition,//
-            mapTypeId: google.maps.MapTypeId.TERRAIN,//
-            //mapTypeControlOptions: { mapTypeIds: ['noText', google.maps.MapTypeId.ROADMAP] },
-            mapTypeControl: false,//
-            //fullscreenControl: false,
-            streetViewControl: false,//
-            scrollwheel: true,//
-            zoomControl: true,//
-        };
-        var googlemap = new google.maps.Map(document.getElementById("photoSpotSetArea"), option);
-        /////////////////////////////////////////////////
-        var marker = new google.maps.Marker({
-                        position: centerPosition,
-                        map: googlemap
-                    });
-        //////////////////////////////////////////////////////////
-        google.maps.event.addListener(googlemap, 'click', function (e) {
-                        marker.position = e.latLng;
-                        //googlemap.getPosition(loc);
-                        //$("#photoSpot").val(e.latLng.lat()+':'+e.latLng.lng());
-                        $("#ido").val(e.latLng.lat());
-                        $("#keido").val(e.latLng.lng());
-                        marker.setMap(googlemap);
-                        googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
-                        $("#mapzoom").val(googlemap.getZoom());
-                    });
-        google.maps.event.addDomListener(window, "resize", function() {
-	           var center = marker.getPosition();//googlemap.getCenter();
-	            google.maps.event.trigger(googlemap, "resize");
-	             googlemap.setCenter(center);
-               $("#mapzoom").val(googlemap.getZoom());
-          });
-        $('#logtabs a').on('shown.bs.tab', function(){
-              var center = marker.getPosition();//
-	            google.maps.event.trigger(googlemap, 'resize');
-              //var center = marker.getPosition();//
-              googlemap.setCenter(center);
-              $("#mapzoom").val(googlemap.getZoom());
-	            //return false;
-          });
-    }
-        //mapInit();
-    */
     }
 });
 //////////  アバター変更時
@@ -579,7 +701,7 @@ $(function(){///アバター画像変更サムネイル
           });
 }});
 ////////////////////////////////////////////////////////////////////////
-$(function(){///アップロード画像サムネイル
+$(function(){///シーン登録グーグルマップ
     if($('#createPhotoSpotSetArea0').length){
         var $pSS = $('#createPhotoSpotSetArea0');
         $pSS.css('height','40vh');
@@ -613,13 +735,10 @@ $(function(){///アップロード画像サムネイル
                     });
         google.maps.event.addListener(googlemap, 'click', function (e) {
                         marker.position = e.latLng;
-                        //googlemap.getPosition(loc);
-                        //$("#photoSpot").val(e.latLng.lat()+':'+e.latLng.lng());
                         $("#ido0").val(e.latLng.lat());
                         $("#keido0").val(e.latLng.lng());
                         marker.setMap(googlemap);
                         googlemap.panTo(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
-                        //$("#mapzoom"+no).val(googlemap.getZoom());
                     });
         google.maps.event.addDomListener(window, "resize", function() {
 	           var center = marker.getPosition();//googlemap.getCenter();

@@ -63,9 +63,9 @@
                 $OldFirstday = $oldfirstday->format('Y年m月d日');
                 $OldLastday = $oldlastday->format('Y年m月d日');
           ?>
-              {!! Form::text('firstday',$OldFirstday,['class'=>'form-control datepicker','id'=>'firstday0','style'=>'width:40%;']) !!}
+              {!! Form::text('firstday',$OldFirstday,['class'=>'form-control datepicker','id'=>'firstdayT','style'=>'width:40%;']) !!}
               <label>～</label>
-              {!! Form::text('lastday',$OldLastday,['class'=>'form-control datepicker','id'=>'lastday0','style'=>'width:40%;']) !!}
+              {!! Form::text('lastday',$OldLastday,['class'=>'form-control datepicker','id'=>'lastdayT','style'=>'width:40%;']) !!}
           </div>
           {!! Form::submit('更新',['class'=>'btn btn-primary btn-xs']) !!}
           {!! Form::close() !!}

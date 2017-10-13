@@ -12,6 +12,8 @@
 */
 
 Route::get('/', 'PageController@showItems')->name('show_items');
+Route::post('/search', 'PageController@showItemsSearch')->name('show_items_search');
+Route::post('/', 'PageController@showItems')->name('break_condition');
 
 //ユーザー登録
 Route::get('signup','Auth\AuthController@getRegister')->name('signup.get');
@@ -27,6 +29,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/newprofilecreate','PageController@newProfileCreate');
     Route::get('/guides','PageController@showGuides')->name('show_guides');
     Route::get('/guests','PageController@showTravelers')->name('show_travelers');
+    Route::post('/guides','PageController@showGuides')->name('break_guides_condition');
+    Route::post('/guests','PageController@showTravelers')->name('break_travelers_condition');
+    Route::post('/guides/search','PageController@searchGuides')->name('search_guides');
+    Route::post('/guests/search','PageController@searchTravelers')->name('search_travelers');
     Route::post('/guides/{guide_id}/candidate','GuestGuideController@candidateGuide')->name('guide_candidate');
     Route::post('/guests/{guest_id}/candidate','GuestGuideController@candidateGuest')->name('guest_candidate');
     Route::post('/guides/{guide_id}/uncandidate','GuestGuideController@uncandidateGuide')->name('guide_uncandidate');
