@@ -4,11 +4,9 @@
 <div class="container-fluid">
 <div class="row">
 @include('bodys.user_menu.contents_menu',['user'=>$user])
-<div class="col-md-9">
+<div class="col-xs-12 col-sm-9 col-md-9 col-lg-6">
     <div class="panel panel-info">
         <div class="panel-heading titleStringL">
-                {!! Link_to_route('show_user_items','マイログ',['id'=>$user->user_id]) !!}
-                &nbsp;&nbsp; ≫
                 @if(Auth::user()->id == $user->user_id)
                   <?php
                         //$today = Carbon\Carbon::now()->format('Y年m月d日');
@@ -17,8 +15,7 @@
                         $OldFirstday = $oldfirstday->format('Y年m月d日');
                         //$OldLastday = $oldlastday->format('Y年m月d日');
                   ?>
-                    &nbsp;&nbsp;
-                    <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fixTitle">編集</button>
+                    <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fixTitle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     &nbsp;
                     <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#fixScene0"
                       data-scene="New Scene"
@@ -34,17 +31,17 @@
                       data-publish="public"
                       data-firstday="{{$title->firstday}}"
                       data-lastday="{{$title->lastday}}"
-                      data-editstyle="add">シーン追加</button>
+                      data-editstyle="add"><i class="fa fa-plus" aria-hidden="true"></i></button>
                       @include('parts.delete_button',['title'=>$title])
                 @else
                     @include('parts.favorite_title_button',['title'=>$title])
                 @endif
-                &nbsp;{{$title->title}}
+                {{$title->title}}
 
 @if(Auth::user()->id == $user->user_id)
 <div class="modal fade" id="fixTitle">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content black">
       <div class="modal-header">
         <h4 class="modal-title">タイトルの編集</h4>
       </div>
@@ -63,9 +60,9 @@
                 $OldFirstday = $oldfirstday->format('Y年m月d日');
                 $OldLastday = $oldlastday->format('Y年m月d日');
           ?>
-              {!! Form::text('firstday',$OldFirstday,['class'=>'form-control datepicker','id'=>'firstdayT','style'=>'width:40%;']) !!}
+              {!! Form::text('firstday',$OldFirstday,['class'=>'form-control datepicker','id'=>'firstdayT']) !!}
               <label>～</label>
-              {!! Form::text('lastday',$OldLastday,['class'=>'form-control datepicker','id'=>'lastdayT','style'=>'width:40%;']) !!}
+              {!! Form::text('lastday',$OldLastday,['class'=>'form-control datepicker','id'=>'lastdayT']) !!}
           </div>
           {!! Form::submit('更新',['class'=>'btn btn-primary btn-xs']) !!}
           {!! Form::close() !!}
@@ -83,12 +80,12 @@
                 $lastdayarray = explode('-',$title->lastday);
             ?>
         <div class="title_detail">
-            <div class="col-xs-5">
+            <div class="col-xs-12 col-sm-5">
                 <label>期間</label><br>
                 {{$firstdayarray[0]}}年{{(int)$firstdayarray[1]}}月{{(int)$firstdayarray[2]}}日～
                 {{$lastdayarray[0]==$firstdayarray[0] ? '':$lastdayarray[0].'年'}}{{(int)$lastdayarray[1]}}月{{(int)$lastdayarray[2]}}日
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-12 col-sm-4">
                 <label>おすすめ</label><br>
                 <div id="showRatyAveDiv" class="showRatyAve">
                     {{(int)($scoreAve*2)/2}}
@@ -99,9 +96,11 @@
                     @endif
                 </div>
             </div>
-            <div class="col-xs-3">
+            <div class="col-xs-12 col-sm-3">
                 <label>お気に入り</label>
+                <div class="text-center">
                 <span class="badge">{{max($favuser)}}</span>
+                </div>
             </div>
         </div>
         <div class="col-xs-12">
@@ -129,7 +128,7 @@
                             data-publish="{{$scene->publish}}"
                             data-firstday="{{$scene->firstday}}"
                             data-lastday="{{$scene->lastday}}"
-                            data-editstyle="fix">編集</button>
+                            data-editstyle="fix"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             @include('parts.delete_button',['scene'=>$scene])
                           @else
                             @include('parts.favorite_scene_button',['scene'=>$scene])
@@ -138,7 +137,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="text-center">
-                                <dvi class="col-xs-4">
+                                <dvi class="col-sm-4 col-xs-12">
                                     @if(isset($thumb[$key]->data))
                                     <?php
                                         $mime = $thumb[$key]->mime;
@@ -153,11 +152,10 @@
                                     <p class="text-center"><small>No Image</small></p>
                                     @endif
                                 </div>
+                                    <div class="googlemapSpot googlemapSizeL col-lg-4 col-md-4 col-sm-4" id="googlemapSpotID{{$key}}"></div>
                                     <input type="hidden" value="{{$scene->lat}}" id="googlemapLat{{$key}}" />
                                     <input type="hidden" value="{{$scene->lng}}" id="googlemapLng{{$key}}" />
-                                <div class="googlemapSpot col-xs-4" style="height:25vh;" id="googlemapSpotID{{$key}}">
-                                </div>
-                                <div class="col-xs-4">
+                                <div class="col-xs-12 col-sm-4 col-lg-4">
                                     <label>日付</label>
                                     <div>
                                         {{$thedayarray[0]}}年

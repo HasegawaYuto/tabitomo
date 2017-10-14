@@ -42,7 +42,7 @@
                   </div>
                   </a>
                   <div class="wrap col-xs-12 Info">{{$recruitment->contents}}</div>
-                  <div class="recruitmentMap" id="recruitmentMap{{$key}}" style="width:80%;height:130px;"></div>
+                  <div class="recruitmentMap googlemapSizeM" id="recruitmentMap{{$key}}"></div>
                   <input type="hidden" value="{{$recruitment->lat}}" id="recruitmentLat{{$key}}">
                   <input type="hidden" value="{{$recruitment->lng}}" id="recruitmentLng{{$key}}">
                   <input type="hidden" value="{{$recruitment->radius}}" id="recruitmentRadius{{$key}}">

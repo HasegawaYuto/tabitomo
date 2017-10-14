@@ -4,5 +4,5 @@
 @if(isset($scene))
 {!! Form::open(['route'=>['scene_delete','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene'=>$scene->scene_id],'style'=>'display:inline;float:right;']) !!}
 @endif
-{!! Form::submit('削除',['class'=>'btn btn-danger btn-xs']) !!}
+<button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 {!! Form::close() !!}

@@ -4,5 +4,6 @@
 'scene_id'=>$scene->scene_id,
 'comment_id'=>$comment->comment_id,
 'comment_user_id'=>$comment->TheUserID],'style'=>'display:inline;float:right;'])!!}
-{!!Form::submit('削除',['class'=>'btn btn-xs btn-default'])!!}
+<button type="submit" class="btn btn-xs btn-default"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+
 {!!Form::close()!!}

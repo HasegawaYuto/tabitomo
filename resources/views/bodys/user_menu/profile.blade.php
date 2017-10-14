@@ -12,7 +12,7 @@
       $url = 'url("' . $src . '")';
   ?>
 @include('bodys.user_menu.contents_menu',['user'=>$user])
-  <div class="text-center col-md-6">
+  <div class="text-center col-xs-12 col-sm-9 col-md-9 col-lg-6">
     <div class="panel panel-info">
       <div class="panel panel-heading">
         <i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>
@@ -44,11 +44,16 @@
                     {!! Form::open(['route'=>['edit_user_profile',$user->user_id],'files'=>'true','id'=>'avatarForm'])!!}
                     {!! csrf_field() !!}
                     <div class="form-group">
-                        {!! Form::file('avatar',['accept'=>'image/*']) !!}
+                      <label>
+                        <span class="btn btn-default btn-block">
+                        イメージ選択
+                        {!! Form::file('avatar',['accept'=>'image/*','style'=>'display:none;']) !!}
+                        </span>
+                      </label>
                     </div>
                     {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
                     {!! Form::close() !!}
-                    <p>スマホで撮った画像などは保存の際に向きを調節します</p>
+                    <p class="wrap smallp">スマホで撮った画像などは保存の際に向きを調節します</p>
                 </div>
             </td>
           </tr>

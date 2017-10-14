@@ -21,7 +21,7 @@ $(function(){
             var Circle = new google.maps.Circle({
                       center: centerPosition,
                       map: googlemap,
-                      radius: parseInt(parseFloat(20)*1000),
+                      radius: parseInt(parseFloat(60)*1000),
                       fillColor: '#FF0000', 		// 塗りつぶし色
                       fillOpacity: 0.5,
                       strokeColor: '#FF0000',		// 外周色
@@ -383,9 +383,9 @@ $(function(){//////////////マッチングデータ登録
             var editurl = originalurl.replace(/(user\/)(.*?)(post)/,editreplace);
             $("#GuestGuideForm").attr("action",editurl);
             if(man=='guide'){
-                $('.modal-header').html('ガイド募集');
+                $('.modal-header').html('ガイド募集<button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button>');
             }else{
-                $('.modal-header').html('ゲスト募集');
+                $('.modal-header').html('ゲスト募集<button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button>');
             }
             var centerPosition = {lat:35, lng: 136};
             var googlemap = new google.maps.Map(document.getElementById("GuestGuideSpotMap"),
@@ -487,14 +487,14 @@ $(function(){/////////////////////シーン更新
             if(editstyle == 'fix'){
                 $('#NewScene0').val(oldScene);
                 $('#comment0').val(oldComment);
-                $('.modal-title').html('シーンの編集');
+                $('.modal-title').html('シーンの編集<button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button>');
                 $('#sceneEditSubmit').val('更新');
             }else{
                 $('#NewScene0').val('');
                 $('#NewScene0').attr('placeholder',oldScene);
                 $('#comment0').val('');
                 $('#comment0').attr('placeholder',oldComment);
-                $('.modal-title').html('シーンの追加');
+                $('.modal-title').html('シーンの追加<button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button>');
                 $('#sceneEditSubmit').val('追加');
             }
             $('#ido0').val(oldLat);
@@ -578,7 +578,7 @@ $(function(){/////////////////////シーン更新
             }
             if($('#editPhotoSpotSetArea0').length){
                 var $pSS = $('#editPhotoSpotSetArea0');
-                $pSS.css('height','40vh');
+                //$pSS.css('height','40vh');
         //////////////////////////////////////////////
                 mapInit();
         ///////////////////////////
@@ -704,7 +704,7 @@ $(function(){///アバター画像変更サムネイル
 $(function(){///シーン登録グーグルマップ
     if($('#createPhotoSpotSetArea0').length){
         var $pSS = $('#createPhotoSpotSetArea0');
-        $pSS.css('height','40vh');
+        //$pSS.css('height','40vh');
         mapInit();
         function mapInit() {//
         if($('#ido0').val()!="" && $('#keido0').val()!=""){

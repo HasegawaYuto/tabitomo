@@ -30,7 +30,7 @@
                     data-publish="{{$scene->publish}}"
                     data-firstday="{{$scene->firstday}}"
                     data-lastday="{{$scene->lastday}}"
-                    data-editstyle="fix">編集</button>
+                    data-editstyle="fix"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     @include('parts.delete_button',['scene'=>$scene])
                   @else
                     @include('parts.favorite_scene_button',['scene'=>$scene])
@@ -74,7 +74,7 @@
                     </div>
                     <input type="hidden" value="{{$scene->lat}}" id="googlemapLat{{$key}}" />
                     <input type="hidden" value="{{$scene->lng}}" id="googlemapLng{{$key}}" />
-                    <div class="googlemapSpot col-xs-12" style="height:25vh;" id="googlemapSpotID{{$key}}"></div>
+                    <div class="googlemapSpot googlemapSizeM" id="googlemapSpotID{{$key}}"></div>
                     <div id="demo{{$key}}" class="collapse col-xs-12">
                     <div class="col-xs-12">
                         <label>日付</label>

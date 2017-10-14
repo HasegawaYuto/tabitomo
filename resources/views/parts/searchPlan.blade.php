@@ -16,7 +16,7 @@
     <div class="panel-heading">
         探す
     </div>
-    <ul class="nav nav-pills nav-stacked tabArea">
+    <ul class="nav nav-pills tabArea">
         <li class="active"><a href="#tab1" data-toggle="tab">ワード</a></li>
         <li><a href="#tab2" data-toggle="tab">期日</a></li>
         <li><a href="#tab3" data-toggle="tab">地域</a></li>
@@ -140,7 +140,7 @@
               <input type="hidden" name="lat" id="centerLat" value="0">
               <input type="hidden" name="lng" id="centerLng" value="0">
               <input type="hidden" name="radius" id="circleRadius" value="0">
-              <div id="searchMap"></div>
+              <div id="searchMap" class="col-xs-12"></div>
             </div>
         </div>
         <div class="tab-pane" id="tab4">

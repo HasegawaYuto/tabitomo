@@ -13,7 +13,7 @@
 <div class="container">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
-    <div class="col-md-6">
+    <div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
         <div class="panel panel-info">
             <div class="panel panel-heading text-center">
                 <i class="fa fa-camera fa-fw" aria-hidden="true"></i>マイログ
@@ -107,9 +107,9 @@
                         <label>期間</label>
                         @if($scene_id==1)
                             <div class="form-group form-inline">
-                                {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday0','style'=>'width:40%;']) !!}
+                                {!! Form::text('firstday',$today,['class'=>'form-control datepicker','id'=>'firstday0']) !!}
                                 <label>～</label>
-                                {!! Form::text('lastday',$today,['class'=>'form-control datepicker','id'=>'lastday0','style'=>'width:40%;']) !!}
+                                {!! Form::text('lastday',$today,['class'=>'form-control datepicker','id'=>'lastday0']) !!}
                             </div>
                         @else
                             <div class="form-group form-inline">
@@ -136,7 +136,12 @@
                               <label>非公開</label>
                         </div>
                         <div class="form-group">
-                              {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*']) !!}
+                            <label>
+                            <span class="btn btn-default">
+                            画像選択
+                              {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*','style'=>'display:none;']) !!}
+                             </span>
+                             </label>
                         </div>
                         <div id="imageThumbnailField0" class="col-xs-12 imageThumbnailField">
                         </div>
@@ -155,7 +160,7 @@
                             @else
                                 {!! Form::hidden('mapzoom', null, ['id' => 'mapzoom0']) !!}
                             @endif
-                              <div id="createPhotoSpotSetArea0" class="col-xs-12 photoSpotSetArea">
+                              <div id="createPhotoSpotSetArea0" class="photoSpotSetArea">
                               </div>
                             <!--/div-->
                         </div>

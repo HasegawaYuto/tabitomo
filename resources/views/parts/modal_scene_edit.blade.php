@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-          <h4 class="modal-title">シーンの編集</h4>
+          <h4 class="modal-title">シーンの編集<button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button></h4>
       </div>
       <div class="modal-body">
           {!! Form::open(['route'=>['edit_scene','id'=>'USERID','title_id'=>'TITLEID','scene_id'=>'SCENEID'],'files'=>'true','id'=>'myLogForm0','class'=>'myLogForm']) !!}
@@ -37,7 +37,12 @@
                 <label>非公開</label>
           </div>
           <div class="form-group">
-                {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*']) !!}
+                <label>
+                <span class="btn btn-default">
+                  追加画像選択
+                {!! Form::file('image[]',['multiple'=>'multiple','accept'=>'image/*','style'=>'display:none;']) !!}
+                </span>
+                </label>
           </div>
           <div id="imageThumbnailField0" class="col-xs-12 imageThumbnailField">
           </div>
@@ -47,11 +52,12 @@
                   {!! Form::hidden('spotNS', 30, ['id' => 'ido0']) !!}
                   {!! Form::hidden('spotEW', 135, ['id' => 'keido0']) !!}
                   {!! Form::hidden('mapzoom', 8, ['id' => 'mapzoom0']) !!}
-                <div id="editPhotoSpotSetArea0" class="col-xs-12 photoSpotSetArea">
+                <div>
+                <div id="editPhotoSpotSetArea0" class="photoSpotSetArea">
                 </div>
-              <!--/div-->
+                </div>
           </div>
-          <div class="form-group">
+          <div class="form-group clearfix">
               <label>おすすめ度</label>
               {!! Form::hidden('score',2,['id'=>'oldScore']) !!}
               <div id="editRateField0" class="rateField">

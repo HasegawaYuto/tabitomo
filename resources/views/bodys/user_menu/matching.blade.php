@@ -4,7 +4,7 @@
 <div class="container-fluid">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
-    <div class="col-md-6">
+    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-6">
         <div class="panel panel-info">
             <div class="panel-heading text-center">
                 <i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング
@@ -44,7 +44,7 @@
                       {!!Form::submit('削除',['class'=>'btn btn-xs btn-danger'])!!}
                       {!!Form::close()!!}
                       <div class="wrap col-xs-12 Info">{{$recruitment->contents}}</div>
-                      <div class="recruitmentMap" id="recruitmentMap{{$key}}" style="width:80%;height:130px;"></div>
+                      <div class="recruitmentMap recruitmentmapSpot" id="recruitmentMap{{$key}}"></div>
                       <input type="hidden" value="{{$recruitment->lat}}" id="recruitmentLat{{$key}}">
                       <input type="hidden" value="{{$recruitment->lng}}" id="recruitmentLng{{$key}}">
                       <input type="hidden" value="{{$recruitment->radius}}" id="recruitmentRadius{{$key}}">

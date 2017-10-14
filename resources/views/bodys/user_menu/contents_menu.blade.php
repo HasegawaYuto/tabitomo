@@ -6,7 +6,7 @@
     }
     $url = 'url("' . $src . '")';
 ?>
-<div class="col-md-3">
+<div class="col-sm-3 col-md-3 col-xs-6 col-lg-3 hidden-xs">
 <div class="text-left panel panel-info">
   <div class="panel-heading overCut">
       @if($user->user_id != Auth::user()->id)
@@ -15,8 +15,8 @@
       <i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>{{$user->nickname or '未設定'}}
   </div>
   <div class="panel-body text-center">
-    <div id="menuavatarBeforeChange">
-        <div id="menuavatarBeforeChangeArea" class="img-circle lazyload" style="background-image:{{$url}};">
+    <div id="menuavatarOuter">
+        <div id="menuavatar" class="img-circle lazyload" style="background-image:{{$url}};">
         </div>
     </div>
   </div>
