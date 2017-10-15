@@ -22,6 +22,11 @@
             {!! Form::close() !!}
 
             <p>ユーザー登録がまだの人は {!! link_to_route('signup.get', 'こちら') !!}から</p>
+            
+            <p>他のサービスのログイン情報を利用する</p>
+            <a class="btn btn-block btn-social btn-facebook" href="auth/login/facebook">
+                <span class="fa fa-facebook"></span> Sign in with Facebook
+            </a>
         </div>
     </div>
 @endsection

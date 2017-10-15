@@ -24,6 +24,9 @@ Route::get('logout', 'Auth\AuthController@getLogout')->name('logout.get');
 Route::get('login','Auth\AuthController@getLogin')->name('login.get');
 Route::post('/login','Auth\AuthController@postLogin')->name('login.post');
 
+//FACEBOOKログイン
+Route::get('/auth/login/facebook', 'Auth\SocialController@getFacebookAuth');
+Route::get('/auth/facebook/callback', 'Auth\SocialController@getFacebookAuthCallback');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/newprofilecreate','PageController@newProfileCreate');
@@ -58,9 +61,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('mylog','PageController@showUserItems')->name('show_user_items');
         Route::post('mylog/creating','ItemPostController@createItems')->name('create_items');
         Route::get('mylog/title/{title_id}','PageController@showTitle')->name('show_title');
+        /*
         Route::get('mylog/title/',function($id){
             return redirect('user/' . $id .'/mylog');
         });
+        */
         Route::post('mylog/title/{title_id}/{scene_id}/favorite','ItemPostController@favoriteScene')->name('favorite_scene');
         Route::post('mylog/title/{title_id}/{scene_id}/unfavorite','ItemPostController@unfavoriteScene')->name('unfavorite_scene');
         Route::post('mylog/title/{title_id}/favorite','ItemPostController@favoriteTitle')->name('favorite_title');
