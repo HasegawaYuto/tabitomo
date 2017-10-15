@@ -87,7 +87,7 @@
             </div>
             <div class="col-xs-12 col-sm-4">
                 <label>おすすめ</label><br>
-                <div id="showRatyAveDiv" class="showRatyAve">
+                <div id="showRatyAveDiv" class="showRatyAve text-center">
                     {{(int)($scoreAve*2)/2}}
                     @if($scoreAve !="")
                         <input type="hidden" value="{{$scoreAve}}" id="showRatyAve" />

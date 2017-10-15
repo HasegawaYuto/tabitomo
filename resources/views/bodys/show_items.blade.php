@@ -55,7 +55,7 @@
                     @else
                         <div class="lazyload itemAvatar img-circle" data-bg="{{asset('noimage.png')}}"></div>
                     @endif
-                    {{$user[$scene->user_id]->nickname!=""?$user[$scene->user_id]->nickname:"未設定"}}
+                    <p class="smallp">{{$user[$scene->user_id]->nickname!=""?$user[$scene->user_id]->nickname:"未設定"}}</p>
                   </div>
                     <div class="col-xs-12">
                     @if(isset($thumb[$key]->data))

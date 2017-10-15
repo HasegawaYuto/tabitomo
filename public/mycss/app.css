@@ -1,6 +1,19 @@
 body {
     padding-top: 70px;
 }
+#avatarImageS{
+    height:50px;
+    width:50px;
+    position:fixed;
+    z-index:1;
+    top:50vh;
+    left:0;
+    background-repeat:no-repeat;
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    -o-background-size:cover;
+    -ms-background-size:cover;
+}
 #avatarBeforeChange{
     padding:100px 0 0;
     position:relative;
@@ -15,6 +28,11 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    background-repeat:no-repeat;
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    -o-background-size:cover;
+    -ms-background-size:cover;
 }
 #avatarAfterChangeArea{
     height:100%;
@@ -24,6 +42,11 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    background-repeat:no-repeat;
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    -o-background-size:cover;
+    -ms-background-size:cover;
 }
 #avatarAfterChange{
     padding:100px 0 0;
