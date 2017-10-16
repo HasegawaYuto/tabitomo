@@ -23,7 +23,7 @@
         @endif
       </div>
       <div class="panel-body">
-      @if(Auth::user()->id == $user->user_id)
+      @if(Auth::user()->id == $user->id)
         <table class="table table-striped">
           <tr>
             <td class="text-center">
@@ -40,7 +40,7 @@
                 </div>
                 <button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile0">編集</button>
                 <div id="userprofile0" class="collapse">
-                    {!! Form::open(['route'=>['edit_user_profile',$user->user_id],'files'=>'true','id'=>'avatarForm'])!!}
+                    {!! Form::open(['route'=>['edit_user_profile',$user->id],'files'=>'true','id'=>'avatarForm'])!!}
                     {!! csrf_field() !!}
                     <div class="form-group">
                       <label>
@@ -60,7 +60,7 @@
             <td class="text-left"><p><b>ニックネーム</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile1">編集</button></p>
               <p class="text-center overCut">{{$user->nickname or '未設定'}}</p>
               <div id="userprofile1" class="collapse text-center">
-                  {!! Form::open(['route'=>['edit_user_profile',$user->user_id]])!!}
+                  {!! Form::open(['route'=>['edit_user_profile',$user->id]])!!}
                   <div class="form-group">
                       {!! Form::text('nickname',null,['class'=>'form-control']) !!}
                   </div>
@@ -84,7 +84,7 @@
             {{isset($user->birthday) ? $age . '歳' : '未設定'}}</p>
             <div id="userprofile2" class="collapse text-center">
                 <label class="text-left">生年月日</label><br>
-                {!! Form::open(['route'=>['edit_user_profile',$user->user_id]])!!}
+                {!! Form::open(['route'=>['edit_user_profile',$user->id]])!!}
                 <div class="form-group form-inline">
                     <select name="year" id="yearSelectBox" class="form-control">
                       @for($year=$thisyear;$year>=1900;$year--)
@@ -123,7 +123,7 @@
             <td class="text-left"><p><b>性別</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile3">編集</button></p>
             <p class="text-center">{{$user->sex or '未設定'}}</p>
               <div id="userprofile3" class="collapse text-center">
-                  {!! Form::open(['route'=>['edit_user_profile',$user->user_id]])!!}
+                  {!! Form::open(['route'=>['edit_user_profile',$user->id]])!!}
                   <div class="form-group form-inline">
                       <input {{ isset($user->sex) && $user->sex == "男性" ? 'checked="checked"' : ''}} name="sex" type="radio" value="男性">
                       <label>男性</label>
@@ -141,7 +141,7 @@
             <td class="text-left"><p><b>エリア</b>&ensp;<button type="button" class="btn btn-warning btn-xs" data-toggle="collapse" data-target="#userprofile4">編集</button></p>
             <p class="text-center">{{$user->area or '未設定'}}</p>
               <div id="userprofile4" class="collapse text-center">
-                  {!! Form::open(['route'=>['edit_user_profile',$user->user_id]])!!}
+                  {!! Form::open(['route'=>['edit_user_profile',$user->id]])!!}
                   <div class="form-group form-inline">
                       {!! Form::select('pref_id',$prefs,old('pref_id'),['class'=>'form-control','id'=>'prefselect']) !!}
                       <select id="cityselect" class="form-control" name="city_id" disabled>

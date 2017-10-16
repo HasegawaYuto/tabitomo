@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Pref;
 use App\Location;
-use App\Profile;
+use App\Profile,App\User;
 use App;
 use Carbon\Carbon;
 
@@ -65,8 +65,8 @@ class UserOptionController extends Controller
      */
     public function edit(Request $request , $id)
     {
-        $profile = Profile::firstOrNew(['user_id'=> $id]);
-        $profile['user_id']=$id;
+        $profile = User::find($id);//Profile::firstOrNew(['user_id'=> $id]);
+        //$profile['user_id']=$id;
         if(\Input::hasFile('avatar')){
             if (!isset($_FILES['avatar']['error']) || !is_int($_FILES['avatar']['error'])) {
                 return false;

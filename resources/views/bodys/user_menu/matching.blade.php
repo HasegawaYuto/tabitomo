@@ -51,7 +51,7 @@
             @if(isset($candidateusers[$key][0]))
             <div style="margin-top:10px;">【マッチング】</div>
             @foreach($candidateusers[$key] as $kkey => $candidateuser)
-                <a href="{{route('show_user_profile',['id'=>$candidateuser->user_id])}}">
+                <a href="{{route('show_user_profile',['id'=>$candidateuser->id])}}">
                 <div class="candidateImageOuter black text-center overCut">
                     @include('parts.avatar',['user'=>$candidateuser,'class'=>'CandidateImage'])
                 {{$candidateuser->nickname!=""?$candidateuser->nickname:"no name"}}

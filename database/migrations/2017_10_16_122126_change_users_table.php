@@ -22,6 +22,11 @@ class ChangeUsersTable extends Migration
             $table->string('mime')->nullable();
             $table->binary('data')->nullable();
             $table->string('password', 60)->nullable()->change();
+            $table->integer('facebook_id')->unsigned()->nullable();
+            $table->integer('twetter_id')->unsigned()->nullable();
+            $table->integer('google_id')->unsigned()->nullable();
+            $table->integer('line_id')->unsigned()->nullable();
+            $table->integer('yahoo_id')->unsigned()->nullable();
         });
     }
 

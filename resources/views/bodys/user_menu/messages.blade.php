@@ -11,10 +11,10 @@
             <i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ
         </div>
         <div class="panel-body">
-            @if(Auth::user()->id == $user->user_id)
+            @if(Auth::user()->id == $user->id)
                 @if(isset($messageUsers[0]))
                     @foreach($messageUsers as $key => $messageUser)
-                        <a data-partner="{{$messageUser->user_id}}" data-toggle="modal" data-target="#messageboad" data-messageid="{{$key}}">
+                        <a data-partner="{{$messageUser->id}}" data-toggle="modal" data-target="#messageboad" data-messageid="{{$key}}">
                         <div class="messangerImageOuter text-center black overCut">
                         @include('parts.avatar',['user'=>$messageUser,'class'=>'messangerImage'])
                       {{$messageUser->nickname!=""?$messageUser->nickname:"no name"}}
@@ -32,7 +32,7 @@
                     メッセージはありません
                 @endif
             @else
-            <button data-partner="{{$user->user_id}}" class="btn btn-xs btn-success" type="button" data-toggle="modal" data-target="#messageboad">メッセージ送信</button>
+            <button data-partner="{{$user->id}}" class="btn btn-xs btn-success" type="button" data-toggle="modal" data-target="#messageboad">メッセージ送信</button>
             @endif
         </div>
     </div>

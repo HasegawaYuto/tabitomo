@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use App\User;
 
 class SocialController extends Controller
 {
@@ -89,14 +92,33 @@ class SocialController extends Controller
     public function getFacebookAuth() {
         return Socialite::driver('facebook')->redirect();
     }
-    public function getFacebookAuthCallback() {
+    
+    public function getFacebookCallback() {
         try {
-            $fuser = Socialite::driver('facebook')->user();
+            $fuser = Socialite::driver('facebook')->fields([
+                    'name', 
+                    'email', 
+                    'gender', 
+                    'id',
+                    'avatar',
+                ])->user();
         } catch (\Exception $e) {
-            return redirect("/");
+            return redirect("/login");
         }
         if ($fuser) {
-            dd($fuser);
+            $email = $fuser->getEmail();
+            $name = $fuser['name'];
+            //$nickname = $fuser['nickname'];
+            //$avatar = $fuser['avatar'];
+            $id = $fuser['id'];
+            $loginuser=User::firstOrCreate(['email'=>$email],[
+                        'name'=>$name,
+                        //'nickname'=>$nickname,
+                        //'snsImagePath'=>$avatar,
+                        'facebook_id'=>$id
+                        ]);
+            \Auth::login($loginuser);
+            return redirect("/");
         } else {
             return 'something went wrong';
         }

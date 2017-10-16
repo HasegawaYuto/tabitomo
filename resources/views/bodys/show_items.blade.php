@@ -98,12 +98,12 @@
                             <ul class="list-group">
                                 @foreach($userComments[$key] as $kkey => $userComment)
                                     <li class="list-group-item">
-                                    <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->user_id])}}" class="black">
+                                    <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->id])}}" class="black">
                                     <div class="overCut" style="width:100%;">
                                         @include('parts.avatar',['user'=>$commentUser[$key][$kkey],'class'=>'CommentUserAvatar'])
                                     {{$commentUser[$key][$kkey]->nickname or '未設定'}}
                                     @if(Auth::check())
-                                    @if(Auth::user()->id == $commentUser[$key][$kkey]->user_id || Auth::user()->id==$scene->user_id)
+                                    @if(Auth::user()->id == $commentUser[$key][$kkey]->id || Auth::user()->id==$scene->user_id)
                                         @include('parts.comment_delete_button',['scene'=>$scene,'commentUser'=>$commentUser[$key][$kkey],'comment'=>$userComment])
                                     @endif
                                     @endif

@@ -28,7 +28,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $guard = ['id','reminder_token','created_at','updated_at'];
+    protected $guarded = ['id','remember_token','created_at','updated_at'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -47,11 +47,11 @@ class User extends Model implements AuthenticatableContract,
     public function scene($titleid,$sceneid){
         return $this->hasMany(Mylog::class)->where('title_id',$titleid)->where('scene_id',$sceneid);
     }
-
-    public function profile(){
-        return $this->hasOne(Profile::class);
-    }
-
+    
+    //public function profile(){
+    //    return $this->hasOne(Profile::class);
+    //}
+    
     public function favors(){
         return $this->belongsToMany(Mylog::class,'mylog_user','user_id','scene_id')->withTimestamps();
     }

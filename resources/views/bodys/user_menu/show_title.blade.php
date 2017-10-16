@@ -7,7 +7,7 @@
 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-6">
     <div class="panel panel-info">
         <div class="panel-heading titleStringL">
-                @if(Auth::user()->id == $user->user_id)
+                @if(Auth::user()->id == $user->id)
                   <?php
                         //$today = Carbon\Carbon::now()->format('Y年m月d日');
                         $oldfirstday = new Carbon\Carbon($title->firstday);
@@ -38,7 +38,7 @@
                 @endif
                 {{$title->title}}
 
-@if(Auth::user()->id == $user->user_id)
+@if(Auth::user()->id == $user->id)
 <div class="modal fade" id="fixTitle">
   <div class="modal-dialog">
     <div class="modal-content black">
@@ -114,7 +114,7 @@
                 <div class="col-xs-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">
-                          @if(Auth::user()->id == $user->user_id)
+                          @if(Auth::user()->id == $user->id)
                             <button type="button" class="btn btn-warning btn-xs"  data-toggle="modal" data-target="#fixScene0" data-scene="{{$scene->scene}}"
                             data-title="{{$scene->title}}"
                             data-lat="{{$scene->lat}}"
@@ -191,7 +191,7 @@
                                                 @include('parts.avatar',['user'=>$commentUser[$key][$kkey],'class'=>'CommentUserAvatarInTitle'])
                                             {{$commentUser[$key][$kkey]->nickname or '未設定'}}
                                             @if(Auth::check())
-                                            @if(Auth::user()->id == $commentUser[$key][$kkey]->user_id || Auth::user()->id==$scene->user_id)
+                                            @if(Auth::user()->id == $commentUser[$key][$kkey]->id || Auth::user()->id==$scene->user_id)
                                                 @include('parts.comment_delete_button',['scene'=>$scene,'commentUser'=>$commentUser[$key][$kkey],'comment'=>$userComment])
                                             @endif
                                             @endif

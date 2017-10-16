@@ -94,14 +94,6 @@ class PageController extends Controller
         //
     }
 
-    public function newProfileCreate(){
-        $user_id = \Auth::user()->id;
-        $profile = Profile::firstOrNew(['user_id'=> $user_id]);
-        $profile->user_id = $user_id;
-        $profile->save();
-        return redirect('/');
-    }
-
     public function showItemsSearch(Request $request){
       $keywordNotExists = $request->keywords=="";
       $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
@@ -164,7 +156,7 @@ class PageController extends Controller
               $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID)->profile;
           }
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
-          $data['user'][$scene->user_id]=Profile::select('data','mime','nickname')->where('user_id',$scene->user_id)->first();
+          $data['user'][$scene->user_id]=User::find($scene->user_id);
           $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->select('id')
@@ -194,7 +186,7 @@ class PageController extends Controller
                                       ->orderBy('created_at','desc')
                                       ->paginate(30);
       foreach($data['recruitments'] as $key => $recruitment){
-          $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
+          $data['recruituser'][$key] = User::find($recruitment->user_id);
       }
       return view('bodys.show_guides',$data);
     }
@@ -238,19 +230,29 @@ class PageController extends Controller
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
       if(isset($request->sex)){
-          $ids = Profile::where('sex',$request->sex)->whereNotNull('sex')->lists('user_id');
+          $ids = User::where('sex',$request->sex)->whereNotNull('sex')->lists('id');
           $recruitments=$recruitments->whereIn('user_id',$ids);
       }
-      if(isset($request->age)){
-          $dt = Carbon::today()->addYear($request->age)->format('Y-m-d');
-          $ids = Profile::where('birthday',$request->agetype,$dt)->whereNotNull('birthday')->lists('user_id');
+      if($request->age!=0){
+          $ages = $request->age+1;
+          $dt = Carbon::today()->subYear($request->age)->format('Y-m-d');
+          $dts = Carbon::today()->subYear($ages)->format('Y-m-d');
+          if($request->agetype=='='){
+              $ids = User::where('birthday','>=',$dts)
+                          ->where('birthday','<=',$dt)
+                          ->whereNotNull('birthday')->lists('id');
+          }elseif($request->agetype=='>='){
+              $ids = User::where('birthday',$request->agetype,$dts)->whereNotNull('birthday')->lists('id');
+          }else{
+              $ids = User::where('birthday',$request->agetype,$dt)->whereNotNull('birthday')->lists('id');
+          }
           $recruitments=$recruitments->whereIn('user_id',$ids);
       }
       $recruitments = $recruitments->orderBy('created_at','desc')
                        ->paginate(30);
       $data['recruitments']=$recruitments;
       foreach($data['recruitments'] as $key => $recruitment){
-          $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
+          $data['recruituser'][$key] = User::find($recruitment->user_id);
       }
       return view('bodys.show_guides',$data);
     }
@@ -266,7 +268,7 @@ class PageController extends Controller
                           ->orderBy('created_at','desc')
                           ->paginate(30);
       foreach($data['recruitments'] as $key => $recruitment){
-          $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
+          $data['recruituser'][$key] = User::find($recruitment->user_id);
       }
       return view('bodys.show_travelers',$data);
     }
@@ -309,6 +311,25 @@ class PageController extends Controller
           $recruitments = $recruitments
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
+      if(isset($request->sex)){
+          $ids = User::where('sex',$request->sex)->whereNotNull('sex')->lists('id');
+          $recruitments=$recruitments->whereIn('user_id',$ids);
+      }
+      if($request->age!=0){
+          $ages = $request->age+1;
+          $dt = Carbon::today()->subYear($request->age)->format('Y-m-d');
+          $dts = Carbon::today()->subYear($ages)->format('Y-m-d');
+          if($request->agetype=='='){
+              $ids = User::where('birthday','>=',$dts)
+                          ->where('birthday','<=',$dt)
+                          ->whereNotNull('birthday')->lists('id');
+          }elseif($request->agetype=='>='){
+              $ids = User::where('birthday',$request->agetype,$dts)->whereNotNull('birthday')->lists('id');
+          }else{
+              $ids = User::where('birthday',$request->agetype,$dt)->whereNotNull('birthday')->lists('id');
+          }
+          $recruitments=$recruitments->whereIn('user_id',$ids);
+      }
       $recruitments = $recruitments->orderBy('created_at','desc')
                        ->paginate(30);
       $data['recruitments']=$recruitments;
@@ -344,10 +365,10 @@ class PageController extends Controller
       foreach($scenes as $key => $scene){
           $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
           foreach($data['userComments'][$key] as $kkey => $userComment){
-              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID)->profile;
+              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
-          $data['user'][$scene->user_id]=Profile::select('data','mime','nickname')->where('user_id',$scene->user_id)->first();
+          $data['user'][$scene->user_id]=User::find($scene->user_id);
           $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->select('id')
@@ -368,7 +389,7 @@ class PageController extends Controller
 
     public function showUserProfile($id){
       $user = User::find($id);
-      $data['user']=$user->profile;
+      $data['user']=$user;
 
       //$locations = Location::all();
       $data['locations']=Location::all();
@@ -389,7 +410,7 @@ class PageController extends Controller
 
     public function showUserMessages($id){
       $user = User::find($id);
-      $data['user']=$user->profile;
+      $data['user']=$user;
       if(\Auth::user()->id==$id){
           $messages = \DB::table('messages')
                             ->where('user_id',$id)
@@ -410,7 +431,7 @@ class PageController extends Controller
           }
           if(isset($sortIds[0])){
               foreach($sortIds as $sortId){
-                  $data['messageUsers'][]=User::find($sortId)->profile;
+                  $data['messageUsers'][]=User::find($sortId);
                   $data['sentmessages'][]=$user->getMessages($sortId)->where('user_id',$sortId)->orderBy('created_at','desc')->get();
                   $temppp=$user->getMessages($sortId)->orderBy('created_at','desc')->get();
                   $data['messages'][]=$temppp;
@@ -460,7 +481,7 @@ class PageController extends Controller
               $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
           }
       }
-      $data['user']=$user->profile;
+      $data['user']=$user;
       $data['titles']=$titles;
       return view('bodys.user_menu.items',$data);
     }
@@ -469,7 +490,7 @@ class PageController extends Controller
 
     public function showUserFavorites($id){
       $user = User::find($id);
-      $data['user']=$user->profile;
+      $data['user']=$user;
       $sceneids = $user->favors()->lists('mylog_user.scene_id');
       $scenes = Mylog::select('title_id','scene_id','user_id','scene','title','id')
                                       ->whereIn('id',$sceneids)
@@ -485,15 +506,15 @@ class PageController extends Controller
       }
       $followingids = User::find($id)->follow()->lists('follow_id');
       $followerids = User::find($id)->follower()->lists('user_id');
-      $data['following'] = Profile::whereIn('user_id',$followingids)
-                                    ->whereNotIn('user_id',$followerids)
+      $data['following'] = User::whereIn('id',$followingids)
+                                    ->whereNotIn('id',$followerids)
                                     ->paginate(10);
-      $data['followed'] = Profile::whereIn('user_id',$followerids)
-                                  ->whereNotIn('user_id',$followingids)
+      $data['followed'] = User::whereIn('id',$followerids)
+                                  ->whereNotIn('id',$followingids)
                                   ->paginate(10);
                                   //->get(['user_id','data','mime']);
-      $data['mutual'] = Profile::whereIn('user_id',$followingids)
-                                ->whereIn('user_id',$followerids)
+      $data['mutual'] = User::whereIn('id',$followingids)
+                                ->whereIn('id',$followerids)
                                 ->paginate(10);
       $data['scenes']=$scenes;
       return view('bodys.user_menu.favorites',$data);
@@ -506,11 +527,11 @@ class PageController extends Controller
           return redirect()->back();
       }
       $user=User::find($id);
-      $data['user']=$user->profile;
+      $data['user']=$user;
       $data['recruitments']=$user->guestguide()->orderBy('created_at','desc')->paginate(15);
       foreach($data['recruitments'] as $key => $recruitment){
           $candidateuserids = Guestguide::find($recruitment->id)->recruited()->lists('user_id');
-          $data['candidateusers'][$key]=Profile::whereIn('user_id',$candidateuserids)->get();
+          $data['candidateusers'][$key]=User::whereIn('id',$candidateuserids)->get();
           $data['candidatecnt'][$key]=Guestguide::find($recruitment->id)->recruited()->count();
       }
       return view('bodys.user_menu.matching',$data);
@@ -561,7 +582,7 @@ class PageController extends Controller
       foreach($scenes as $key => $scene){
           $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
           foreach($data['userComments'][$key] as $kkey => $userComment){
-              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID)->profile;
+              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
           $thumbID = $user->scene($title_id,$scene->scene_id)
@@ -581,7 +602,7 @@ class PageController extends Controller
               $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
           }
       }
-      $data['user']=$user->profile;
+      $data['user']=$user;
       $data['thisyear']=Carbon::now()->year;
       return view('bodys.user_menu.show_title',$data);
     }
