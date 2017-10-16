@@ -185,18 +185,10 @@
                                     @if(isset($userComments[$key]))
                                     <ul class="list-group">
                                         @foreach($userComments[$key] as $kkey => $userComment)
-                                            <?php
-                                                $mime = $commentUser[$key][$kkey]->mime;
-                                                $dataImage = base64_encode($commentUser[$key][$kkey]->data);
-                                            ?>
                                             <li class="list-group-item">
                                             <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->user_id])}}" class="black">
                                             <div style="width:100%;">
-                                            @if(isset($dataImage))
-                                                <div class="CommentUserAvatarInTitle lazyload img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
-                                            @else
-                                                <div class="CommentUserAvatarInTitle lazyload img-circle" data-bg="{{asset('noimage.png')}}"></div>
-                                            @endif
+                                                @include('parts.avatar',['user'=>$commentUser[$key][$kkey],'class'=>'CommentUserAvatarInTitle'])
                                             {{$commentUser[$key][$kkey]->nickname or '未設定'}}
                                             @if(Auth::check())
                                             @if(Auth::user()->id == $commentUser[$key][$kkey]->user_id || Auth::user()->id==$scene->user_id)

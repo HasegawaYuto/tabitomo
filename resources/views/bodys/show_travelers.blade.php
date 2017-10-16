@@ -25,15 +25,7 @@
                 <?php $theuser=$recruituser[$key]; ?>
                 <a href="{{route('show_user_profile',['id'=>$theuser->user_id])}}" class="black">
                 <div class="GuideImageOuter">
-                    @if(isset($theuser->data))
-                    <?php
-                        $mime = $theuser->mime;
-                        $dataImage = base64_encode($theuser->data);
-                    ?>
-                    <div class="GuideImage lazyload img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
-                    @else
-                    <div class="GuideImage lazyload img-circle" data-bg="{{asset('noimage.png')}}"></div>
-                    @endif
+                    @include('parts.avatar',['user'=>$theuser,'class'=>'GuideImage'])
                 </div>
                 <div class="GuideProfile black overCut">
                 {{$theuser->nickname==""?'ニックネーム未設定':$theuser->nickname}}<br>

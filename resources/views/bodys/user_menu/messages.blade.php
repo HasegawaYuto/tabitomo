@@ -14,27 +14,19 @@
             @if(Auth::user()->id == $user->user_id)
                 @if(isset($messageUsers[0]))
                     @foreach($messageUsers as $key => $messageUser)
+                        <a data-partner="{{$messageUser->user_id}}" data-toggle="modal" data-target="#messageboad" data-messageid="{{$key}}">
                         <div class="messangerImageOuter text-center black overCut">
-                        @if(isset($messageUser->data))
-                            <?php
-                                $mime = $messageUser->mime;
-                                $dataImage = base64_encode($messageUser->data);
-                            ?>
-                            <div class="lazyload messangerImage img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
-                        @else
-                            <div class="lazyload messangerImage img-circle" data-bg="{{asset('noimage.png')}}"></div>
-                        @endif
+                        @include('parts.avatar',['user'=>$messageUser,'class'=>'messangerImage'])
                       {{$messageUser->nickname!=""?$messageUser->nickname:"no name"}}
                       <div>
                       @if(isset($sentmessages[$key][0]) &&$sentmessages[$key][0]->status == 0)
-                          <button data-partner="{{$messageUser->user_id}}"
-                             class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#messageboad">新着あり</button>
+                          <button class="btn btn-xs btn-danger " type="button" id="newMessageHas{{$key}}">新着あり</button>
                       @else
-                          <button data-partner="{{$messageUser->user_id}}"
-                            class="btn btn-xs btn-default" type="button" data-toggle="modal" data-target="#messageboad">新着なし</button>
+                          <button class="btn btn-xs btn-default" type="button">新着なし</button>
                       @endif
                     </div>
                       </div>
+                      </a>
                     @endforeach
                 @else
                     メッセージはありません

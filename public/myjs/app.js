@@ -204,8 +204,9 @@ $(function(){
 $(function(){///////メッセージ
     if($('#messageboad').length){
         $('#messageboad').on('show.bs.modal',function(event){
-            var button = $(event.relatedTarget);
-            var partnerid = button.data('partner');
+            var theE = $(event.relatedTarget);
+            var partnerid = theE.data('partner');
+            var messageid = theE.data('messageid');
             var urlbefore = $('#sendform').attr('action');
             var editreplace = 'message/'+partnerid+'/send';
             var urlafter = urlbefore.replace(/(message\/)(.*?)(\/send)/,editreplace);
@@ -267,10 +268,11 @@ $(function(){///////メッセージ
         $('#messageboad').on('hidden.bs.modal',function(){
             clearInterval(setTimer);
         });
-        button.html('新着なし');
-        if(button.hasClass('btn-danger')){
-            button.removeClass('btn-danger');
-            button.addClass('btn-default');
+        var badge = $('#newMessageHas'+messageid);
+        badge.html('新着なし');
+        if(badge.hasClass('btn-danger')){
+            badge.removeClass('btn-danger');
+            badge.addClass('btn-default');
         }
         });
         $('#messageSubmit').on('click',function(){
@@ -681,7 +683,7 @@ $(function(){///グーグルマップ複数表示
 });
 //////////  アバター変更時
 $(function(){///アバター画像変更サムネイル
-    if($('#avatarBeforeChangeArea').length && $('#avatarAfterChangeArea').length){
+    if($('#avatarAfterChangeArea').length){
         $('#avatarForm').on('change', 'input[type="file"]', function(e) {
             var file = e.target.files[0],
                 reader = new FileReader(),

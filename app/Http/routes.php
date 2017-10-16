@@ -25,8 +25,8 @@ Route::get('login','Auth\AuthController@getLogin')->name('login.get');
 Route::post('/login','Auth\AuthController@postLogin')->name('login.post');
 
 //FACEBOOKログイン
-Route::get('/auth/login/facebook', 'Auth\SocialController@getFacebookAuth');
-Route::get('/auth/facebook/callback', 'Auth\SocialController@getFacebookAuthCallback');
+Route::get('auth/login/facebook', 'Auth\SocialController@getFacebookAuth');
+Route::get('auth/login/facebook/callback', 'Auth\SocialController@getFacebookAuthCallback');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/newprofilecreate','PageController@newProfileCreate');

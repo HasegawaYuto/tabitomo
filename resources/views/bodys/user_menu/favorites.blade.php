@@ -49,16 +49,8 @@
                                     {!! $mutual->render() !!}
                                     @foreach($mutual as $favuser)
                                         <div class="followImage text-center">
-                                            <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
-                                            @if(isset($favuser->data))
-                                                <?php
-                                                    $mime = $favuser->mime;
-                                                    $dataImage = base64_encode($favuser->data);
-                                                ?>
-                                                <div class="lazyload favuser img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
-                                            @else
-                                                <div class="lazyload favuser img-circle" data-bg="{{asset('noimage.png')}}"></div>
-                                            @endif
+                                        <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
+                                            @include('parts.avatar',['user'=>$favuser,'class'=>'favuser'])
                                           </a>
                                         @include('parts.follow_button',['user'=>$favuser])
                                         </div>
@@ -71,15 +63,7 @@
                                     @foreach($following as $favuser)
                                         <div class="followImage text-center">
                                             <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
-                                            @if(isset($favuser->data))
-                                                <?php
-                                                    $mime = $favuser->mime;
-                                                    $dataImage = base64_encode($favuser->data);
-                                                ?>
-                                                <div class="lazyload favuser img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
-                                            @else
-                                                <div class="lazyload favuser img-circle" data-bg="{{asset('noimage.png')}}"></div>
-                                            @endif
+                                                @include('parts.avatar',['user'=>$favuser,'class'=>'favuser'])
                                           </a>
                                         @include('parts.follow_button',['user'=>$favuser])
                                         </div>
@@ -92,15 +76,7 @@
                                     @foreach($followed as $favuser)
                                         <div class="followImage text-center">
                                             <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
-                                            @if(isset($favuser->data))
-                                                <?php
-                                                    $mime = $favuser->mime;
-                                                    $dataImage = base64_encode($favuser->data);
-                                                ?>
-                                                <div class="lazyload favuser img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
-                                            @else
-                                                <div class="lazyload favuser img-circle" data-bg="{{asset('noimage.png')}}"></div>
-                                            @endif
+                                                @include('parts.avatar',['user'=>$favuser,'class'=>'favuser'])
                                           </a>
                                         @include('parts.follow_button',['user'=>$favuser])
                                         </div>

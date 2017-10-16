@@ -502,6 +502,9 @@ class PageController extends Controller
 
 
     public function showUserMatching($id){
+      if(\Auth::user()->id!=$id){
+          return redirect()->back();
+      }
       $user=User::find($id);
       $data['user']=$user->profile;
       $data['recruitments']=$user->guestguide()->orderBy('created_at','desc')->paginate(15);

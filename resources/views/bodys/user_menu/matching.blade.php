@@ -53,15 +53,7 @@
             @foreach($candidateusers[$key] as $kkey => $candidateuser)
                 <a href="{{route('show_user_profile',['id'=>$candidateuser->user_id])}}">
                 <div class="candidateImageOuter black text-center overCut">
-                @if(isset($candidateuser->data))
-                <?php
-                    $mime = $candidateuser->mime;
-                    $dataImage = base64_encode($candidateuser->data);
-                ?>
-                <div class="CandidateImage lazyload img-circle" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
-                @else
-                <div class="CandidateImage lazyload img-circle" data-bg="{{asset('noimage.png')}}"></div>
-                @endif
+                    @include('parts.avatar',['user'=>$candidateuser,'class'=>'CandidateImage'])
                 {{$candidateuser->nickname!=""?$candidateuser->nickname:"no name"}}
               </div>
                 </a>

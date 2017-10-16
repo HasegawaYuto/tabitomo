@@ -29,8 +29,7 @@
             <td class="text-center">
                 <div class="col-xs-6">
                 <div  id="avatarBeforeChange">
-                    <div id="avatarBeforeChangeArea" class="img-circle" style="background-image:{{$url}};height:100%;">
-                    </div>
+                    @include('parts.avatar',['user'=>$user,'class'=>'avatarBeforeChangeArea'])
                 </div>
                 </div>
                 <div class="col-xs-6">
@@ -160,6 +159,13 @@
         </table>
         @else
         <table class="table table-striped">
+          <tr>
+              <td>
+                  <div  id="avatarBeforeChange">
+                    @include('parts.avatar',['user'=>$user,'class'=>'avatarBeforeChangeArea'])
+                  </div>
+              </td>
+          </tr>
           <tr>
             <td class="text-left"><p><b>ニックネーム</b></p>
               <p class="text-center overCut">{{$user->nickname or '未設定'}}</p>
