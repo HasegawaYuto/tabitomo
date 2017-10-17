@@ -9,10 +9,6 @@ use App\Http\Controllers\Controller;
 use App\User,App\Guestguide;
 use App;
 
-function replaceDate($DateString){
-      $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
-      return $theday;
-}
 
 class GuestGuideController extends Controller
 {
@@ -21,6 +17,11 @@ class GuestGuideController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function replaceDate($DateString){
+      $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
+      return $theday;
+    }
+     
     public function index()
     {
         //
@@ -97,7 +98,7 @@ class GuestGuideController extends Controller
       $cnt = $request->cnt;
       for($i=0;$i<=$cnt;$i++){
           if(isset($request->limitdate)){
-              $data['limitdate']=replaceDate($request->limitdate);
+              $data['limitdate']=$this->replaceDate($request->limitdate);
           }
           if(isset($request->contents)){
               $data['contents']=$request->contents;
@@ -115,7 +116,7 @@ class GuestGuideController extends Controller
         $cnt = $request->cnt;
         for($i=0;$i<=$cnt;$i++){
             if(isset($request->limitdate)){
-                $data['limitdate']=replaceDate($request->limitdate);
+                $data['limitdate']=$this->replaceDate($request->limitdate);
             }
             if(isset($request->contents)){
                 $data['contents']=$request->contents;

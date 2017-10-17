@@ -153,7 +153,7 @@ class PageController extends Controller
       foreach($scenes as $key => $scene){
           $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
           foreach($data['userComments'][$key] as $kkey => $userComment){
-              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID)->profile;
+              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
           $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
           $data['user'][$scene->user_id]=User::find($scene->user_id);
@@ -334,7 +334,7 @@ class PageController extends Controller
                        ->paginate(30);
       $data['recruitments']=$recruitments;
       foreach($data['recruitments'] as $key => $recruitment){
-          $data['recruituser'][$key] = User::find($recruitment->user_id)->profile;
+          $data['recruituser'][$key] = User::find($recruitment->user_id);
       }
       return view('bodys.show_travelers',$data);
     }

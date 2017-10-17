@@ -28,6 +28,14 @@ Route::post('/login','Auth\AuthController@postLogin')->name('login.post');
 Route::get('auth/login/facebook', 'Auth\SocialController@getFacebookAuth');
 Route::get('auth/login/facebook/callback', 'Auth\SocialController@getFacebookCallback');
 
+//Googleログイン
+Route::get('auth/login/google','Auth\SocialController@getGoogleAuth');
+Route::get('auth/login/google/callback','Auth\SocialController@getGoogleCallback');
+
+//Twitterログイン
+Route::get('auth/login/twitter', 'Auth\SocialController@getTwitterAuth');
+Route::get('auth/login/twitter/callback', 'Auth\SocialController@getTwitterCallback');
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/guides','PageController@showGuides')->name('show_guides');
     Route::get('/guests','PageController@showTravelers')->name('show_travelers');
@@ -46,8 +54,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
-        Route::any('message/{send_id}/send','MessageController@sendMessage')->name('send_message');
-        Route::any('message/{partner_id}/show','MessageController@loadMessage')->name('load_message');
+        Route::post('message/{send_id}/send','MessageController@sendMessage')->name('send_message');
+        Route::post('message/{partner_id}/show','MessageController@loadMessage')->name('load_message');
         Route::post('mylog/title/{title_id}/{scene_id}/delete','ItemPostController@deleteScene')->name('scene_delete');
         Route::post('mylog/title/{title_id}/delete','ItemPostController@deleteTitle')->name('title_delete');
         Route::post('mylog/title/{title_id}/edit','ItemPostController@editTitle')->name('edit_title');

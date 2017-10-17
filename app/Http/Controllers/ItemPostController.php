@@ -15,11 +15,6 @@ use App\Pref;
 use App\Profile,App\Mylog;
 use Illuminate\Support\Facades\Log;
 
-function replaceDate($DateString){
-      $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
-      return $theday;
-}
-
 class ItemPostController extends Controller
 {
     /**
@@ -27,6 +22,11 @@ class ItemPostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function replaceDate($DateString){
+      $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
+      return $theday;
+}
+     
     public function index()
     {
         //
@@ -141,13 +141,13 @@ class ItemPostController extends Controller
                     $mylog['scene'] = $request->scene;
                 }
                 if(isset($request->firstday)){
-                    $mylog['firstday'] = replaceDate($request->firstday);
+                    $mylog['firstday'] = $this->replaceDate($request->firstday);
                 }
                 if(isset($request->lastday)){
-                    $mylog['lastday'] = replaceDate($request->lastday);
+                    $mylog['lastday'] = $this->replaceDate($request->lastday);
                 }
                 if(isset($request->theday)){
-                    $mylog['theday'] = replaceDate($request->theday);
+                    $mylog['theday'] = $this->replaceDate($request->theday);
                 }
                 if(isset($request->publish)){
                     $mylog['publish'] = $request->publish;
@@ -183,13 +183,13 @@ class ItemPostController extends Controller
                 $mylog['scene'] = $request->scene;
             }
             if(isset($request->firstday)){
-                $mylog['firstday'] = replaceDate($request->firstday);
+                $mylog['firstday'] = $this->replaceDate($request->firstday);
             }
             if(isset($request->lastday)){
-                $mylog['lastday'] = replaceDate($request->lastday);
+                $mylog['lastday'] = $this->replaceDate($request->lastday);
             }
             if(isset($request->theday)){
-                $mylog['theday'] = replaceDate($request->theday);
+                $mylog['theday'] = $this->replaceDate($request->theday);
             }
             if(isset($request->publish)){
                 $mylog['publish'] = $request->publish;
@@ -210,7 +210,7 @@ class ItemPostController extends Controller
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
           //$user = Profile::where('user_id',$id)->first();
-          $data['user']=$user->profile;
+          $data['user']=$user-;
           //$data['id']=$id;
           $data['title'] = $request->title;
           $data['activetab'] = '2';
@@ -255,8 +255,8 @@ class ItemPostController extends Controller
         $changes = $user->title($title_id)->get();
         foreach($changes as $change){
               $change->update([ 'title'=>$request->NewTitle,
-                                'firstday'=>replaceDate($request->firstday),
-                                'lastday'=>replaceDate($request->lastday)
+                                'firstday'=>$this->replaceDate($request->firstday),
+                                'lastday'=>$this->replaceDate($request->lastday)
                               ]);
         }
         return redirect()->back();
@@ -281,7 +281,7 @@ class ItemPostController extends Controller
             }
             foreach($changes as $change){
                 $change->update([ 'scene'=>$request->scene,
-                                'theday'=>replaceDate($request->theday),
+                                'theday'=>$this->replaceDate($request->theday),
                                 'publish'=>$request->publish,
                                 'lat'=>$request->spotNS,
                                 'lng'=>$request->spotEW,
@@ -321,10 +321,10 @@ class ItemPostController extends Controller
                   $mylog['photo_id'] = $i+$photoCnt;
                   $mylog['title'] = $request->title;
                   $mylog['scene'] = $request->scene;
-                  $mylog['firstday'] = replaceDate($request->firstday);
-                  $mylog['lastday'] = replaceDate($request->lastday);
+                  $mylog['firstday'] = $this->replaceDate($request->firstday);
+                  $mylog['lastday'] = $this->replaceDate($request->lastday);
                   if(isset($request->theday)){
-                      $mylog['theday'] = replaceDate($request->theday);
+                      $mylog['theday'] = $this->replaceDate($request->theday);
                   }
                   if(isset($request->publish)){
                       $mylog['publish'] = $request->publish;

@@ -287,6 +287,7 @@ $(function(){///////メッセージ
                 'chtimestamp':$("#newTimestamp").val()
               },
               success :function(json){
+                  /*
                   var beforeCnt = $('.forCnt').length;
                   var jsonsize = json.length;
                   var h = new Array;
@@ -308,6 +309,7 @@ $(function(){///////メッセージ
                   }}
                   $('.messageShow').scrollTop($('.messageShow')[0].scrollHeight);
                   $("#newTimestamp").val(json[jsonsize-1].created_at);
+                  */
               },
               error : function(XMLHttpRequest, textStatus, errorThrown) {
 　　　　              alert(textStatus + ":" + errorThrown);

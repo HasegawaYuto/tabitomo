@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="text-center">
-        <h3>ユーザー登録</h3>
+    <div class="text-center col-md-6 col-md-offset-3 col-xs-12 col-sm-12">
+        <h4>ユーザー登録</h4>
     </div>
 
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-6 col-md-offset-3 col-xs-12 col-sm-12">
 
             {!! Form::open(['route' => 'signup.post']) !!}
                 <div class="form-group">
@@ -31,6 +31,14 @@
 
                 {!! Form::submit('登録', ['class' => 'btn btn-primary btn-block']) !!}
             {!! Form::close() !!}
+            
+            <p>他のサービスのログイン情報を利用する</p>
+            <a class="btn btn-block btn-primary" href="auth/login/facebook">
+                <span class="fa fa-facebook"></span>Facebookのアカウントを利用
+            </a>
+            <a class="btn btn-block btn-danger"  href="auth/login/google">
+                <span class="fa fa-google"></span>Google+のアカウントを利用
+            </a>
         </div>
     </div>
 @endsection

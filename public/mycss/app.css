@@ -323,7 +323,9 @@ a:hover{
 }
 .followImage{
     width:80px;
-    margin:10px;}
+    margin:10px;
+    display:inline-block;
+}
 .noborder{
     border:none;}
 .messangerImage{

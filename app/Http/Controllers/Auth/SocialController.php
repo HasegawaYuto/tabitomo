@@ -95,32 +95,102 @@ class SocialController extends Controller
     
     public function getFacebookCallback() {
         try {
-            $fuser = Socialite::driver('facebook')->fields([
-                    'name', 
-                    'email', 
-                    'gender', 
-                    'id',
-                    'avatar',
-                ])->user();
+            $fuser = Socialite::driver('facebook')->user();
         } catch (\Exception $e) {
             return redirect("/login");
         }
         if ($fuser) {
-            $email = $fuser->getEmail();
-            $name = $fuser['name'];
-            //$nickname = $fuser['nickname'];
-            //$avatar = $fuser['avatar'];
-            $id = $fuser['id'];
-            $loginuser=User::firstOrCreate(['email'=>$email],[
-                        'name'=>$name,
-                        //'nickname'=>$nickname,
-                        //'snsImagePath'=>$avatar,
-                        'facebook_id'=>$id
-                        ]);
+            //dd($fuser);
+            $loginuser=User::firstOrCreate(['email'=>$fuser->getEmail()]);
             \Auth::login($loginuser);
+            /*
+            if(!isset($loginuser->sex)){
+                if($fuser->$getUser()->gender=='Male'){
+                    $loginuser['sex'] = '男性';
+                }elseif($fuser->$getUser()->gender=='Female'){
+                    $loginuser['sex'] = '女性';
+                }else{
+                    $loginuser['sex'] = 'その他';
+                }
+            }
+            */
+            if(!isset($loginuser->nickname)){
+                $loginuser['nickname']=$fuser->getNickname();
+            }
+            $loginuser['facebook_id']=$fuser->getId();
+            $loginuser['name']=$fuser->getName();
+            $loginuser['snsImagePath']=$fuser->getAvatar();
+            $loginuser->save();
             return redirect("/");
         } else {
             return 'something went wrong';
         }
     }
+    
+    public function getGoogleAuth() {
+        //return redirect("/");
+        return Socialite::driver('google')->redirect();
+    }
+ 
+    public function getGoogleCallback() {
+        try {
+            $guser = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return redirect("/login");
+        }
+        if ($guser) {
+            //dd($guser);
+            $loginuser=User::firstOrCreate(['email'=>$guser->getEmail()]);
+            \Auth::login($loginuser);
+            if(!isset($loginuser->nickname)){
+                $loginuser['nickname']=$fuser->getNickname();
+            }
+            $loginuser['google_id']=$guser->getId();
+            $loginuser['name']=$guser->getName();
+            $loginuser['snsImagePath']=$guser->getAvatar();
+            $loginuser->save();
+            return redirect("/");
+        } else {
+            return 'something went wrong';
+        }
+    }
+    
+    public function getTwitterAuth() {
+        return Socialite::driver('twitter')->redirect();
+    }
+ 
+    public function getTwitterCallback() {
+        try {
+            $tuser = Socialite::driver('twitter')->user();
+        } catch (\Exception $e) {
+            return redirect("/");
+        }
+        if ($tuser) {
+            dd($tuser);
+            /*
+            $loginuser=User::firstOrCreate(['email'=>$tuser->getEmail()]);
+            \Auth::login($loginuser);
+            //if(!isset($loginuser->sex)){
+            //    if($fuser->getGender()=='Male'){
+            //        $loginuser['sex'] = '男性';
+            //    }elseif($fuser->getGender()=='Female'){
+            //        $loginuser['sex'] = '女性';
+            //    }else{
+            //        $loginuser['sex'] = 'その他';
+            //    }
+            //}
+            if(!isset($loginuser->nickname)){
+                $loginuser['nickname']=$tuser['nickname'];
+            }
+            $loginuser['twitter_id']=$tuser->getId();
+            $loginuser['name']=$tuser->getName();
+            $loginuser['snsImagePath']=$tuser->getAvatar();
+            $loginuser->save();
+            return redirect("/");
+            */
+        } else {
+            return 'something went wrong';
+        }
+    }
+       
 }

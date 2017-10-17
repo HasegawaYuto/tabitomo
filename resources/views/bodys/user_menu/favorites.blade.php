@@ -49,8 +49,9 @@
                                     {!! $mutual->render() !!}
                                     @foreach($mutual as $favuser)
                                         <div class="followImage text-center">
-                                        <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
+                                        <a href="{{route('show_user_profile',['id'=>$favuser->id])}}">
                                             @include('parts.avatar',['user'=>$favuser,'class'=>'favuser'])
+                                            <p class="smallp overCut black">{{isset($favuser->nickname)?$favuser->nickname:'未設定'}}</p>
                                           </a>
                                         @include('parts.follow_button',['user'=>$favuser])
                                         </div>
@@ -62,8 +63,9 @@
                                     {!! $following->render() !!}
                                     @foreach($following as $favuser)
                                         <div class="followImage text-center">
-                                            <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
+                                            <a href="{{route('show_user_profile',['id'=>$favuser->id])}}">
                                                 @include('parts.avatar',['user'=>$favuser,'class'=>'favuser'])
+                                                <p class="smallp overCut black">{{isset($favuser->nickname)?$favuser->nickname:'未設定'}}</p>
                                           </a>
                                         @include('parts.follow_button',['user'=>$favuser])
                                         </div>
@@ -75,8 +77,9 @@
                                     {!! $followed->render() !!}
                                     @foreach($followed as $favuser)
                                         <div class="followImage text-center">
-                                            <a href="{{route('show_user_profile',['id'=>$favuser->user_id])}}">
+                                            <a href="{{route('show_user_profile',['id'=>$favuser->id])}}">
                                                 @include('parts.avatar',['user'=>$favuser,'class'=>'favuser'])
+                                                <p class="smallp overCut black">{{isset($favuser->nickname)?$favuser->nickname:'未設定'}}</p>
                                           </a>
                                         @include('parts.follow_button',['user'=>$favuser])
                                         </div>
