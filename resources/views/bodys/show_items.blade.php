@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 @if(isset($scenes[0]))
 <div class="container-fluid">
     @include('parts.searchItem')
@@ -67,6 +66,7 @@
                     <input type="hidden" value="{{$scene->lat}}" id="googlemapLat{{$key}}" />
                     <input type="hidden" value="{{$scene->lng}}" id="googlemapLng{{$key}}" />
                     <div class="googlemapSpot googlemapSizeM" id="googlemapSpotID{{$key}}"></div>
+                    @include('parts.go_navi',['scene'=>$scene])
                     <div id="demo{{$key}}" class="collapse col-xs-12">
                         <label>日付</label>
                         <div class="text-center">
@@ -83,7 +83,9 @@
                         <div>
                             <label>お気に入り</label>
                             <div style="margin-bottom:10px;" class="text-center">
-                              <span class="badge">{{$favuser[$key]}}</span>
+                              <a data-target="#modalFavoriteUsers{{$key}}" data-toggle="modal">
+                                <span class="badge">{{$favuser[$key]}}</span>
+                            </a>
                             </div>
                         </div>
                     <!--div class="col-xs-12"-->
@@ -155,4 +157,9 @@
         </div>
     </div>
 @endif
+
+@foreach($scenes as $key => $scene)
+@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuserdata[$key]])
+@endforeach
+
 @endsection

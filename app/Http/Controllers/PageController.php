@@ -95,6 +95,9 @@ class PageController extends Controller
     }
 
     public function showItemsSearch(Request $request){
+      if(\Auth::check()){
+          $data += $this->newMessageHas(\Auth::user());
+      }
       $keywordNotExists = $request->keywords=="";
       $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
       $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
@@ -155,7 +158,13 @@ class PageController extends Controller
           foreach($data['userComments'][$key] as $kkey => $userComment){
               $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
-          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.scene_id')->count();
+          $sceneids = Mylog::where('user_id',$scene->user_id)
+                           ->where('title_id',$scene->title_id)
+                           ->where('scene_id',$scene->scene_id)
+                           ->lists('id');
+          $userids = \DB::table('mylog_user')->whereIn('scene_id',$sceneids)->groupBy('user_id')->lists('user_id');
+          $data['favuserdata'][$key] = User::whereIn('id',$userids)->get();
+          $data['favuser'][$key] = User::whereIn('id',$userids)->count();
           $data['user'][$scene->user_id]=User::find($scene->user_id);
           $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
                                   ->whereNotNull('data')
@@ -367,7 +376,13 @@ class PageController extends Controller
           foreach($data['userComments'][$key] as $kkey => $userComment){
               $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
-          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.scene_id')->count();
+          $sceneids = Mylog::where('user_id',$scene->user_id)
+                           ->where('title_id',$scene->title_id)
+                           ->where('scene_id',$scene->scene_id)
+                           ->lists('id');
+          $userids = \DB::table('mylog_user')->whereIn('scene_id',$sceneids)->groupBy('user_id')->lists('user_id');
+          $data['favuserdata'][$key] = User::whereIn('id',$userids)->get();
+          $data['favuser'][$key] = User::whereIn('id',$userids)->count();
           $data['user'][$scene->user_id]=User::find($scene->user_id);
           $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
                                   ->whereNotNull('data')
@@ -550,6 +565,10 @@ class PageController extends Controller
                                   }
                               })
                               ->first();
+      $titleids = $user->title($title_id)->lists('mylogs.id');
+      $userids = \DB::table('mylog_user')->whereIn('scene_id',$titleids)->groupBy('user_id')->lists('user_id');
+      $data['favuserdata']['title'] = User::whereIn('id',$userids)->get();
+      $data['favuser']['title'] = User::whereIn('id',$userids)->count();
       $scenes = $user->title($title_id)
                       ->groupBy('scene_id')
                       ->orderBy('theday')
@@ -584,7 +603,10 @@ class PageController extends Controller
           foreach($data['userComments'][$key] as $kkey => $userComment){
               $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
-          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.scene_id')->count();
+          $sceneids = $user->scene($title_id,$scene->scene_id)->lists('mylogs.id');
+          $userids = \DB::table('mylog_user')->whereIn('scene_id',$sceneids)->groupBy('user_id')->lists('user_id');
+          $data['favuserdata'][$key] = User::whereIn('id',$userids)->get();
+          $data['favuser'][$key] = User::whereIn('id',$userids)->count();
           $thumbID = $user->scene($title_id,$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->select('id')

@@ -1,12 +1,3 @@
-<?php $checkPhotos = 'false'; ?>
-@if(isset($photos))
-    @foreach($photos as $photo)
-        @if($photo->scene_id == $scene->scene_id)
-            <?php $checkPhotos = 'true'; ?>
-        @endif
-    @endforeach
-@endif
-
 <div class="modal fade" id="modal_carousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" aria-hidden="true">
     <div class="modal-content" id="modal-carousel-content">
       <div class="modal-header overCut" style="height:50px;">
@@ -15,7 +6,7 @@
       <div class="modal-body" style="padding:0" id="modal-carousel-body">
         <div id="myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" class="carousel slide carousel-fit" data-ride="carousel">
           <ol class="carousel-indicators">
-              @if($checkPhotos == 'true')
+              @if(isset($photos[0]))
                   <?php $cnt = -1; ?>
                   @foreach($photos as $photo)
                       @if($photo->scene_id == $scene->scene_id && $photo->title_id == $scene->title_id && $photo->user_id == $scene->user_id)
@@ -30,7 +21,7 @@
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-              @if($checkPhotos == 'true')
+              @if(isset($photos[0]))
                   <?php $cnt = -1; ?>
                   @foreach($photos as $photo)
                       @if($photo->scene_id == $scene->scene_id && $photo->title_id == $scene->title_id && $photo->user_id == $scene->user_id)

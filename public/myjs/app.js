@@ -1,11 +1,32 @@
-$(function () {
-	$('[data-toggle="popover"]').popover();
+$(function(){
+    if($('#QRdiv').length){
+    $('#QRdiv').qrcode({
+	text: window.location.href,
+	size:50
+    });
+    }
 });
+///////////////////////////////////////////////
 $(function(){
 var topBtn=$('#ToPageTop');
-if($(document).height()<=$(window).height()){
-    topBtn.hide();
+topBtn.hide();
+if($(document).height()>$(window).height()){
+    topBtn.show();
 }
+window.addEventListener("orientationchange", function() {
+    if($(document).height()>$(window).height()){
+        topBtn.show();
+    }else{
+        topBtn.hide();
+    }
+});
+window.addEventListener("resize", function() {
+    if($(document).height()>$(window).height()){
+        topBtn.show();
+    }else{
+        topBtn.hide();
+    }
+});
 topBtn.click(function(){
   $('body,html').animate({
   scrollTop: 0},500);

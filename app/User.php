@@ -70,7 +70,10 @@ class User extends Model implements AuthenticatableContract,
         return true;
     }
     public function is_favoritesScene($userid,$titleid,$sceneid){
-        $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
+        $sceneidLists = \DB::table('mylogs')->where('user_id',$userid)
+                                                ->where('title_id',$titleid)
+                                                ->where('scene_id',$sceneid)
+                                                ->lists('id');
         return $this->favors()->whereIn('mylog_user.scene_id',$sceneidLists)->exists();
     }
     public function favoringScene($userid,$titleid,$sceneid){
@@ -78,7 +81,10 @@ class User extends Model implements AuthenticatableContract,
         if($exists){
             return false;
         }else{
-            $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
+            $sceneidLists = \DB::table('mylogs')->where('user_id',$userid)
+                                                ->where('title_id',$titleid)
+                                                ->where('scene_id',$sceneid)
+                                                ->lists('id');
             foreach($sceneidLists as $sceneidList){
                 $this->favors()->attach($sceneidList);
             }
@@ -91,7 +97,10 @@ class User extends Model implements AuthenticatableContract,
         if(!$exists){
             return false;
         }else{
-            $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
+            $sceneidLists = \DB::table('mylogs')->where('user_id',$userid)
+                                                ->where('title_id',$titleid)
+                                                ->where('scene_id',$sceneid)
+                                                ->lists('id');
             foreach($sceneidLists as $sceneidList){
                 $this->favors()->detach($sceneidList);
             }
@@ -101,15 +110,19 @@ class User extends Model implements AuthenticatableContract,
 
 
     public function is_favoritesTitle($userid,$titleid){
-        $titleidLists = $this->find($userid)->title($titleid)->lists('mylogs.id');
+        $titleidLists = \DB::table('mylogs')->where('user_id',$userid)
+                                                ->where('title_id',$titleid)
+                                                ->lists('id');
         return $this->favors()->whereIn('mylog_user.scene_id',$titleidLists)->exists();
     }
-    public function favoringTitle($userid,$titleid,$sceneid){
+    public function favoringTitle($userid,$titleid){
         $exists = $this->is_favoritesTitle($userid,$titleid);
         if($exists){
             return false;
         }else{
-            $titleidLists = $this->find($userid)->title($titleid)->lists('mylogs.id');
+            $titleidLists = \DB::table('mylogs')->where('user_id',$userid)
+                                                ->where('title_id',$titleid)
+                                                ->lists('id');
             foreach($titleidLists as $titleidList){
                 $this->favors()->attach($titleidList);
             }
@@ -122,7 +135,9 @@ class User extends Model implements AuthenticatableContract,
         if(!$exists){
             return false;
         }else{
-            $titleidLists = $this->find($userid)->title($titleid)->lists('mylogs.id');
+            $titleidLists = \DB::table('mylogs')->where('user_id',$userid)
+                                                ->where('title_id',$titleid)
+                                                ->lists('id');
             foreach($titleidLists as $titleidList){
                 $this->favors()->detach($titleidList);
             }
@@ -211,5 +226,14 @@ class User extends Model implements AuthenticatableContract,
         $sendfromids = $this->sendFrom()->where('user_id',$id)->lists('messages.id');
         $messageids = $sendtoids->merge($sendfromids);
         return \DB::table('messages')->whereIn('id',$messageids);
+    }
+    
+    public function newMessageHas(){
+        $bool = \DB::table('messages')->where('send_id',$this->id)->where('status','0')->exists();
+        if($bool){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -4,7 +4,7 @@
 <div class="container-fluid">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
-    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-6">
+    <div class="col-xs-12 col-sm- col-md-9 col-lg-6">
         <div class="panel panel-info">
             <div class="panel-heading text-center">
                 <i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング
@@ -41,7 +41,9 @@
                       @else
                       {!!Form::open(['route'=>['guest_delete','guest_id'=>$recruitment->id],'style'=>'display:inline;float:right;'])!!}
                       @endif
-                      {!!Form::submit('削除',['class'=>'btn btn-xs btn-danger'])!!}
+                      <button class="btn btn-xs btn-danger" type="submit">
+                          <i class="fa fa-trash-o" aria-hidden="true"></i>
+                      </button>
                       {!!Form::close()!!}
                       <div class="wrap col-xs-12 Info">{{$recruitment->contents}}</div>
                       <div class="recruitmentMap recruitmentmapSpot" id="recruitmentMap{{$key}}"></div>

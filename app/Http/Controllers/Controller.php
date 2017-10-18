@@ -11,7 +11,4 @@ abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
-    public function newMessageHas($user){
-        return ['newMessageHas'=>$user->senFrom()->where('status')->exists];
-    }
 }

@@ -12,7 +12,7 @@
       $url = 'url("' . $src . '")';
   ?>
 @include('bodys.user_menu.contents_menu',['user'=>$user])
-  <div class="text-center col-xs-12 col-sm-9 col-md-9 col-lg-6">
+  <div class="text-center col-xs-12 col-sm-8 col-md-9 col-lg-6">
     <div class="panel panel-info">
       <div class="panel panel-heading">
         <i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>

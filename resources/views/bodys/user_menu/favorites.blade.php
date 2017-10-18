@@ -4,7 +4,7 @@
 <div class="container-fluid">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
-    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-6">
+    <div class="col-xs-12 col-sm- col-md-9 col-lg-6">
         <div class="panel panel-info">
             <div class="panel panel-heading text-center">
                 <i class="fa-fw fa fa-heart-o" aria-hidden="true"></i>お気に入り
@@ -17,8 +17,10 @@
                         @foreach($scenes as $key => $scene)
                             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                 <div class="panel panel-primary">
-                                    <div class="panel-heading">
-                                        @include('parts.favorite_scene_button',['scene'=>$scene])
+                                    <div class="panel-heading overCut">
+                                        @if(Auth::user()->id!=$scene->user_id)
+                                            @include('parts.favorite_scene_button',['scene'=>$scene])
+                                        @endif
                                         {{$scene->scene}}
                                     </div>
                                     <div class="panel-body">

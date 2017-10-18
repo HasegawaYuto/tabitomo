@@ -4,7 +4,7 @@
 <div class="container-fluid">
 <div class="row">
 @include('bodys.user_menu.contents_menu',['user'=>$user])
-<div class="col-xs-12 col-sm-9 col-md-9 col-lg-6">
+<div class="col-xs-12 col-sm-8 col-md-9 col-lg-6">
     <div class="panel panel-info">
         <div class="panel-heading titleStringL">
                 @if(Auth::user()->id == $user->id)
@@ -99,7 +99,9 @@
             <div class="col-xs-12 col-sm-3">
                 <label>お気に入り</label>
                 <div class="text-center">
-	        <span class="badge">{{max($favuser)}}</span>
+                    <a data-target="#modalFavoriteUserstitle" data-toggle="modal">
+	                <span class="badge">{{$favuser['title']}}</span>
+	                </a>
                 </div>
             </div>
         <div class="col-xs-12">
@@ -173,7 +175,9 @@
                                     <div>
                                         <label>お気に入り</label>
                                         <div class="text-center">
-                                            <span class="badge">{{$favuser[$key]}}</span>
+                                            <a data-target="#modalFavoriteUsers{{$key}}" data-toggle="modal">
+                                                <span class="badge">{{$favuser[$key]}}</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -188,8 +192,8 @@
                                     <ul class="list-group">
                                         @foreach($userComments[$key] as $kkey => $userComment)
                                             <li class="list-group-item">
-                                            <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->user_id])}}" class="black">
-                                            <div style="width:100%;">
+                                            <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->id])}}">
+                                            <div style="width:100%;" class="black">
                                                 @include('parts.avatar',['user'=>$commentUser[$key][$kkey],'class'=>'CommentUserAvatarInTitle'])
                                             {{$commentUser[$key][$kkey]->nickname or '未設定'}}
                                             @if(Auth::check())
@@ -224,9 +228,10 @@
 </div>
 </div>
 
-<div id="QRdiv" style="width:50px;height:50px;background-color:red;">
-    <a ><img id="QRcord"></a>
+@if(Auth::user()->id==$user->id)
+<div id="QRdiv">
 </div>
+@endif
 
 @if(isset($photos))
     @include('parts.modal_scene_edit',['photos'=>$photos])
@@ -235,4 +240,11 @@
 @foreach($scenes as $scene)
 @include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene])
 @endforeach
+
+@foreach($scenes as $key => $scene)
+@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuserdata[$key]])
+@endforeach
+
+@include('parts.showFavoriteUsers',['key'=>'title','users'=>$favuserdata['title']])
+
 @endsection

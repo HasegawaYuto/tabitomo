@@ -13,7 +13,7 @@
 <div class="container">
 <div class="row">
     @include('bodys.user_menu.contents_menu',['user'=>$user])
-    <div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+    <div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
         <div class="panel panel-info">
             <div class="panel panel-heading text-center">
                 <i class="fa fa-camera fa-fw" aria-hidden="true"></i>マイログ

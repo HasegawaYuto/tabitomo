@@ -39,7 +39,13 @@ $browser=((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos(
                             @if($browser!='sp')
                                 <li role="separator" class="divider"></li>
                             @endif
-                            <li><a href="{{ route('show_user_messages',['id'=>$id]) }}" class="list-group-item noborder"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ</a></li>
+                            <li><a href="{{ route('show_user_messages',['id'=>$id]) }}" class="list-group-item noborder">
+                                    <i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ
+                                    @if(\Auth::user()->newMessageHas())
+                                        <button class="btn btn-xs btn-danger " type="button">新着</button>
+                                    @endif
+                                </a>
+                            </li>
                             @if($browser!='sp')
                                 <li role="separator" class="divider"></li>
                             @endif

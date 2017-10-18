@@ -1,6 +1,29 @@
 body {
     padding-top: 70px;
 }
+.ImgSizeFull{
+    height:1000px;
+}
+.avatarInner{
+    width:100%;
+    padding:100% 0 0;
+    height:100%;
+    background-size:cover;
+    background-position:center;
+    position: relative;
+    background-repeat:no-repeat;
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    -o-background-size:cover;
+    -ms-background-size:cover;   
+}
+#QRdiv{
+    position:fixed;
+    bottom:10px;
+    left:10px;
+    height:50px;
+    width:50px;
+}
 #ToPageTop{
     width:35px;
     height:35px;
@@ -121,6 +144,9 @@ a:hover{
 }
 #modal-carousel-content{
     height:100vh;
+    width:100vw;
+    top:0;
+    left:0;
 }
 #modal-carousel-body{
     height:calc(100vh - 50px);
