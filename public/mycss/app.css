@@ -1,6 +1,21 @@
 body {
     padding-top: 70px;
 }
+#ToPageTop{
+    width:35px;
+    height:35px;
+    right:0;
+    bottom:0;
+    background-color:cyan;
+    z-index:1;
+    position:fixed;
+    display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight:700;
+	color:white;
+	text-shadow: 1px 1px 0 #000
+}
 .avatarImageS{
     height:50px;
     width:50px;
@@ -88,6 +103,7 @@ body {
 .titleContents{
     width:70%;
     margin-left:30%;
+    color:black;
 }
 .titleStringL{
     text-overflow:ellipsis;
@@ -100,17 +116,8 @@ body {
     max-height:15vh;
     float:left;
 }
-.btn-ghost{
-     background: transparent;
-}
 a:hover{
     text-decoration:none;
-}
-.titleContents {
-    color:black;
-}
-.titleContents {
-    color:black;
 }
 #modal-carousel-content{
     height:100vh;

@@ -210,8 +210,7 @@ class ItemPostController extends Controller
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
           //$user = Profile::where('user_id',$id)->first();
-          $data['user']=$user-;
-          //$data['id']=$id;
+          $data['user']=$user;
           $data['title'] = $request->title;
           $data['activetab'] = '2';
           $data['scene_id'] = $request->scene_id+1;

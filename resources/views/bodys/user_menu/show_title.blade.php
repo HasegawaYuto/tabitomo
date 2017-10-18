@@ -99,19 +99,19 @@
             <div class="col-xs-12 col-sm-3">
                 <label>お気に入り</label>
                 <div class="text-center">
-                <span class="badge">{{max($favuser)}}</span>
+	        <span class="badge">{{max($favuser)}}</span>
                 </div>
             </div>
-        </div>
         <div class="col-xs-12">
             {!! $scenes->render() !!}
+        </div>
         </div>
 
             @foreach($scenes as $key => $scene)
             <?php
                 $thedayarray = explode('-',$scene->theday);
             ?>
-                <div class="col-xs-12">
+                <div class="col-xs-12" style="margin-top:10px;">
                     <div class="panel panel-primary">
                         <div class="panel-heading" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">
                           @if(Auth::user()->id == $user->id)
@@ -157,13 +157,13 @@
                                     <input type="hidden" value="{{$scene->lng}}" id="googlemapLng{{$key}}" />
                                 <div class="col-xs-12 col-sm-4 col-lg-4">
                                     <label>日付</label>
-                                    <div>
+                                    <div class="text-center">
                                         {{$thedayarray[0]}}年
                                         {{(int)$thedayarray[1]}}月
                                         {{(int)$thedayarray[2]}}日
                                     </div><br>
                                     <label>おすすめ</label>
-                                    <div class="showRaty" id="showRatyDiv{{$key}}">
+                                    <div class="showRaty text-center" id="showRatyDiv{{$key}}">
                                         @if($scene->score !="")
                                             <input type="hidden" value="{{$scene->score}}" id="showRaty{{$key}}" />
                                         @else
@@ -172,7 +172,9 @@
                                     </div><br>
                                     <div>
                                         <label>お気に入り</label>
-                                        <span class="badge">{{$favuser[$key]}}</span>
+                                        <div class="text-center">
+                                            <span class="badge">{{$favuser[$key]}}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
@@ -220,6 +222,10 @@
     </div>
 </div>
 </div>
+</div>
+
+<div id="QRdiv" style="width:50px;height:50px;background-color:red;">
+    <a ><img id="QRcord"></a>
 </div>
 
 @if(isset($photos))

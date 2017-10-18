@@ -155,7 +155,7 @@ class PageController extends Controller
           foreach($data['userComments'][$key] as $kkey => $userComment){
               $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
-          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
+          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.scene_id')->count();
           $data['user'][$scene->user_id]=User::find($scene->user_id);
           $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
                                   ->whereNotNull('data')
@@ -367,7 +367,7 @@ class PageController extends Controller
           foreach($data['userComments'][$key] as $kkey => $userComment){
               $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
-          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
+          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.scene_id')->count();
           $data['user'][$scene->user_id]=User::find($scene->user_id);
           $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
                                   ->whereNotNull('data')
@@ -584,7 +584,7 @@ class PageController extends Controller
           foreach($data['userComments'][$key] as $kkey => $userComment){
               $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
           }
-          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.user_id')->count();
+          $data['favuser'][$key] = Mylog::find($scene->id)->favoredBy()->groupBy('mylog_user.scene_id')->count();
           $thumbID = $user->scene($title_id,$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->select('id')

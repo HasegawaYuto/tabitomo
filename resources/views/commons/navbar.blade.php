@@ -59,4 +59,5 @@ $browser=((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos(
             </div>
         </div>
     </nav>
+    <div id="ToPageTop" class="img-circle">Top</div>
 </header>

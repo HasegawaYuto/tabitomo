@@ -1,3 +1,18 @@
+$(function () {
+	$('[data-toggle="popover"]').popover();
+});
+$(function(){
+var topBtn=$('#ToPageTop');
+if($(document).height()<=$(window).height()){
+    topBtn.hide();
+}
+topBtn.click(function(){
+  $('body,html').animate({
+  scrollTop: 0},500);
+  return false;
+});
+
+});
 $(function(){
     if($('#searchMap').length){
         $('.tabArea a[href = "#tab3"]').on('shown.bs.tab', function(){
@@ -62,7 +77,6 @@ $(function(){
     	             googlemap.setCenter(center);
               });
         });
-        //$('#chlat').html($('#centerLat').val());
     }
 });
 /////////////////////////////////////////////////////
