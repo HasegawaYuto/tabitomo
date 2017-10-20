@@ -101,7 +101,7 @@ class ItemPostController extends Controller
     public function createItems(Request $request,$id){
       $user = User::find($id);
       if($request->scene_id==1){
-          $title_id = $user->mylogs()->max('title_id');
+          $title_id = Mylog::where('user_id',$id)->max('title_id');
           if(!isset($title_id)){
               $data['title_id'] = 1;
           }else{
@@ -162,6 +162,9 @@ class ItemPostController extends Controller
                 if(isset($request->comment)){
                     $mylog['comment'] = $request->comment;
                 }
+                if(isset($_POST['genre'][0])){
+                    $mylog['genre']=implode("-", $_POST['genre']);
+                }
                 $mylog->save();
                 if(isset($filename)){
                   if (\File::exists($filename)) {
@@ -204,6 +207,9 @@ class ItemPostController extends Controller
             if(isset($request->comment)){
                 $mylog['comment'] = $request->comment;
             }
+            if(isset($_POST['genre'][0])){
+                    $mylog['genre']=implode("-", $_POST['genre']);
+                }
             $mylog->save();
       }
       if(\Input::get('fin')){
@@ -267,6 +273,11 @@ class ItemPostController extends Controller
         if($request->editstyle=='fix'){
             $user = User::find($id);
             $changes = $user->scene($title_id,$scene_id)->get();
+            if(isset($_POST['genre'][0])){
+                    $valgenre=implode("-", $_POST['genre']);
+            }else{
+                $valgenre = "";
+            }
             if(isset($_POST['deletePhotoNo'])){
                 $postDelNos = $_POST['deletePhotoNo'];
                 if(isset($postDelNos)){
@@ -285,6 +296,7 @@ class ItemPostController extends Controller
                                 'lat'=>$request->spotNS,
                                 'lng'=>$request->spotEW,
                                 'score'=>$request->score,
+                                'genre'=>$valgenre
                               ]);
             }
         }
@@ -338,6 +350,9 @@ class ItemPostController extends Controller
                   if(isset($request->comment)){
                       $mylog['comment'] = $request->comment;
                   }
+                  if(isset($_POST['genre'][0])){
+                    $mylog['genre']=implode("-", $_POST['genre']);
+                }
                   $mylog->save();
                   if(isset($filename)){
                     if (\File::exists($filename)) {

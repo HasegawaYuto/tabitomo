@@ -130,6 +130,7 @@
                             data-publish="{{$scene->publish}}"
                             data-firstday="{{$scene->firstday}}"
                             data-lastday="{{$scene->lastday}}"
+                            data-genre="{{$scene->genre}}"
                             data-editstyle="fix"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             @include('parts.delete_button',['scene'=>$scene])
                           @else
@@ -138,6 +139,47 @@
                             &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                         </div>
                         <div class="panel-body">
+                            <div class="col-xs-12">
+                                <p class="smallp">【ジャンル】</p>
+                                <div>
+                                @if($scene->genre!="")
+                                    @if(strpos($scene->genre,'A')!== false)
+                                        <div class="white chlbl chdivH" style="background-color:#228b22;">
+                                            <i class="fa fa-leaf" aria-hidden="true"></i>
+                                        </div>
+                                    @endif
+                                    @if(strpos($scene->genre,'B')!== false)
+                                        <div class="black chlbl chdivH" style="background-color:#ffff00;">
+                                             <i class="fa fa-history" aria-hidden="true"></i>
+                                        </div>
+                                    @endif
+                                    @if(strpos($scene->genre,'C')!== false)
+                                        <div class="white chlbl chdivH" style="background-color:#a0522d;">
+                                             <i class="fa fa-university" aria-hidden="true"></i>
+                                        </div>
+                                    @endif
+                                    @if(strpos($scene->genre,'D')!== false)
+                                        <div class="black chlbl chdivH" style="background-color:#ff69b4;">
+                                             <i class="fa fa-cutlery" aria-hidden="true"></i>
+                                        </div>
+                                    @endif
+                                    @if(strpos($scene->genre,'E')!== false)
+                                        <div class="black chlbl chdivH" style="background-color:#00ffff;">
+                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                        </div>
+                                    @endif
+                                    @if(strpos($scene->genre,'F')!== false)
+                                        <div class="black chlbl chdivH" style="background-color:#ffffff;">
+                                             <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                        </div>
+                                    @endif
+                            @else
+                                    <div class="black chlbl chdivH">
+                                          未設定
+                                    </div>
+                            @endif
+                            </div>
+                        </div>
                             <div class="text-center">
                                 <dvi class="col-sm-4 col-xs-12">
                                     @if(isset($thumb[$key]->data))
@@ -163,7 +205,7 @@
                                         {{$thedayarray[0]}}年
                                         {{(int)$thedayarray[1]}}月
                                         {{(int)$thedayarray[2]}}日
-                                    </div><br>
+                                    </div>
                                     <label>おすすめ</label>
                                     <div class="showRaty text-center" id="showRatyDiv{{$key}}">
                                         @if($scene->score !="")
@@ -171,7 +213,7 @@
                                         @else
                                             <input type="hidden" value="0" id="showRaty{{$key}}" />
                                         @endif
-                                    </div><br>
+                                    </div>
                                     <div>
                                         <label>お気に入り</label>
                                         <div class="text-center">
@@ -180,10 +222,11 @@
                                             </a>
                                         </div>
                                     </div>
+                                    </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <label>コメント</label><br>
-                                    {{$scene->comment != "" ? $scene->comment: 'No comment'}}
+                                    <p class="wrap">{{$scene->comment != "" ? $scene->comment: 'No comment'}}</p>
                                 </div>
                             <div>
                                 <div id="demo{{$key}}" class="collapse col-xs-12">

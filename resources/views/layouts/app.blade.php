@@ -5,7 +5,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>旅とも</title>
+        <title>旅とも｜あなたの旅行のおともに</title>
+        <meta name="description" content="楽しみな旅行を成功させるためには、現地の人や実際に行った人の記録が頼りになります。
+        旅行者とガイドのマッチング、友だちと旅行の記録をシェア。個人の旅行の行き先も探せる">
+</head>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">

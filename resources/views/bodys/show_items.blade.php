@@ -29,6 +29,7 @@
                     data-publish="{{$scene->publish}}"
                     data-firstday="{{$scene->firstday}}"
                     data-lastday="{{$scene->lastday}}"
+                    data-genre="{{$scene->genre}}" 
                     data-editstyle="fix"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     @include('parts.delete_button',['scene'=>$scene])
                   @else
@@ -39,15 +40,53 @@
                 </div>
                 <div class="panel-body">
                     <a href="{{route('show_title',['id'=>$scene->user_id,'title_id'=>$scene->title_id])}}">
-                     <div class="black titleFrom overCut">
-                      【FROM】<br>
-                    {{$scene->title}}
+                     <div class="black titleFrom">
+                        <p class="smallp">【ジャンル】</p>
+                        @if($scene->genre!="")
+                            @if(strpos($scene->genre,'A')!== false)
+                                <div class="white chlbl chdivH" style="background-color:#228b22;">
+                                      <i class="fa fa-leaf" aria-hidden="true"></i>
+                                  </div>
+                            @endif
+                            @if(strpos($scene->genre,'B')!== false)
+                                <div class="black chlbl chdivH" style="background-color:#ffff00;">
+                                      <i class="fa fa-history" aria-hidden="true"></i>
+                                  </div>
+                            @endif
+                            @if(strpos($scene->genre,'C')!== false)
+                                <div class="white chlbl chdivH" style="background-color:#a0522d;">
+                                      <i class="fa fa-university" aria-hidden="true"></i>
+                                  </div>
+                            @endif
+                            @if(strpos($scene->genre,'D')!== false)
+                                <div class="black chlbl chdivH" style="background-color:#ff69b4;">
+                                      <i class="fa fa-cutlery" aria-hidden="true"></i>
+                                  </div>
+                            @endif
+                            @if(strpos($scene->genre,'E')!== false)
+                                <div class="black chlbl chdivH" style="background-color:#00ffff;">
+                                      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                  </div>
+                            @endif
+                            @if(strpos($scene->genre,'F')!== false)
+                                <div class="black chlbl chdivH" style="background-color:#ffffff;">
+                                      <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                  </div>
+                            @endif
+                        @else
+                            <div class="black chlbl chdivH">
+                                      未設定
+                            </div>
+                        @endif
+                      <p class="smallp">【タイトル】</p>
+                    <p class="overCut">{{$scene->title}}</p>
                   </div></a>
                   <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}">
                   <div class="itemAvatarOuter text-center black overCut">
                       @include('parts.avatar',['user'=>$user[$scene->user_id],'class'=>'itemAvatar'])
                     <p class="smallp">{{$user[$scene->user_id]->nickname!=""?$user[$scene->user_id]->nickname:"未設定"}}</p>
                   </div>
+                  </a>
                     <div class="col-xs-12">
                     @if(isset($thumb[$key]->data))
                     <?php
@@ -95,15 +134,15 @@
                         </div>
                     <!--/div-->
                     <!--div-->
-                            <label>ユーザーコメント</label>
                             @if(isset($userComments[$key][0]))
+                            <label>ユーザーコメント</label>
                             <ul class="list-group">
                                 @foreach($userComments[$key] as $kkey => $userComment)
                                     <li class="list-group-item">
                                     <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->id])}}" class="black">
-                                    <div class="overCut" style="width:100%;">
+                                    <div class="overCut black" style="width:100%;">
                                         @include('parts.avatar',['user'=>$commentUser[$key][$kkey],'class'=>'CommentUserAvatar'])
-                                    {{$commentUser[$key][$kkey]->nickname or '未設定'}}
+                                    <p class="smallp">{{$commentUser[$key][$kkey]->nickname or '未設定'}}</p>
                                     @if(Auth::check())
                                     @if(Auth::user()->id == $commentUser[$key][$kkey]->id || Auth::user()->id==$scene->user_id)
                                         @include('parts.comment_delete_button',['scene'=>$scene,'commentUser'=>$commentUser[$key][$kkey],'comment'=>$userComment])

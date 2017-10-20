@@ -95,20 +95,25 @@ class PageController extends Controller
     }
 
     public function showItemsSearch(Request $request){
-      if(\Auth::check()){
-          $data += $this->newMessageHas(\Auth::user());
-      }
       $keywordNotExists = $request->keywords=="";
       $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
       $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
       $areaNot = $request->lat=="0"&&$request->lng=="0"&&$request->radius=="0";
-      if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot){
+      $genreNot = !isset($request->genre);
+      if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot && $genreNot){
         return redirect('/');
       }
-      $scenes = Mylog::select('scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
+      $scenes = Mylog::select('genre','scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
             ->where(function($query){
                 if(\Auth::check()){
-                    $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
+                        $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
+                        $query->whereIn('user_id',$userids)
+                              ->orWhere('user_id',\Auth::user()->id)
+                              ->Where('publish','<>','private');
+                    }else{
+                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    }
                 }else{
                     $query->where('publish','public');
                 }
@@ -139,6 +144,11 @@ class PageController extends Controller
           $scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
+      if(isset($request->genre)){
+          foreach($request->genre as $genre){
+              $scenes = $scenes->where('genre','like','%'.$genre.'%');
+          }
+      }
       $scenes=$scenes->orderBy('updated_at','desc')
                     ->groupBy('user_id','title_id','scene_id')
                     ->paginate(24);
@@ -147,7 +157,13 @@ class PageController extends Controller
                                 ->whereNotNull('data')
                                 ->where(function($query){
                                     if(\Auth::check()){
-                                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                        if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
+                        $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
+                        $query->whereIn('user_id',$userids)->where('publish','friend')
+                              ->orWhere('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    }else{
+                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    }
                                     }else{
                                         $query->where('publish','public');
                                     }
@@ -349,10 +365,16 @@ class PageController extends Controller
     }
 
     public function showItems(){
-      $scenes = Mylog::select('scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
+      $scenes = Mylog::select('genre','scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
             ->where(function($query){
                 if(\Auth::check()){
-                    $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
+                        $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
+                        $query->whereIn('user_id',$userids)->where('publish','friend')
+                              ->orWhere('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    }else{
+                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    }
                 }else{
                     $query->where('publish','public');
                 }
@@ -365,7 +387,13 @@ class PageController extends Controller
                                 ->whereNotNull('data')
                                 ->where(function($query){
                                     if(\Auth::check()){
-                                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                        if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
+                                            $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
+                                            $query->whereIn('user_id',$userids)->where('publish','friend')
+                                                  ->orWhere('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                        }else{
+                                            $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                        }
                                     }else{
                                         $query->where('publish','public');
                                     }
@@ -389,7 +417,13 @@ class PageController extends Controller
                                   ->select('id')
                                   ->where(function($query){
                                       if(\Auth::check()){
-                                          $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                                          if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
+                        $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
+                        $query->whereIn('user_id',$userids)->where('publish','friend')
+                              ->orWhere('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    }else{
+                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                    }
                                       }else{
                                           $query->where('publish','public');
                                       }
@@ -465,7 +499,11 @@ class PageController extends Controller
       $titles = $user->mylogs()
                       ->where(function($query)use($id){
                           if(\Auth::user()->id != $id){
+                              if(\Auth::user()->is_followed($id)){
+                                $query->where('publish','public')->orWhere('publish','friend');
+                              }else{
                                 $query->where('publish','public');
+                              }
                           }else{
                               $query;
                           }
@@ -478,7 +516,11 @@ class PageController extends Controller
           $data['scenes'][$key] = $user->title($title->title_id)
                                 ->where(function($query)use($id){
                                     if(\Auth::user()->id!=$id){
-                                        $query->where('publish','public');
+                                        if(\Auth::user()->is_followed($id)){
+                                            $query->where('publish','public')->orWhere('publish','friend');
+                                        }else{
+                                            $query->where('publish','public');
+                                        }
                                     }else{
                                         $query;
                                     }
@@ -487,7 +529,18 @@ class PageController extends Controller
                                 ->select('scene')
                                 ->orderBy('theday')
                                 ->get();
-          $thumbID = $user->title($title->title_id)->where('publish','public')
+          $thumbID = $user->title($title->title_id)
+                            ->where(function($query)use($id){
+                                    if(\Auth::user()->id!=$id){
+                                        if(\Auth::user()->is_followed($id)){
+                                            $query->where('publish','public')->orWhere('publish','friend');
+                                        }else{
+                                            $query->where('publish','public');
+                                        }
+                                    }else{
+                                        $query;
+                                    }
+                                })
                             ->whereNotNull('data')
                             ->select('id')
                             ->orderByRaw("RAND()")
@@ -559,7 +612,11 @@ class PageController extends Controller
                               ->select('title','firstday','lastday','title_id','user_id')
                               ->where(function($query)use($id){
                                   if(\Auth::user()->id != $id){
-                                      $query->where('publish','public');
+                                      if(\Auth::user()->is_followed($id)){
+                                $query->where('publish','public')->orWhere('publish','friend');
+                              }else{
+                                $query->where('publish','public');
+                              }
                                   }else{
                                       $query;
                                   }
@@ -572,10 +629,14 @@ class PageController extends Controller
       $scenes = $user->title($title_id)
                       ->groupBy('scene_id')
                       ->orderBy('theday')
-                      ->select('publish','scene','theday','lat','lng','score','comment','scene_id','title','user_id','title_id','firstday','lastday','theday','id')
+                      ->select('genre','publish','scene','theday','lat','lng','score','comment','scene_id','title','user_id','title_id','firstday','lastday','theday','id')
                       ->where(function($query)use($id){
                           if(\Auth::user()->id != $id){
-                              $query->where('publish','public');
+                              if(\Auth::user()->is_followed($id)){
+                                $query->where('publish','public')->orWhere('publish','friend');
+                              }else{
+                                $query->where('publish','public');
+                              }
                           }else{
                               $query;
                           }
@@ -592,7 +653,11 @@ class PageController extends Controller
                               ->select('mime','data','scene_id','id','user_id','title_id')
                               ->where(function($query)use($id){
                                   if(\Auth::user()->id != $id){
-                                      $query->where('publish','public');
+                                      if(\Auth::user()->is_followed($id)){
+                                $query->where('publish','public')->orWhere('publish','friend');
+                              }else{
+                                $query->where('publish','public');
+                              }
                                   }else{
                                       $query;
                                   }
@@ -613,7 +678,11 @@ class PageController extends Controller
                                   ->orderBy('theday')
                                   ->where(function($query)use($id){
                                       if(\Auth::user()->id != $id){
-                                          $query->where('publish','public');
+                                          if(\Auth::user()->is_followed($id)){
+                                $query->where('publish','public')->orWhere('publish','friend');
+                              }else{
+                                $query->where('publish','public');
+                              }
                                       }else{
                                           $query;
                                       }

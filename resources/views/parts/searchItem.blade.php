@@ -16,6 +16,7 @@
         <li class="active"><a href="#tab1" data-toggle="tab">ワード</a></li>
         <li><a href="#tab2" data-toggle="tab">時期</a></li>
         <li><a href="#tab3" data-toggle="tab">地域</a></li>
+        <li><a href="#tab4" data-toggle="tab">ジャンル</a></li>
     </ul>
     {!! Form::open(['route'=>'show_items_search']) !!}
     <div class="tab-content tabContents">
@@ -132,6 +133,61 @@
               <input type="hidden" name="lng" id="centerLng" value="0">
               <input type="hidden" name="radius" id="circleRadius" value="0">
               <div id="searchMap" class="col-xs-12"></div>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab4">
+            <div class="col-xs-10 col-xs-offset-1  searchArea">
+              <div class="form-group">
+                              {!! Form::label('genre','ジャンル') !!}<br>
+                              <div class="chdiv">
+                              {!! Form::checkbox('genre[]','A') !!}
+                              <label>
+                                  <div class="white chlbl" style="background-color:#228b22;">
+                                      自然<i class="fa fa-leaf fa-lg" aria-hidden="true"></i>
+                                  </div>
+                              </label>
+                              </div>
+                              <div class="chdiv">
+                              {!! Form::checkbox('genre[]','B') !!}
+                              <label>
+                                  <div class="black chlbl" style="background-color:#ffff00;">
+                                      歴史・人物<i class="fa fa-history fa-lg" aria-hidden="true"></i>
+                                  </div>
+                              </label>
+                              </div>
+                              <div class="chdiv">
+                              {!! Form::checkbox('genre[]','C') !!}
+                              <label>
+                                  <div class="white chlbl" style="background-color:#a0522d;">
+                                      建物<i class="fa fa-university fa-lg" aria-hidden="true"></i>
+                                  </div>
+                              </label>
+                              </div>
+                              <div class="chdiv">
+                              {!! Form::checkbox('genre[]','D') !!}
+                              <label>
+                                  <div class="black chlbl" style="background-color:#ff69b4;">
+                                      食べる<i class="fa fa-cutlery fa-lg" aria-hidden="true"></i>
+                                  </div>
+                              </label>
+                              </div>
+                              <div class="chdiv">
+                              {!! Form::checkbox('genre[]','E') !!}
+                              <label>
+                                  <div class="black chlbl" style="background-color:#00ffff;">
+                                      買う<i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
+                                  </div>
+                              </label>
+                              </div>
+                              <div class="chdiv">
+                              {!! Form::checkbox('genre[]','F') !!}
+                              <label>
+                                  <div class="black chlbl" style="background-color:#ffffff;border:solid 0.5px #000000;">
+                                      遊ぶ<i class="fa fa-futbol-o fa-lg" aria-hidden="true"></i>
+                                  </div>
+                              </label>
+                              </div>
+                        </div>
             </div>
         </div>
     </div>

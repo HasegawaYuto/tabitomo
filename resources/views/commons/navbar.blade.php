@@ -16,7 +16,6 @@ $browser=((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos(
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-left">
-                  <li>{!! link_to_route('show_items', '旅先一覧') !!}</li>
                   @if(Auth::check())
                       <li>{!! link_to_route('show_guides', 'ガイド募集') !!}</li>
                       <li>{!! link_to_route('show_travelers', 'ゲスト募集') !!}</li>
@@ -41,8 +40,8 @@ $browser=((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos(
                             @endif
                             <li><a href="{{ route('show_user_messages',['id'=>$id]) }}" class="list-group-item noborder">
                                     <i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ
-                                    @if(\Auth::user()->newMessageHas())
-                                        <button class="btn btn-xs btn-danger " type="button">新着</button>
+                                    @if(Auth::user()->newMessageHas())
+                                        <button class="btn btn-xs btn-danger" type="button">新着</button>
                                     @endif
                                 </a>
                             </li>

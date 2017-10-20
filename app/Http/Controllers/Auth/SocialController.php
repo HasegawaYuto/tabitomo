@@ -93,7 +93,7 @@ class SocialController extends Controller
         return Socialite::driver('facebook')->redirect();
     }
     
-    public function getFacebookCallback() {
+    public function getFacebookCallback(Request $request) {
         try {
             $fuser = Socialite::driver('facebook')->user();
         } catch (\Exception $e) {
@@ -101,27 +101,20 @@ class SocialController extends Controller
         }
         if ($fuser) {
             //dd($fuser);
-            $loginuser=User::firstOrCreate(['email'=>$fuser->getEmail()]);
+            $loginuser=User::firstOrCreate(['email'=>$fuser->getEmail()],['facebook_id'=>$fuser->getId()]);
             \Auth::login($loginuser);
-            /*
-            if(!isset($loginuser->sex)){
-                if($fuser->$getUser()->gender=='Male'){
-                    $loginuser['sex'] = '男性';
-                }elseif($fuser->$getUser()->gender=='Female'){
-                    $loginuser['sex'] = '女性';
-                }else{
-                    $loginuser['sex'] = 'その他';
-                }
-            }
-            */
             if(!isset($loginuser->nickname)){
                 $loginuser['nickname']=$fuser->getNickname();
             }
-            $loginuser['facebook_id']=$fuser->getId();
-            $loginuser['name']=$fuser->getName();
+            if(!isset($loginuser->facebook_id)){
+                $loginuser['facebook_id']=$fuser->getId();
+            }
+            if(!isset($loginuser->name)){
+                $loginuser['name']=$fuser->getName();
+            }
             $loginuser['snsImagePath']=$fuser->getAvatar();
             $loginuser->save();
-            return redirect("/");
+            return redirect($_SERVER['HTTP_REFERER']);
         } else {
             return 'something went wrong';
         }
@@ -140,16 +133,21 @@ class SocialController extends Controller
         }
         if ($guser) {
             //dd($guser);
-            $loginuser=User::firstOrCreate(['email'=>$guser->getEmail()]);
+            $loginuser=User::firstOrCreate(['email'=>$guser->getEmail()],['google_id'=>$guser->getId()]);
             \Auth::login($loginuser);
             if(!isset($loginuser->nickname)){
-                $loginuser['nickname']=$fuser->getNickname();
+                $loginuser['nickname']=$guser->getNickname();
             }
-            $loginuser['google_id']=$guser->getId();
-            $loginuser['name']=$guser->getName();
+            if(!isset($loginuser->facebook_id)){
+                $loginuser['facebook_id']=$guser->getId();
+            }
+            if(!isset($loginuser->name)){
+                $loginuser['name']=$guser->getName();
+            }
             $loginuser['snsImagePath']=$guser->getAvatar();
             $loginuser->save();
-            return redirect("/");
+            //return $next($request);
+            return redirect('/');
         } else {
             return 'something went wrong';
         }

@@ -517,6 +517,7 @@ $(function(){/////////////////////シーン更新
             var editstyle = button.data('editstyle');
             var $firstday = button.data('firstday');
             var $lastday = button.data('lastday');
+            var oldGenre = button.data('genre');
             var $theday = oldTheday;
             $('#firstday0').val($firstday);
             $('#lastday0').val($lastday);
@@ -540,13 +541,25 @@ $(function(){/////////////////////シーン更新
             $('#keido0').val(oldLng);
             $('#oldScore').val(oldScore);
             $('#edittheday0').val(oldTheday);
+            $('input[name="genre[]"]').each(function(){
+               $(this).prop('checked',false); 
+            });
+            var charr = oldGenre.split('-'); 
+            var Allcharr = ['A','B','C','D','E','F'];
+            var Allcharrlen = Allcharr.length;
+            for($i=0;$i<Allcharrlen;$i++){
+                if($.inArray(Allcharr[$i],charr)!=-1){
+                    $('input[name="genre[]"][value="'+ Allcharr[$i] +'"]').prop('checked',true);
+                }
+            }
             if(oldPublish=='public'){
-                $('#radioPublic').attr('checked','checked');
-                $('#radioPrivate').removeAttr('checked');
+                $("input[name='publish'][value='public']").prop('checked',true);
             }
             if(oldPublish=='private'){
-                $('#radioPrivate').attr('checked','checked');
-                $('#radioPublic').removeAttr('checked');
+                 $("input[name='publish'][value='private']").prop('checked',true);
+            }
+            if(oldPublish=='friend'){
+                 $("input[name='publish'][value='friend']").prop('checked',true);
             }
 
             if($('#photosField').length){
