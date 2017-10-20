@@ -365,8 +365,7 @@ class PageController extends Controller
     }
 
     public function showItems(){
-      $scenes = Mylog::select('genre','scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
-            ->where(function($query){
+      $scenes = Mylog::where(function($query){
                 if(\Auth::check()){
                     if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
                         $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
