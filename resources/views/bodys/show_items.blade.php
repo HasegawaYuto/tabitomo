@@ -180,6 +180,9 @@
 @foreach($scenes as $scene)
 @include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene])
 @endforeach
+@foreach($scenes as $key => $scene)
+@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuserdata[$key]])
+@endforeach
 
 @else
     <div class="center jumbotron">
@@ -197,8 +200,5 @@
     </div>
 @endif
 
-@foreach($scenes as $key => $scene)
-@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuserdata[$key]])
-@endforeach
 
 @endsection
