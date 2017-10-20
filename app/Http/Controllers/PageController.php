@@ -141,7 +141,7 @@ class PageController extends Controller
       $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
       $scenes = $scenes->whereBetween('theday',[$date2,$date3]);
       if(!$areaNot){
-          $scenes = $scenes
+$scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
       if(isset($request->genre)){
@@ -333,7 +333,7 @@ class PageController extends Controller
       $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
       $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
       if(!$areaNot){
-          $recruitments = $recruitments
+$recruitments = $recruitments
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
       if(isset($request->sex)){
