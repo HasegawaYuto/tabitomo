@@ -380,6 +380,7 @@ $recruitments = $recruitments
             })
             ->orderBy('updated_at','desc')
             ->groupBy('user_id','title_id','scene_id')
+            ->distinct()
             ->paginate(24);
       $data['scenes'] = $scenes;
       $data['photos'] = Mylog::select('mime','data','scene_id','id','user_id','title_id')
