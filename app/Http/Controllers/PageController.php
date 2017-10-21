@@ -333,7 +333,7 @@ $scenes = $scenes
       $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
       $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
       if(!$areaNot){
-$recruitments = $recruitments
+          $recruitments = $recruitments
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
       if(isset($request->sex)){
@@ -365,7 +365,8 @@ $recruitments = $recruitments
     }
 
     public function showItems(){
-      $scenes = Mylog::where(function($query){
+      $scenes = Mylog::select('genre','scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
+            ->where(function($query){
                 if(\Auth::check()){
                     if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
                         $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
