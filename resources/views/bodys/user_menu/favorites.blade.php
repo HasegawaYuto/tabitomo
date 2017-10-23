@@ -9,7 +9,10 @@
             <div class="panel panel-heading text-center">
                 <i class="fa-fw fa fa-heart-o" aria-hidden="true"></i>お気に入り
             </div>
-                @include('parts.tabs',['tab_names'=>['シーン','ユーザー'],'class'=>'nav-tabs nav-justified','activetab'=>1])
+                <ul class="nav nav-tabs nav-justified">
+                      <li class="active"><a href="#tab1-1" data-toggle="tab">シーン</a></li>
+                      <li><a href="#tab1-2" data-toggle="tab">ユーザー</a></li>
+                </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1-1">
                       <div class="panel-body">
@@ -18,13 +21,13 @@
                             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading overCut">
-                                        @if(Auth::user()->id!=$scene->user_id)
-                                            @include('parts.favorite_scene_button',['scene'=>$scene])
+                                        @if(Auth::user()->id!=$titles[$key]->user_id)
+                                            @include('parts.favorite_scene_button',['thescene'=>$scene])
                                         @endif
                                         {{$scene->scene}}
                                     </div>
                                     <div class="panel-body">
-                                      <a href="{{route('show_title',['id'=>$scene->user_id,'title_id'=>$scene->title_id])}}">
+                                      <a href="{{route('show_title',['id'=>$titles[$key]->user_id,'title_id'=>$scene->title_id])}}">
                                               @if(isset($thumb[$key]->data))
                                                   <?php
                                                       $mime = $thumb[$key]->mime;
@@ -44,23 +47,12 @@
                     </div>
                     <div class="tab-pane " id="tab1-2">
                         <div class="panel-body">
-                              @include('parts.tabs',['tab_names'=>['ともだち','フォロー','フォロワー'],'activetab'=>'1','nest'=>'2'])
+                            <ul class="nav nav-tabs">
+                                  <li class="active"><a href="#tab2-1" data-toggle="tab">フォロー</a></li>
+                                  <li><a href="#tab2-2" data-toggle="tab">フォロワー</a></li>
+                            </ul>
                               <div class="tab-content">
-                                  <div class="tab-pane active" id="tab2-1">
-                                    @if(isset($mutual[0]))
-                                    {!! $mutual->render() !!}
-                                    @foreach($mutual as $favuser)
-                                        <div class="followImage text-center">
-                                        <a href="{{route('show_user_profile',['id'=>$favuser->id])}}">
-                                            @include('parts.avatar',['user'=>$favuser,'class'=>'favuser'])
-                                            <p class="smallp overCut black">{{isset($favuser->nickname)?$favuser->nickname:'未設定'}}</p>
-                                          </a>
-                                        @include('parts.follow_button',['user'=>$favuser])
-                                        </div>
-                                    @endforeach
-                                    @endif
-                                  </div>
-                                  <div class="tab-pane" id="tab2-2">
+                                  <div class="tab-pane" id="tab2-1">
                                     @if(isset($following[0]))
                                     {!! $following->render() !!}
                                     @foreach($following as $favuser)
@@ -74,7 +66,7 @@
                                     @endforeach
                                     @endif
                                   </div>
-                                  <div class="tab-pane" id="tab2-3">
+                                  <div class="tab-pane" id="tab2-2">
                                     @if(isset($followed[0]))
                                     {!! $followed->render() !!}
                                     @foreach($followed as $favuser)

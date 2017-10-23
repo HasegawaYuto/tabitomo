@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRecruitmentsTable extends Migration
+class CommentsTableCreate extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateRecruitmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('recruitments', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')
@@ -20,14 +20,15 @@ class CreateRecruitmentsTable extends Migration
                   ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->integer('recruitment_id')->unsigned()->index();
-            $table->foreign('recruitment_id')
-                  ->references('id')
-                  ->on('guestguides')
+            $table->string('scene_id')
+                  ->index();
+            $table->foreign('scene_id')
+                  ->references('scene_id')
+                  ->on('mylogdetailscenes')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
+            $table->text('comment');
             $table->timestamps();
-            $table->unique(['user_id','recruitment_id']);
         });
     }
 
@@ -38,6 +39,6 @@ class CreateRecruitmentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('recruitments');
+        Schema::drop('comments');
     }
 }

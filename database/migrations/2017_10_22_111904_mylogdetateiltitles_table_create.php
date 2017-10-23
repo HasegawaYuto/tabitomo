@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGuestguideTable extends Migration
+class MylogdetateiltitlesTableCreate extends Migration
 {
     /**
      * Run the migrations.
@@ -12,20 +12,20 @@ class CreateGuestguideTable extends Migration
      */
     public function up()
     {
-        Schema::create('guestguides', function (Blueprint $table) {
+        Schema::create('mylogdetailtitles', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->index();
+            $table->integer('user_id')
+                  ->unsigned()
+                  ->index();
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->string('type');
-            $table->float('lat');
-            $table->float('lng');
-            $table->float('radius');
-            $table->date('limitdate')->nullable();
-            $table->longText('contents')->nullable();
+            $table->string('title_id')->unique()->index();
+            $table->string('title')->nullable();
+            $table->date('firstday')->nullable();
+            $table->date('lastday')->nullable();
             $table->timestamps();
         });
     }
@@ -37,6 +37,6 @@ class CreateGuestguideTable extends Migration
      */
     public function down()
     {
-        Schema::drop('guestguides');
+        Schema::drop('mylogdetailtitles');
     }
 }

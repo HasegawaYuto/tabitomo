@@ -420,6 +420,7 @@ $(function(){//////////////マッチングデータ登録
             var originalurl = $('#GuestGuideForm').attr('action');
             var editreplace = 'user/'+userid+'/'+man+'post';
             var editurl = originalurl.replace(/(user\/)(.*?)(post)/,editreplace);
+
             $("#GuestGuideForm").attr("action",editurl);
             if(man=='guide'){
                 $('.modal-header').html('ガイド募集<button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button>');
@@ -438,18 +439,13 @@ $(function(){//////////////マッチングデータ登録
                       scrollwheel: true,//
                       zoomControl: true
                     });
-            var Marker = new Array;
-            var Circle = new Array;
-            var cnt = -1;
-            google.maps.event.addListener(googlemap,'click', function(e){
-                    cnt++;
-                    Marker[cnt] = new google.maps.Marker({
-                            position: e.latLng,
+                    var marker = new google.maps.Marker({
+                            position: centerPosition,
                             draggable: true,
                             map: googlemap
                             });
-                    Circle[cnt] = new google.maps.Circle({
-	                            center: e.latLng,
+                    var circle = new google.maps.Circle({
+	                            center: centerPosition,
 	                            map: googlemap,
                               radius: parseInt(parseFloat(20)*1000),
                               fillColor: '#FF0000', 		// 塗りつぶし色
@@ -459,26 +455,29 @@ $(function(){//////////////マッチングデータ登録
 	                            strokeWeight: 1,
                               editable: true
                             });
-                    Circle[cnt].bindTo("center", Marker[cnt], "position");
-                    $('#cnt').val(cnt);
-                    //$('.modal-header').html(cnt);
-                    $('#spotdata').append('<input type="hidden" value="'+e.latLng.lat()+'" name="centerLat[]" id="centerLat'+cnt+'">');
-                    $('#spotdata').append('<input type="hidden" value="'+e.latLng.lng()+'" name="centerLng[]" id="centerLng'+cnt+'">');
-                    $('#spotdata').append('<input type="hidden" value="20000" name="circleRadius[]" id="circleRadius'+cnt+'">');
-                    google.maps.event.addListener(Marker[cnt],'drag',function(){
-                      var marker = Marker[cnt].getPosition();
-                      var circle = Circle[cnt].getRadius();
-                      $('#centerLat'+cnt).val(marker.lat());
-                      $('#centerLng'+cnt).val(marker.lng());
-                      $('#circleRadius'+cnt).val(circle);
+                    circle.bindTo("center", marker, "position");
+                    google.maps.event.addListener(marker,'drag',function(){
+                      var markerPosi = marker.getPosition();
+                      var circleRad = circle.getRadius();
+                      $('#centerLat').val(markerPosi.lat());
+                      $('#centerLng').val(markerPosi.lng());
+                      $('#circleRadius').val(circleRad);
                     });
-                    google.maps.event.addListener(Circle[cnt],'radius_changed',function(){
-                        var marker = Marker[cnt].getPosition();
-                        var circle = Circle[cnt].getRadius();
-                        $('#centerLat'+cnt).val(marker.lat());
-                        $('#centerLng'+cnt).val(marker.lng());
-                        $('#circleRadius'+cnt).val(circle);
+                    google.maps.event.addListener(circle,'radius_changed',function(){
+                        var markerPosi = marker.getPosition();
+                      var circleRad = circle.getRadius();
+                      $('#centerLat').val(markerPosi.lat());
+                      $('#centerLng').val(markerPosi.lng());
+                      $('#circleRadius').val(circleRad);
                     });
+            google.maps.event.addListener(googlemap,'click', function(e){
+                        marker.position = e.latLng;
+                        circle.bindTo("center", marker, "position");
+                        marker.setMap(googlemap);
+                      var circleRad = circle.getRadius();
+                      $('#centerLat').val(e.latLng.lat());
+                      $('#centerLng').val(e.latLng.lng());
+                      $('#circleRadius').val(circleRad);
                 });
         });
     }
@@ -489,7 +488,7 @@ $(function(){/////////////////////シーン更新
         var originalImg = $('#photosField').html();
         $('#fixScene0').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
-            var $sceneID = button.data('userid')+'-'+button.data('titleid')+'-'+button.data('sceneid');
+            var $sceneID = button.data('sceneid');
             $('#photosField').html(originalImg).find('img').each(function(){
                 var $photoSceneId = $(this).attr('sceneID');
                 if($photoSceneId != $sceneID){
@@ -598,9 +597,6 @@ $(function(){/////////////////////シーン更新
                 date=Date.parse(date);
                 return date;
             }
-            //var $firstday = $('#firstday0').val();
-            //var $lastday = $('#lastday0').val();
-            //var $theday = $('#edittheday0').val();
             var $firstdayParse = dateToParse($firstday);
             var $lastdayParse = dateToParse($lastday);
             var $thedayParse = dateToParse($theday);
@@ -635,11 +631,11 @@ $(function(){/////////////////////シーン更新
                 mapInit();
         ///////////////////////////
                 function mapInit() {//
-                if($('#ido0').val()!="" && $('#keido0').val()!=""){
+                //if($('#ido0').val()!="" && $('#keido0').val()!=""){
                     var centerPosition = {lat: parseFloat($('#ido0').val()), lng: parseFloat($('#keido0').val())};
-                }else{
-                    var centerPosition = {lat: 36, lng: 136};
-                }
+                //}else{
+                //    var centerPosition = {lat: 36, lng: 136};
+                //}
                 if($('#mapzoom0').val()!=""){
                     var mapzoom = parseInt($('#mapzoom0').val());
                 }else{

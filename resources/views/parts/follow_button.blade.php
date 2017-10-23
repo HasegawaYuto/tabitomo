@@ -1,4 +1,4 @@
-@if(isset($user))
+@if($user->id != \Auth::user()->id)
   @if(\Auth::user()->is_following($user->id))
       {!!Form::open(['route'=>['unfollow_user','follow_id'=>$user->id],'style'=>'display:inline;'])!!}
       <button type="submit" class="btn btn-xs btn-default"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i>

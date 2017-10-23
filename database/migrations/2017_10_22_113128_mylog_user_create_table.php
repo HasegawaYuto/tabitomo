@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProfilesTable extends Migration
+class MylogUserCreateTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('mylog_user', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')
                   ->unsigned()
@@ -22,15 +22,15 @@ class CreateProfilesTable extends Migration
                   ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->string('nickname')->nullable();
-            $table->string('sex')->nullable();
-            $table->date('birthday')->nullable();
-            $table->integer('age')->nullable();
-            $table->string('area')->nullable();
-            $table->string('path')->nullable();
-            $table->string('mime')->nullable();
-            $table->binary('data')->nullable();
+            $table->string('scene_id')
+                  ->index();
+            $table->foreign('scene_id')
+                  ->references('scene_id')
+                  ->on('mylogdetailscenes')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
             $table->timestamps();
+            $table->unique(['user_id','scene_id']);
         });
     }
 
@@ -41,6 +41,6 @@ class CreateProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('profiles');
+        Schema::drop('mylog_user');
     }
 }

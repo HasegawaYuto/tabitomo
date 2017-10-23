@@ -51,13 +51,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/guests/{guest_id}/delete','GuestGuideController@deleteGuest')->name('guest_delete');
     Route::post('/following/{follow_id}','UserController@following')->name('follow_user');
     Route::post('/unfollowing/{follow_id}','UserController@unfollowing')->name('unfollow_user');
-
+    Route::post('mylog/title/{title_id}/favorite','ItemPostController@favoriteTitle')->name('favorite_title');
+    Route::post('mylog/title/{title_id}/unfavorite','ItemPostController@unfavoriteTitle')->name('unfavorite_title');
+    Route::post('mylog/scene/{scene_id}/favorite','ItemPostController@favoriteScene')->name('favorite_scene');
+    Route::post('mylog/scene/{scene_id}/unfavorite','ItemPostController@unfavoriteScene')->name('unfavorite_scene');
+    Route::post('/mylog/{scene_id}/delete','ItemPostController@deleteScene')->name('scene_delete');
+    Route::post('mylog/scene/{scene_id}/comment','ItemPostController@postComment')->name('add_comment');
+    Route::post('mylog/comment/{comment_id}/delete','ItemPostController@deleteComment')->name('delete_comment');
+    Route::post('mylog/scene/{scene_id}/delete','ItemPostController@deleteScene')->name('scene_delete');
+    Route::post('mylog/title/{title_id}/delete','ItemPostController@deleteTitle')->name('title_delete');
+    Route::post('guestpost','GuestGuideController@postGuest')->name('guest_post');
+    Route::post('guidepost','GuestGuideController@postGuide')->name('guide_post');
+    
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
         Route::post('message/{send_id}/send','MessageController@sendMessage')->name('send_message');
         Route::post('message/{partner_id}/show','MessageController@loadMessage')->name('load_message');
-        Route::post('mylog/title/{title_id}/{scene_id}/delete','ItemPostController@deleteScene')->name('scene_delete');
-        Route::post('mylog/title/{title_id}/delete','ItemPostController@deleteTitle')->name('title_delete');
         Route::post('mylog/title/{title_id}/edit','ItemPostController@editTitle')->name('edit_title');
         Route::post('mylog/title/{title_id}/{scene_id}/edit','ItemPostController@editScene')->name('edit_scene');
         Route::post('profile/edit','UserOptionController@edit')->name('edit_user_profile');
@@ -68,13 +77,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('mylog','PageController@showUserItems')->name('show_user_items');
         Route::post('mylog/creating','ItemPostController@createItems')->name('create_items');
         Route::get('mylog/title/{title_id}','PageController@showTitle')->name('show_title');
-
-        Route::post('mylog/title/{title_id}/{scene_id}/favorite','ItemPostController@favoriteScene')->name('favorite_scene');
-        Route::post('mylog/title/{title_id}/{scene_id}/unfavorite','ItemPostController@unfavoriteScene')->name('unfavorite_scene');
-        Route::post('mylog/title/{title_id}/favorite','ItemPostController@favoriteTitle')->name('favorite_title');
-        Route::post('mylog/title/{title_id}/unfavorite','ItemPostController@unfavoriteTitle')->name('unfavorite_title');
-        Route::post('mylog/title/{title_id}/{scene_id}/comments','ItemPostController@postComment')->name('add_comment');
-        Route::post('mylog/title/{title_id}/{scene_id}/comments/{comment_user_id}/{comment_id}/delete','ItemPostController@deleteComment')->name('delete_comment');
         Route::post('guestpost','GuestGuideController@postGuest')->name('guest_post');
         Route::post('guidepost','GuestGuideController@postGuide')->name('guide_post');
       });

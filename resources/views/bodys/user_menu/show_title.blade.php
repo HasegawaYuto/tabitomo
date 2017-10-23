@@ -9,11 +9,8 @@
         <div class="panel-heading titleStringL">
                 @if(Auth::user()->id == $user->id)
                   <?php
-                        //$today = Carbon\Carbon::now()->format('Y年m月d日');
                         $oldfirstday = new Carbon\Carbon($title->firstday);
-                        //$oldlastday = new Carbon\Carbon($title->lastday);
                         $OldFirstday = $oldfirstday->format('Y年m月d日');
-                        //$OldLastday = $oldlastday->format('Y年m月d日');
                   ?>
                     <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fixTitle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     &nbsp;
@@ -24,15 +21,16 @@
                       data-lng="136"
                       data-score="0"
                       data-comment="no comment"
-                      data-oldtheday="{{$OldFirstday}}"
+                      data-oldtheday="{{$title->firstday}}"
                       data-sceneid="{{$newsceneid}}"
                       data-titleid="{{$title->title_id}}"
                       data-userid="{{$title->user_id}}"
                       data-publish="public"
                       data-firstday="{{$title->firstday}}"
                       data-lastday="{{$title->lastday}}"
+                      data-genre=""
                       data-editstyle="add"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                      @include('parts.delete_button',['title'=>$title])
+                      @include('parts.delete_button_title',['title'=>$title])
                 @else
                     @include('parts.favorite_title_button',['title'=>$title])
                 @endif
@@ -100,7 +98,7 @@
                 <label>お気に入り</label>
                 <div class="text-center">
                     <a data-target="#modalFavoriteUserstitle" data-toggle="modal">
-	                <span class="badge">{{$favuser['title']}}</span>
+	                <span class="badge">{{count($favuser['title'])}}</span>
 	                </a>
                 </div>
             </div>
@@ -118,7 +116,7 @@
                         <div class="panel-heading" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;">
                           @if(Auth::user()->id == $user->id)
                             <button type="button" class="btn btn-warning btn-xs"  data-toggle="modal" data-target="#fixScene0" data-scene="{{$scene->scene}}"
-                            data-title="{{$scene->title}}"
+                            data-title="{{$title->title}}"
                             data-lat="{{$scene->lat}}"
                             data-lng="{{$scene->lng}}"
                             data-score="{{$scene->score}}"
@@ -126,15 +124,15 @@
                             data-oldtheday="{{$scene->theday}}"
                             data-sceneid="{{$scene->scene_id}}"
                             data-titleid="{{$scene->title_id}}"
-                            data-userid="{{$scene->user_id}}"
+                            data-userid="{{$title->user_id}}"
                             data-publish="{{$scene->publish}}"
-                            data-firstday="{{$scene->firstday}}"
-                            data-lastday="{{$scene->lastday}}"
+                            data-firstday="{{$title->firstday}}"
+                            data-lastday="{{$title->lastday}}"
                             data-genre="{{$scene->genre}}"
                             data-editstyle="fix"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                            @include('parts.delete_button',['scene'=>$scene])
+                            @include('parts.delete_button_scene',['thescene'=>$scene,'title'=>$title])
                           @else
-                            @include('parts.favorite_scene_button',['scene'=>$scene])
+                            @include('parts.favorite_scene_button',['thescene'=>$scene])
                           @endif
                             &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                         </div>
@@ -187,7 +185,7 @@
                                         $mime = $thumb[$key]->mime;
                                         $dataImage = base64_encode($thumb[$key]->data);
                                     ?>
-                                    <a href="#modal_carousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}">
+                                    <a href="#modal_carousel{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}">
                                         <div class="ItemImageShow lazyload" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                                     </a>
                                     <p class="text-center"><small>↑クリック</small></p>
@@ -218,7 +216,7 @@
                                         <label>お気に入り</label>
                                         <div class="text-center">
                                             <a data-target="#modalFavoriteUsers{{$key}}" data-toggle="modal">
-                                                <span class="badge">{{$favuser[$key]}}</span>
+                                                <span class="badge">{{count($favuser[$key])}}</span>
                                             </a>
                                         </div>
                                     </div>
@@ -230,23 +228,24 @@
                                 </div>
                             <div>
                                 <div id="demo{{$key}}" class="collapse col-xs-12">
+                                    @if(isset($comments[$key][0]))
                                     <label>ユーザーコメント</label>
-                                    @if(isset($userComments[$key]))
                                     <ul class="list-group">
-                                        @foreach($userComments[$key] as $kkey => $userComment)
+                                        @foreach($comments[$key] as $comment)
+                                        <?php $theuser = App\User::find($comment->user_id); ?>
                                             <li class="list-group-item">
-                                            <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->id])}}">
+                                            <a href="{{route('show_user_profile',['id'=>$theuser->id])}}">
                                             <div style="width:100%;" class="black">
-                                                @include('parts.avatar',['user'=>$commentUser[$key][$kkey],'class'=>'CommentUserAvatarInTitle'])
-                                            {{$commentUser[$key][$kkey]->nickname or '未設定'}}
+                                                @include('parts.avatar',['user'=>$theuser,'class'=>'CommentUserAvatarInTitle'])
+                                            {{$theuser->nickname or '未設定'}}
                                             @if(Auth::check())
-                                            @if(Auth::user()->id == $commentUser[$key][$kkey]->id || Auth::user()->id==$scene->user_id)
-                                                @include('parts.comment_delete_button',['scene'=>$scene,'commentUser'=>$commentUser[$key][$kkey],'comment'=>$userComment])
+                                            @if(Auth::user()->id == $theuser->id || Auth::user()->id==$title->user_id)
+                                                @include('parts.comment_delete_button',['scene'=>$scene,'commentUser'=>$theuser,'comment'=>$comment])
                                             @endif
                                             @endif
                                             </div></a>
                                             <div class="commentContent clearfix">
-                                            {{$userComment->comment}}
+                                            {{$comment->comment}}
                                             </div>
                                             </li>
                                         @endforeach
@@ -260,11 +259,12 @@
                                         {!! Form::close() !!}
                                 </div>
                                 <button type="button" class="btn btn-block" data-toggle="collapse" data-target="#demo{{$key}}"><span class="caret"></span></button>
-                            </div>
+
                         </div>
                     </div>
                 </div>
             @endforeach
+            </div>
         </div>
     </div>
 </div>
@@ -276,18 +276,16 @@
 </div>
 @endif
 
-@if(isset($photos))
-    @include('parts.modal_scene_edit',['photos'=>$photos])
-@endif
+@include('parts.modal_scene_edit',['photos'=>$photos])
 
 @foreach($scenes as $scene)
-@include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene])
+@include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene,'title'=>$title])
 @endforeach
 
 @foreach($scenes as $key => $scene)
-@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuserdata[$key]])
+@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuser[$key]])
 @endforeach
 
-@include('parts.showFavoriteUsers',['key'=>'title','users'=>$favuserdata['title']])
+@include('parts.showFavoriteUsers',['key'=>'title','users'=>$favuser['title']])
 
 @endsection

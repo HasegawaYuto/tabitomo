@@ -15,7 +15,7 @@
             <div class="panel panel-primary">
                 <div class="panel-heading overCut">
                   @if(Auth::check())
-                  @if(Auth::user()->id == $scene->user_id)
+                  @if(Auth::user()->id == $titles[$key]->user_id)
                     <button type="button" class="btn btn-warning btn-xs"  data-toggle="modal" data-target="#fixScene0" data-scene="{{$scene->scene}}"
                     data-lat="{{$scene->lat}}"
                     data-lng="{{$scene->lng}}"
@@ -23,23 +23,22 @@
                     data-comment="{{$scene->comment}}"
                     data-oldtheday="{{$scene->theday}}"
                     data-sceneid="{{$scene->scene_id}}"
-                    data-sceneid="{{$scene->scene_id}}"
                     data-titleid="{{$scene->title_id}}"
-                    data-userid="{{$scene->user_id}}"
+                    data-userid="{{$titles[$key]->user_id}}"
                     data-publish="{{$scene->publish}}"
-                    data-firstday="{{$scene->firstday}}"
-                    data-lastday="{{$scene->lastday}}"
+                    data-firstday="{{$titles[$key]->firstday}}"
+                    data-lastday="{{$titles[$key]->lastday}}"
                     data-genre="{{$scene->genre}}" 
                     data-editstyle="fix"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                    @include('parts.delete_button',['scene'=>$scene])
+                    @include('parts.delete_button_scene',['thescene'=>$scene])
                   @else
-                    @include('parts.favorite_scene_button',['scene'=>$scene])
+                    @include('parts.favorite_scene_button',['thescene'=>$scene])
                   @endif
                   @endif
                     &nbsp;&nbsp;{{$scene->scene =="" ? 'No Title':$scene->scene}}
                 </div>
                 <div class="panel-body">
-                    <a href="{{route('show_title',['id'=>$scene->user_id,'title_id'=>$scene->title_id])}}">
+                    <a href="{{route('show_title',['id'=>$titles[$key]->user_id,'title_id'=>$scene->title_id])}}">
                      <div class="black titleFrom">
                         <p class="smallp">【ジャンル】</p>
                         @if($scene->genre!="")
@@ -79,12 +78,12 @@
                             </div>
                         @endif
                       <p class="smallp">【タイトル】</p>
-                    <p class="overCut">{{$scene->title}}</p>
+                    <p class="overCut">{{$titles[$key]->title}}</p>
                   </div></a>
-                  <a href="{{route('show_user_profile',['id'=>$scene->user_id])}}">
+                  <a href="{{route('show_user_profile',['id'=>$titles[$key]->user_id])}}">
                   <div class="itemAvatarOuter text-center black overCut">
-                      @include('parts.avatar',['user'=>$user[$scene->user_id],'class'=>'itemAvatar'])
-                    <p class="smallp">{{$user[$scene->user_id]->nickname!=""?$user[$scene->user_id]->nickname:"未設定"}}</p>
+                      @include('parts.avatar',['user'=>$user[$key],'class'=>'itemAvatar'])
+                    <p class="smallp">{{isset($user[$key]->nickname)?$user[$key]->nickname:"未設定"}}</p>
                   </div>
                   </a>
                     <div class="col-xs-12">
@@ -93,7 +92,7 @@
                         $mime = $thumb[$key]->mime;
                         $dataImage = base64_encode($thumb[$key]->data);
                     ?>
-                    <a href="#modal_carousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}">
+                    <a href="#modal_carousel{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}">
                         <div class="ItemImageShow lazyload" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
                     </a>
                     <p class="text-center"><small>↑クリック</small></p>
@@ -123,7 +122,7 @@
                             <label>お気に入り</label>
                             <div style="margin-bottom:10px;" class="text-center">
                               <a data-target="#modalFavoriteUsers{{$key}}" data-toggle="modal">
-                                <span class="badge">{{$favuser[$key]}}</span>
+                                <span class="badge">{{count($favuser[$key])}}</span>
                             </a>
                             </div>
                         </div>
@@ -134,30 +133,31 @@
                         </div>
                     <!--/div-->
                     <!--div-->
-                            @if(isset($userComments[$key][0]))
+                            @if(isset($comments[$key][0]))
                             <label>ユーザーコメント</label>
                             <ul class="list-group">
-                                @foreach($userComments[$key] as $kkey => $userComment)
+                                @foreach($comments[$key] as $kkey => $comment)
+                                <?php $theuser = App\User::find($comment->user_id); ?>
                                     <li class="list-group-item">
-                                    <a href="{{route('show_user_profile',['id'=>$commentUser[$key][$kkey]->id])}}" class="black">
+                                    <a href="{{route('show_user_profile',['id'=>$theuser->id])}}" class="black">
                                     <div class="overCut black" style="width:100%;">
-                                        @include('parts.avatar',['user'=>$commentUser[$key][$kkey],'class'=>'CommentUserAvatar'])
-                                    <p class="smallp">{{$commentUser[$key][$kkey]->nickname or '未設定'}}</p>
+                                        @include('parts.avatar',['user'=>$theuser,'class'=>'CommentUserAvatar'])
+                                    <p class="smallp">{{$theuser->nickname or '未設定'}}</p>
                                     @if(Auth::check())
-                                    @if(Auth::user()->id == $commentUser[$key][$kkey]->id || Auth::user()->id==$scene->user_id)
-                                        @include('parts.comment_delete_button',['scene'=>$scene,'commentUser'=>$commentUser[$key][$kkey],'comment'=>$userComment])
+                                    @if(Auth::user()->id == $titles[$key]->user_id || Auth::user()->id==$theuser->id)
+                                        @include('parts.comment_delete_button',['comment'=>$comment])
                                     @endif
                                     @endif
                                     </div></a>
                                     <div class="commentContent clearfix">
-                                    {{$userComment->comment}}
+                                    {{$comment->comment}}
                                     </div>
                                     </li>
                                 @endforeach
                             </ul>
                             @endif
                             @if(Auth::check())
-                                {!! Form::open(['route'=>['add_comment','id'=>$scene->user_id,'title_id'=>$scene->title_id,'scene_id'=>$scene->scene_id]]) !!}
+                                {!! Form::open(['route'=>['add_comment','scene_id'=>$scene->scene_id]]) !!}
                                 <div class="form-group">
                                     {!! Form::textarea('comment',null,['placeholder'=>'コメント','class'=>'form-control','rows'=>'3']) !!}
                                 </div>
@@ -177,11 +177,9 @@
     @include('parts.modal_scene_edit',['photos'=>$photos])
 @endif
 
-@foreach($scenes as $scene)
-@include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene])
-@endforeach
 @foreach($scenes as $key => $scene)
-@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuserdata[$key]])
+@include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene,'title'=>$titles[$key]])
+@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuser[$key]])
 @endforeach
 
 @else

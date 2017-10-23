@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommentsTable extends Migration
+class MessagesCreate extends Migration
 {
     /**
      * Run the migrations.
@@ -12,25 +12,26 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
+            $table->integer('send_id')->unsigned()->index();
+            $table->text('message');
+            $table->string('mime')->nullable();
+            $table->binary('data')->nullable();
+            $table->tinyInteger('status')->default(0);
+            $table->timestamps();
+
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->integer('scene_id')
-                  ->unsigned()
-                  ->index();
-            $table->foreign('scene_id')
+            $table->foreign('send_id')
                   ->references('id')
-                  ->on('mylogs')
+                  ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->integer('comment_id')->unsigned()->index();
-            $table->text('comment');
-            $table->timestamps();
         });
     }
 
@@ -41,6 +42,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('comments');
+        Schema::drop('messages');
     }
 }

@@ -12,7 +12,7 @@ use App\User;
 use Carbon\Carbon;
 use App\Location;
 use App\Pref;
-use App\Profile,App\Mylog,App\Guestguide;
+use App\Mylogdetailtitle,App\Mylogdetailscene,App\Guestguide,App\Photo;
 use Illuminate\Support\Facades\Log;
 
 class PageController extends Controller
@@ -103,16 +103,16 @@ class PageController extends Controller
       if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot && $genreNot){
         return redirect('/');
       }
-      $scenes = Mylog::select('genre','scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
-            ->where(function($query){
+      $scenes = Mylogdetailscene::where(function($query){
                 if(\Auth::check()){
                     if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
                         $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
-                        $query->whereIn('user_id',$userids)
-                              ->orWhere('user_id',\Auth::user()->id)
-                              ->Where('publish','<>','private');
+                        $titleids = Mylogdetailtitle::where('user_id',$userids)->lists('title_id');
+                        $query->whereIn('title_id',$titleids)
+                              ->where('publish','<>','private')
+                              ->orWhere('scene_id','like',\Auth::user()->id.'-%-%');
                     }else{
-                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                        $query->where('publish','public')->orWhere('scene_id','like',\Auth::user()->id.'-%-%');
                     }
                 }else{
                     $query->where('publish','public');
@@ -122,7 +122,8 @@ class PageController extends Controller
           $keywords = explode(' ',$request->keywords);
           foreach($keywords as $keyword){
             $scenes = $scenes->where(function($query)use($keyword){
-                                    $query->where('title','like','%'.$keyword.'%')
+                                    $titleids = Mylogdetailtitle::where('title','like','%'.$keyword.'%')->lists('title_id');
+                                    $query->whereIn('title_id',$titleids)
                                           ->orWhere('scene','like','%'.$keyword.'%')
                                           ->orWhere('comment','like','%'.$keyword.'%');
                               });
@@ -150,63 +151,43 @@ $scenes = $scenes
           }
       }
       $scenes=$scenes->orderBy('updated_at','desc')
-                    ->groupBy('user_id','title_id','scene_id')
                     ->paginate(24);
       $data['scenes'] = $scenes;
-      $data['photos'] = Mylog::select('mime','data','scene_id','id','user_id','title_id')
-                                ->whereNotNull('data')
-                                ->where(function($query){
-                                    if(\Auth::check()){
-                                        if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
-                        $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
-                        $query->whereIn('user_id',$userids)->where('publish','friend')
-                              ->orWhere('publish','public')->orWhere('user_id',\Auth::user()->id);
-                    }else{
-                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
-                    }
-                                    }else{
-                                        $query->where('publish','public');
-                                    }
-                                })
-                                ->get();
+      /*
+      $sceneids=[];
+      foreach($scenes as $scene){
+          $sceneids[] = $scene->scene_id;
+      }
+      */
+      $sceneids = $scenes->lists('scene_id');
+      $data['photos'] = Photo::whereIn('scene_id',$sceneids)
+                              ->whereNotNull('data')
+                              ->get();
       foreach($scenes as $key => $scene){
-          $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
-          foreach($data['userComments'][$key] as $kkey => $userComment){
-              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
-          }
-          $sceneids = Mylog::where('user_id',$scene->user_id)
-                           ->where('title_id',$scene->title_id)
-                           ->where('scene_id',$scene->scene_id)
-                           ->lists('id');
-          $userids = \DB::table('mylog_user')->whereIn('scene_id',$sceneids)->groupBy('user_id')->lists('user_id');
-          $data['favuserdata'][$key] = User::whereIn('id',$userids)->get();
-          $data['favuser'][$key] = User::whereIn('id',$userids)->count();
-          $data['user'][$scene->user_id]=User::find($scene->user_id);
-          $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
+          $data['user'][]=User::find(Mylogdetailtitle::where('title_id',$scene->title_id)->first()->user_id);
+          $comments = \DB::table('comments')->where('scene_id',$scene->scene_id)
+                                            ->orderBy('created_at','asc')
+                                            ->get();
+          $data['comments'][] = $comments;
+          $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
+          $data['favuser'][] = User::whereIn('id',$userids)->get();
+          $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
-                                  ->select('id')
-                                  ->where(function($query){
-                                      if(\Auth::check()){
-                                          $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
-                                      }else{
-                                          $query->where('publish','public');
-                                      }
-                                    })
-                                  ->orderByRaw("RAND()")->first();
-          if(isset($thumbID)){
-              $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
-          }
+                                  ->orderByRaw("RAND()")
+                                  ->first();
+          $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)
+                                            ->first();
       }
       return view('bodys.show_items',$data);
     }
 
     public function showGuides(){
       $today = Carbon::today();
-      $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . $today->day;
+      $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . str_pad($today->day, 2, 0, STR_PAD_LEFT);
       $data['recruitments']=Guestguide::where('type','guide')
-                                      ->where('user_id','!=',\Auth::user()->id)
+                                      ->where('user_id','<>',\Auth::user()->id)
                                       ->where(function($query)use($chdate){
-                                          $query->whereNull('limitdate')->orWhere('limitdate','>',$chdate);
+                                          $query->where('limitdate','0000-00-00')->orWhere('limitdate','>',$chdate);
                                       })
                                       ->orderBy('created_at','desc')
                                       ->paginate(30);
@@ -221,16 +202,16 @@ $scenes = $scenes
       $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
       $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
       $areaNot = $request->lat=="0"&&$request->lng=="0"&&$request->radius=="0";
-      $personalNot = !isset($request->sex)&&!isset($request->age);
+      $personalNot = !isset($request->sex)&&$request->age==0;
       if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot && $personalNot){
         return redirect('/guides');
       }
       $today = Carbon::today();
       $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . str_pad($today->day, 2, 0, STR_PAD_LEFT);
       $recruitments=Guestguide::where('type','guide')
-                          ->where('user_id','!=',\Auth::user()->id)
+                          ->where('user_id','<>',\Auth::user()->id)
                           ->where(function($query)use($chdate){
-                              $query->whereNull('limitdate')->orWhere('limitdate','>',$chdate);
+                              $query->where('limitdate','0000-00-00')->orWhere('limitdate','>',$chdate);
                           });
       if(isset($request->keywords)){
           $keywords = explode(' ',$request->keywords);
@@ -247,9 +228,11 @@ $scenes = $scenes
       if($request->day1!='00'){
           $recruitments=$recruitments->where('limitdate','like','____-__-'.$request->day1);
       }
-      $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
-      $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
-      $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
+      if(!$termNotBetween){
+        $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
+        $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
+        $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
+      }
       if(!$areaNot){
           $recruitments = $recruitments
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
@@ -259,26 +242,21 @@ $scenes = $scenes
           $recruitments=$recruitments->whereIn('user_id',$ids);
       }
       if($request->age!=0){
-          $ages = $request->age+1;
-          $dt = Carbon::today()->subYear($request->age)->format('Y-m-d');
-          $dts = Carbon::today()->subYear($ages)->format('Y-m-d');
-          if($request->agetype=='='){
-              $ids = User::where('birthday','>=',$dts)
-                          ->where('birthday','<=',$dt)
-                          ->whereNotNull('birthday')->lists('id');
-          }elseif($request->agetype=='>='){
-              $ids = User::where('birthday',$request->agetype,$dts)->whereNotNull('birthday')->lists('id');
+          $age = $request->age;
+          $sup = Carbon::today()->subYear($request->age)->format('Y-m-d');
+          $inf = Carbon::today()->subYear($request->age+1)->format('Y-m-d');
+          if($request->agetype=='e'){
+              $userids = User::where('birthday','<=',$sup)->where('birthday','>',$inf)->lists('id');
+          }elseif($request->agetype=='i'){
+              $userids = User::where('birthday','<=',$sup)->lists('id');
           }else{
-              $ids = User::where('birthday',$request->agetype,$dt)->whereNotNull('birthday')->lists('id');
+              $userids = User::where('birthday','>',$inf)->lists('id');
           }
-          $recruitments=$recruitments->whereIn('user_id',$ids);
+          $recruitments=$recruitments->whereIn('user_id',$userids);
       }
       $recruitments = $recruitments->orderBy('created_at','desc')
                        ->paginate(30);
       $data['recruitments']=$recruitments;
-      foreach($data['recruitments'] as $key => $recruitment){
-          $data['recruituser'][$key] = User::find($recruitment->user_id);
-      }
       return view('bodys.show_guides',$data);
     }
 
@@ -286,9 +264,9 @@ $scenes = $scenes
       $today = Carbon::today();
       $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . $today->day;
       $data['recruitments']=Guestguide::where('type','guest')
-                          ->where('user_id','!=',\Auth::user()->id)
+                          ->where('user_id','<>',\Auth::user()->id)
                           ->where(function($query)use($chdate){
-                              $query->whereNull('limitdate')->orWhere('limitdate','>',$chdate);
+                              $query->where('limitdate','0000-00-00')->orWhere('limitdate','>',$chdate);
                           })
                           ->orderBy('created_at','desc')
                           ->paginate(30);
@@ -310,9 +288,9 @@ $scenes = $scenes
       $today = Carbon::today();
       $chdate = $today->year . '-' . str_pad($today->month, 2, 0, STR_PAD_LEFT) . '-' . str_pad($today->day, 2, 0, STR_PAD_LEFT);
       $recruitments=Guestguide::where('type','guest')
-                          ->where('user_id','!=',\Auth::user()->id)
+                          ->where('user_id','<>',\Auth::user()->id)
                           ->where(function($query)use($chdate){
-                              $query->whereNull('limitdate')->orWhere('limitdate','>',$chdate);
+                              $query->where('limitdate','0000-00-00')->orWhere('limitdate','>',$chdate);
                           });
       if(isset($request->keywords)){
           $keywords = explode(' ',$request->keywords);
@@ -329,9 +307,11 @@ $scenes = $scenes
       if($request->day1!='00'){
           $recruitments=$recruitments->where('limitdate','like','____-__-'.$request->day1);
       }
-      $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
-      $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
-      $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
+      if(!$termNotBetween){
+        $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
+        $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
+        $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
+      }
       if(!$areaNot){
           $recruitments = $recruitments
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
@@ -341,98 +321,62 @@ $scenes = $scenes
           $recruitments=$recruitments->whereIn('user_id',$ids);
       }
       if($request->age!=0){
-          $ages = $request->age+1;
-          $dt = Carbon::today()->subYear($request->age)->format('Y-m-d');
-          $dts = Carbon::today()->subYear($ages)->format('Y-m-d');
-          if($request->agetype=='='){
-              $ids = User::where('birthday','>=',$dts)
-                          ->where('birthday','<=',$dt)
-                          ->whereNotNull('birthday')->lists('id');
-          }elseif($request->agetype=='>='){
-              $ids = User::where('birthday',$request->agetype,$dts)->whereNotNull('birthday')->lists('id');
+          $age = $request->age;
+          $sup = Carbon::today()->subYear($request->age)->format('Y-m-d');
+          $inf = Carbon::today()->subYear($request->age+1)->format('Y-m-d');
+          if($request->agetype=='e'){
+              $userids = User::where('birthday','<=',$sup)->where('birthday','>',$inf)->lists('id');
+          }elseif($request->agetype=='i'){
+              $userids = User::where('birthday','<=',$sup)->lists('id');
           }else{
-              $ids = User::where('birthday',$request->agetype,$dt)->whereNotNull('birthday')->lists('id');
+              $userids = User::where('birthday','>',$inf)->lists('id');
           }
-          $recruitments=$recruitments->whereIn('user_id',$ids);
+          $recruitments=$recruitments->whereIn('user_id',$userids);
       }
       $recruitments = $recruitments->orderBy('created_at','desc')
                        ->paginate(30);
       $data['recruitments']=$recruitments;
-      foreach($data['recruitments'] as $key => $recruitment){
-          $data['recruituser'][$key] = User::find($recruitment->user_id);
-      }
       return view('bodys.show_travelers',$data);
     }
 
     public function showItems(){
-      $scenes = Mylog::select('updated_at','genre','scene','lat','lng','user_id','title_id','title','scene_id','score','comment','theday','publish','firstday','lastday','theday','id')
-            ->where(function($query){
+      $scenes = Mylogdetailscene::where(function($query){
                 if(\Auth::check()){
                     if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
                         $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
-                        $query->whereIn('user_id',$userids)->where('publish','friend')
-                              ->orWhere('publish','public')->orWhere('user_id',\Auth::user()->id);
+                        $titleids = Mylogdetailtitle::whereIn('user_id',$userids)->lists('title_id');
+                        $query->whereIn('title_id',$titleids)
+                              ->where('publish','<>','private')
+                              ->orWhere('scene_id','like',\Auth::user()->id.'-%-%');
                     }else{
-                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
+                        $query->where('publish','public')
+                              ->orWhere('scene_id','like',\Auth::user()->id.'-%-%');
                     }
                 }else{
                     $query->where('publish','public');
                 }
             })
             ->orderBy('updated_at','desc')
-            ->groupBy('user_id','title_id','scene_id')
-            ->distinct()
             ->paginate(24);
       $data['scenes'] = $scenes;
-      $data['photos'] = Mylog::select('mime','data','scene_id','id','user_id','title_id')
-                                ->whereNotNull('data')
-                                ->where(function($query){
-                                    if(\Auth::check()){
-                                        if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
-                                            $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
-                                            $query->whereIn('user_id',$userids)->where('publish','friend')
-                                                  ->orWhere('publish','public')->orWhere('user_id',\Auth::user()->id);
-                                        }else{
-                                            $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
-                                        }
-                                    }else{
-                                        $query->where('publish','public');
-                                    }
-                                })
+      $sceneids = $scenes->lists('scene_id');
+      $data['photos'] = Photo::whereNotNull('data')
+                                ->whereIn('scene_id',$sceneids)
                                 ->get();
       foreach($scenes as $key => $scene){
-          $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
-          foreach($data['userComments'][$key] as $kkey => $userComment){
-              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
-          }
-          $sceneids = Mylog::where('user_id',$scene->user_id)
-                           ->where('title_id',$scene->title_id)
-                           ->where('scene_id',$scene->scene_id)
-                           ->lists('id');
-          $userids = \DB::table('mylog_user')->whereIn('scene_id',$sceneids)->groupBy('user_id')->lists('user_id');
-          $data['favuserdata'][$key] = User::whereIn('id',$userids)->get();
-          $data['favuser'][$key] = User::whereIn('id',$userids)->count();
-          $data['user'][$scene->user_id]=User::find($scene->user_id);
-          $thumbID = User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
+          $data['user'][]=User::find(Mylogdetailtitle::where('title_id',$scene->title_id)->first()->user_id);
+          $comments = \DB::table('comments')->where('scene_id',$scene->scene_id)
+                                            ->orderBy('created_at','asc')
+                                            ->get();
+          $data['comments'][] = $comments;
+          $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
+          $data['favuser'][] = User::whereIn('id',$userids)->get();
+          $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
-                                  ->select('id')
-                                  ->where(function($query){
-                                      if(\Auth::check()){
-                                          if(\DB::table('follows')->where('follow_id',\Auth::user()->id)->exists()){
-                        $userids=\DB::table('follows')->where('follow_id',\Auth::user()->id)->lists('user_id');
-                        $query->whereIn('user_id',$userids)->where('publish','friend')
-                              ->orWhere('publish','public')->orWhere('user_id',\Auth::user()->id);
-                    }else{
-                        $query->where('publish','public')->orWhere('user_id',\Auth::user()->id);
-                    }
-                                      }else{
-                                          $query->where('publish','public');
-                                      }
-                                    })
-                                  ->orderByRaw("RAND()")->first();
-          if(isset($thumbID)){
-              $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
-          }
+                                  ->orderByRaw("RAND()")
+                                  ->first();
+          $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)
+                                            ->first();
       }
       return view('bodys.show_items',$data);
     }
@@ -466,7 +410,6 @@ $scenes = $scenes
                             ->where('user_id',$id)
                             ->orWhere('send_id',$id)
                             ->orderBy('created_at')
-                            ->groupBy('user_id','send_id')
                             ->get();
           $sortIds=[];
           foreach($messages as $message){
@@ -482,13 +425,13 @@ $scenes = $scenes
           if(isset($sortIds[0])){
               foreach($sortIds as $sortId){
                   $data['messageUsers'][]=User::find($sortId);
-                  $data['sentmessages'][]=$user->getMessages($sortId)->where('user_id',$sortId)->orderBy('created_at','desc')->get();
+                  $data['sentmessages'][]=$user->getMessages($sortId)
+                                               ->where('user_id',$sortId)
+                                               ->orderBy('created_at','desc')->get();
                   $temppp=$user->getMessages($sortId)->orderBy('created_at','desc')->get();
                   $data['messages'][]=$temppp;
               }
           }
-
-          //$data['messageUsers']=$sortIds;
       }
       return view('bodys.user_menu.messages',$data);
     }
@@ -497,28 +440,31 @@ $scenes = $scenes
 
     public function showUserItems($id){
       $user = User::find($id);
-      $titles = $user->mylogs()
-                      ->where(function($query)use($id){
+      $titles = $user->title()->where(function($query)use($id){
                           if(\Auth::user()->id != $id){
                               if(\Auth::user()->is_followed($id)){
-                                $query->where('publish','public')->orWhere('publish','friend');
+                                $titleids=$user->scene()
+                                               ->where('publish','<>','private')
+                                               ->lists('title_id');
+                                $query->whereIn('title_id',$titleids);
                               }else{
-                                $query->where('publish','public');
+                                $titleids=$user->scene()
+                                               ->where('publish','public')
+                                               ->lists('title_id');
+                                $query->whereIn('title_id',$titleids);
                               }
                           }else{
                               $query;
                           }
                       })
-                      ->groupBy('title_id')
-                      ->select('title_id','title','firstday','lastday','user_id')
-                      ->orderBy('theday','desc')
+                      ->orderBy('firstday','desc')
                       ->paginate(10);
-      foreach($titles as $key => $title){
-          $data['scenes'][$key] = $user->title($title->title_id)
+      foreach($titles as $title){
+          $scenes = Mylogdetailscene::where('title_id',$title->title_id)
                                 ->where(function($query)use($id){
                                     if(\Auth::user()->id!=$id){
                                         if(\Auth::user()->is_followed($id)){
-                                            $query->where('publish','public')->orWhere('publish','friend');
+                                            $query->where('publish','<>','private');
                                         }else{
                                             $query->where('publish','public');
                                         }
@@ -526,29 +472,14 @@ $scenes = $scenes
                                         $query;
                                     }
                                 })
-                                ->groupBy('scene_id')
-                                ->select('scene')
                                 ->orderBy('theday')
                                 ->get();
-          $thumbID = $user->title($title->title_id)
-                            ->where(function($query)use($id){
-                                    if(\Auth::user()->id!=$id){
-                                        if(\Auth::user()->is_followed($id)){
-                                            $query->where('publish','public')->orWhere('publish','friend');
-                                        }else{
-                                            $query->where('publish','public');
-                                        }
-                                    }else{
-                                        $query;
-                                    }
-                                })
+          $data['scenes'][]=$scenes;
+          $sceneids = $scenes->lists('scene_id');
+          $data['thumb'][] = Photo::whereIn('scene_id',$sceneids)
                             ->whereNotNull('data')
-                            ->select('id')
                             ->orderByRaw("RAND()")
                             ->first();
-          if(isset($thumbID)){
-              $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
-          }
       }
       $data['user']=$user;
       $data['titles']=$titles;
@@ -560,31 +491,31 @@ $scenes = $scenes
     public function showUserFavorites($id){
       $user = User::find($id);
       $data['user']=$user;
-      $sceneids = $user->favors()->lists('mylog_user.scene_id');
-      $scenes = Mylog::select('title_id','scene_id','user_id','scene','title','id')
-                                      ->whereIn('id',$sceneids)
-                                      ->groupBy('user_id','title_id','scene_id')
-                                      ->orderBy('updated_at','desc')
-                                      ->get();
+      $sceneids = $user->favor()->lists('mylog_user.scene_id');
+      $scenes = Mylogdetailscene::whereIn('scene_id',$sceneids)
+                           ->orderBy('updated_at','desc')
+                           ->get();
       foreach($scenes as $key => $scene){
-          $data['thumb'][$key]=User::find($scene->user_id)->scene($scene->title_id,$scene->scene_id)
+          $data['thumb'][]=Photo::where('scene_id',$scene->scene_id)
                                     ->whereNotNull('data')
-                                    ->select('data','mime')
                                     ->orderByRaw("RAND()")
                                     ->first();
+          $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)->first();
       }
-      $followingids = User::find($id)->follow()->lists('follow_id');
-      $followerids = User::find($id)->follower()->lists('user_id');
-      $data['following'] = User::whereIn('id',$followingids)
-                                    ->whereNotIn('id',$followerids)
+      //$followingids = User::find($id)->follow()->lists('follow_id');
+      //$followerids = User::find($id)->follower()->lists('user_id');
+      $data['following'] = $user->follow()//->whereIn('id',$followingids)
+                                    //->whereNotIn('id',$followerids)
                                     ->paginate(10);
-      $data['followed'] = User::whereIn('id',$followerids)
-                                  ->whereNotIn('id',$followingids)
+      $data['followed'] = $user->follower()//->whereIn('id',$followerids)
+                                  //->whereNotIn('id',$followingids)
                                   ->paginate(10);
                                   //->get(['user_id','data','mime']);
+      /*
       $data['mutual'] = User::whereIn('id',$followingids)
                                 ->whereIn('id',$followerids)
                                 ->paginate(10);
+      */
       $data['scenes']=$scenes;
       return view('bodys.user_menu.favorites',$data);
     }
@@ -598,10 +529,10 @@ $scenes = $scenes
       $user=User::find($id);
       $data['user']=$user;
       $data['recruitments']=$user->guestguide()->orderBy('created_at','desc')->paginate(15);
-      foreach($data['recruitments'] as $key => $recruitment){
+      foreach($data['recruitments'] as $recruitment){
           $candidateuserids = Guestguide::find($recruitment->id)->recruited()->lists('user_id');
-          $data['candidateusers'][$key]=User::whereIn('id',$candidateuserids)->get();
-          $data['candidatecnt'][$key]=Guestguide::find($recruitment->id)->recruited()->count();
+          $data['candidateusers'][]=User::whereIn('id',$candidateuserids)->get();
+          //$data['candidatecnt'][]=Guestguide::find($recruitment->id)->recruited()->count();
       }
       return view('bodys.user_menu.matching',$data);
     }
@@ -609,32 +540,15 @@ $scenes = $scenes
 
     public function showTitle($id,$title_id){
       $user = User::find($id);
-      $data['title'] = $user->title($title_id)
-                              ->select('title','firstday','lastday','title_id','user_id')
-                              ->where(function($query)use($id){
-                                  if(\Auth::user()->id != $id){
-                                      if(\Auth::user()->is_followed($id)){
-                                $query->where('publish','public')->orWhere('publish','friend');
-                              }else{
-                                $query->where('publish','public');
-                              }
-                                  }else{
-                                      $query;
-                                  }
-                              })
-                              ->first();
-      $titleids = $user->title($title_id)->lists('mylogs.id');
-      $userids = \DB::table('mylog_user')->whereIn('scene_id',$titleids)->groupBy('user_id')->lists('user_id');
-      $data['favuserdata']['title'] = User::whereIn('id',$userids)->get();
-      $data['favuser']['title'] = User::whereIn('id',$userids)->count();
-      $scenes = $user->title($title_id)
-                      ->groupBy('scene_id')
-                      ->orderBy('theday')
-                      ->select('genre','publish','scene','theday','lat','lng','score','comment','scene_id','title','user_id','title_id','firstday','lastday','theday','id')
+      $data['title'] = Mylogdetailtitle::where('title_id',$title_id)->first();
+      $sceneids = Mylogdetailscene::where('title_id',$title_id)->lists('scene_id');
+      $userids = \DB::table('mylog_user')->whereIn('scene_id',$sceneids)->lists('user_id');
+      $data['favuser']['title'] = User::whereIn('id',$userids)->get();
+      $scenes = Mylogdetailscene::where('title_id',$title_id)
                       ->where(function($query)use($id){
                           if(\Auth::user()->id != $id){
                               if(\Auth::user()->is_followed($id)){
-                                $query->where('publish','public')->orWhere('publish','friend');
+                                $query->where('publish','<>','private');
                               }else{
                                 $query->where('publish','public');
                               }
@@ -642,57 +556,39 @@ $scenes = $scenes
                               $query;
                           }
                       })
+                      ->orderBy('theday')
                       ->paginate(5);
       $data['scenes'] = $scenes;
-      $data['newsceneid'] = $user->title($title_id)->max('scene_id')+1;
-      $data['scoreAve'] = $user->title($title_id)
-                              ->where('publish','public')
-                              ->orderBy('scene_id')
-                              ->avg('score');
-      $data['photos'] = $user->title($title_id)
-                              ->whereNotNull('data')
-                              ->select('mime','data','scene_id','id','user_id','title_id')
-                              ->where(function($query)use($id){
-                                  if(\Auth::user()->id != $id){
-                                      if(\Auth::user()->is_followed($id)){
-                                $query->where('publish','public')->orWhere('publish','friend');
-                              }else{
-                                $query->where('publish','public');
-                              }
-                                  }else{
-                                      $query;
-                                  }
-                              })
+      $forFixSceneIds = Mylogdetailscene::where('title_id',$title_id)->lists('scene_id');
+      $forFixSceneIdsArr=[];
+      foreach($forFixSceneIds as $forFixSceneId){
+          $forFixSceneId = str_replace($title_id.'-', '', $forFixSceneId);
+          $forFixSceneIdsArr[]=$forFixSceneId;
+      }
+      if(!isset($forFixSceneIdsArr[0])){
+          $newFixSceneId = 1;
+      }else{
+          $newFixSceneId = max($forFixSceneIdsArr)+1;
+      }
+      $data['newsceneid'] = $title_id.'-'.$newFixSceneId;
+      
+      $sceneids = $scenes->lists('scene_id');
+      $data['scoreAve'] = Mylogdetailscene::whereIn('scene_id',$sceneids)
+                                          ->avg('score');
+      $data['photos'] = Photo::whereIn('scene_id',$sceneids)
                               ->get();
       foreach($scenes as $key => $scene){
-          $data['userComments'][$key] = Mylog::find($scene->id)->commented()->select('comments.user_id AS TheUserID','comments.comment','comments.comment_id')->groupBy('comments.comment_id','comments.comment')->orderBy('comments.created_at','asc')->get();
-          foreach($data['userComments'][$key] as $kkey => $userComment){
-              $data['commentUser'][$key][$kkey] = User::find($userComment->TheUserID);
-          }
-          $sceneids = $user->scene($title_id,$scene->scene_id)->lists('mylogs.id');
-          $userids = \DB::table('mylog_user')->whereIn('scene_id',$sceneids)->groupBy('user_id')->lists('user_id');
-          $data['favuserdata'][$key] = User::whereIn('id',$userids)->get();
-          $data['favuser'][$key] = User::whereIn('id',$userids)->count();
-          $thumbID = $user->scene($title_id,$scene->scene_id)
+          $comments = \DB::table('comments')
+                          ->where('scene_id',$scene->scene_id)
+                          ->orderBy('created_at','asc')
+                          ->get();
+          $data['comments'][] = $comments;                          
+          $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
+          $data['favuser'][] = User::whereIn('id',$userids)->get();
+          $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
-                                  ->select('id')
-                                  ->orderBy('theday')
-                                  ->where(function($query)use($id){
-                                      if(\Auth::user()->id != $id){
-                                          if(\Auth::user()->is_followed($id)){
-                                $query->where('publish','public')->orWhere('publish','friend');
-                              }else{
-                                $query->where('publish','public');
-                              }
-                                      }else{
-                                          $query;
-                                      }
-                                  })
                                   ->orderByRaw("RAND()")
                                   ->first();
-          if(isset($thumbID)){
-              $data['thumb'][$key] = Mylog::select('mime','data')->find($thumbID->id);
-          }
       }
       $data['user']=$user;
       $data['thisyear']=Carbon::now()->year;

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMylogUserTable extends Migration
+class GuestguideCreate extends Migration
 {
     /**
      * Run the migrations.
@@ -12,26 +12,21 @@ class CreateMylogUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('mylog_user', function (Blueprint $table) {
+        Schema::create('guestguides', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')
-                  ->unsigned()
-                  ->index();
+            $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->integer('scene_id')
-                  ->unsigned()
-                  ->index();
-            $table->foreign('scene_id')
-                  ->references('id')
-                  ->on('mylogs')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
+            $table->string('type');
+            $table->float('lat');
+            $table->float('lng');
+            $table->float('radius');
+            $table->date('limitdate')->nullable();
+            $table->longText('contents')->nullable();
             $table->timestamps();
-            $table->unique(['user_id','scene_id']);
         });
     }
 
@@ -42,6 +37,6 @@ class CreateMylogUserTable extends Migration
      */
     public function down()
     {
-        Schema::drop('mylog_user');
+        Schema::drop('guestguides');
     }
 }

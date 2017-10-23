@@ -159,9 +159,9 @@
                   <input type="number" name="age" class="form-control">
                   {!!Form::label('age','歳')!!}
                   {!!Form::select('agetype', [
-                      '=' => '----',
-                      '<=' => '以上',
-                      '>=' => '以下']
+                      'e' => '----',
+                      'i' => '以上',
+                      's' => '以下']
                     ,'=',['class'=>'form-control'])!!}
                 </div>
             </div>

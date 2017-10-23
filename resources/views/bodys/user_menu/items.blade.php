@@ -29,18 +29,16 @@
                     <div class="tab-pane {{ $activetab == '1' ? 'active' : ''}}" id="tab1-1">
             @endif
             <div class="panel-body">
-                {!! $titles->render() !!}
                 @if(isset($titles[0]))
-                <?php $cnt = 0; ?>
-                @foreach($titles as $key => $mylog)
+                @foreach($titles as $key => $title)
                 <?php
-                    $firstdayarray = explode('-',$mylog->firstday);
-                    $lastdayarray = explode('-',$mylog->lastday);
+                    $firstdayarray = explode('-',$title->firstday);
+                    $lastdayarray = explode('-',$title->lastday);
                 ?>
-                <a href="{{route('show_title',['id'=>$mylog->user_id,'title_id'=>$mylog->title_id])}}">
+                <a href="{{route('show_title',['id'=>$title->user_id,'title_id'=>$title->title_id])}}">
                 <div class="panel panel-primary">
                       <div class="panel-heading">
-                        {{$mylog->title}}
+                        {{$title->title}}
                       </div>
                       <div class="panel-body text-center">
                             <div class="col-xs-12 col-sm-4">
@@ -100,7 +98,7 @@
                         @else
                             <div class="form-group">
                                 <label>タイトル</label>
-                                <p>{{$title or 'No Title'}}</p>
+                                <p>{{$titleStr or 'No Title'}}</p>
                                 {!! Form::hidden('title',$title) !!}
                             </div>
                         @endif

@@ -38,108 +38,79 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
     ///
     //
-    public function mylogs(){
-        return $this->hasMany(Mylog::class);
+    public function title(){
+        return $this->hasMany(Mylogdetailtitle::class);
     }
-    public function title($titleid){
-        return $this->hasMany(Mylog::class)->where('title_id',$titleid);
-    }
-    public function scene($titleid,$sceneid){
-        return $this->hasMany(Mylog::class)->where('title_id',$titleid)->where('scene_id',$sceneid);
+    public function scene(){
+        return $this->hasManyThrough(Mylogdetailscene::class,Mylogdetailtitle::class,'user_id','title_id');
     }
     
-    //public function profile(){
-    //    return $this->hasOne(Profile::class);
-    //}
-    
-    public function favors(){
-        return $this->belongsToMany(Mylog::class,'mylog_user','user_id','scene_id')->withTimestamps();
-    }
     public function comments(){
-        return $this->belongsToMany(Mylog::class,'comments','user_id','scene_id')->withPivot('comment','comment_id')->withTimestamps();
+        return $this->belongsToMany(Mylogdetailscene::class,'comments','user_id','scene_id')->withPivot('comment','comment_id')->withTimestamps();
     }
-    public function commentTo($userid,$titleid,$sceneid,$comment){
-        $sceneidLists = $this->find($userid)->scene($titleid,$sceneid)->lists('mylogs.id');
-        $latestCommentId = $this->comments()->whereIn('comments.scene_id',$sceneidLists)->max('comment_id');
-        if(!isset($latestCommentId)){
-            $latestCommentId = 0;
-        }
-        foreach($sceneidLists as $sceneidList){
-            $this->comments()->attach($sceneidList,['comments.comment'=>$comment,'comment_id'=>$latestCommentId+1]);
-        }
+    public function commentTo($sceneid,$comment){
+        $this->comments()->attach($sceneid,['comments.comment'=>$comment]);
         return true;
     }
-    public function is_favoritesScene($userid,$titleid,$sceneid){
-        $sceneidLists = \DB::table('mylogs')->where('user_id',$userid)
-                                                ->where('title_id',$titleid)
-                                                ->where('scene_id',$sceneid)
-                                                ->lists('id');
-        return $this->favors()->whereIn('mylog_user.scene_id',$sceneidLists)->exists();
+    
+    public function favor(){
+        return $this->belongsToMany(Mylogdetailscene::class,'mylog_user','user_id','scene_id')->withTimestamps();
     }
-    public function favoringScene($userid,$titleid,$sceneid){
-        $exists = $this->is_favoritesScene($userid,$titleid,$sceneid);
+    public function is_favoritesScene($sceneid){
+        return $this->favor()->where('mylog_user.scene_id',$sceneid)->exists();
+    }
+    public function favoringScene($sceneid){
+        $exists = $this->is_favoritesScene($sceneid);
         if($exists){
             return false;
         }else{
-            $sceneidLists = \DB::table('mylogs')->where('user_id',$userid)
-                                                ->where('title_id',$titleid)
-                                                ->where('scene_id',$sceneid)
-                                                ->lists('id');
-            foreach($sceneidLists as $sceneidList){
-                $this->favors()->attach($sceneidList);
-            }
+            $this->favor()->attach($sceneid);
             return true;
         }
     }
-
-    public function unfavoringScene($userid,$titleid,$sceneid){
-        $exists = $this->is_favoritesScene($userid,$titleid,$sceneid);
+    public function unfavoringScene($sceneid){
+        $exists = $this->is_favoritesScene($sceneid);
         if(!$exists){
             return false;
         }else{
-            $sceneidLists = \DB::table('mylogs')->where('user_id',$userid)
-                                                ->where('title_id',$titleid)
-                                                ->where('scene_id',$sceneid)
-                                                ->lists('id');
-            foreach($sceneidLists as $sceneidList){
-                $this->favors()->detach($sceneidList);
-            }
+            $this->favor()->detach($sceneid);
             return true;
         }
     }
-
-
-    public function is_favoritesTitle($userid,$titleid){
-        $titleidLists = \DB::table('mylogs')->where('user_id',$userid)
-                                                ->where('title_id',$titleid)
-                                                ->lists('id');
-        return $this->favors()->whereIn('mylog_user.scene_id',$titleidLists)->exists();
+    public function is_favoritesTitle($titleid){
+        $sceneids = Mylogdetailscene::where('title_id',$titleid)->lists('scene_id');
+        $arr=[];
+        foreach($sceneids as $sceneid){
+            if(!$this->is_favoritesScene($sceneid)){
+                $arr[]=$sceneid;
+            }
+        }
+        return empty($arr);
     }
-    public function favoringTitle($userid,$titleid){
-        $exists = $this->is_favoritesTitle($userid,$titleid);
+    public function favoringTitle($titleid){
+        $exists = $this->is_favoritesTitle($titleid);
         if($exists){
             return false;
         }else{
-            $titleidLists = \DB::table('mylogs')->where('user_id',$userid)
-                                                ->where('title_id',$titleid)
-                                                ->lists('id');
-            foreach($titleidLists as $titleidList){
-                $this->favors()->attach($titleidList);
+            $sceneids = Mylogdetailscene::where('title_id',$titleid)->lists('scene_id');
+            foreach($sceneids as $sceneid){
+                if(!$this->is_favoritesScene($sceneid)){
+                    $this->favor()->attach($sceneid);
+                }
             }
             return true;
         }
     }
-
-    public function unfavoringTitle($userid,$titleid){
-        $exists = $this->is_favoritesTitle($userid,$titleid);
+    public function unfavoringTitle($titleid){
+        $exists = $this->is_favoritesTitle($titleid);
         if(!$exists){
             return false;
         }else{
-            $titleidLists = \DB::table('mylogs')->where('user_id',$userid)
-                                                ->where('title_id',$titleid)
-                                                ->lists('id');
-            foreach($titleidLists as $titleidList){
-                $this->favors()->detach($titleidList);
+            $sceneids = Mylogdetailscene::where('title_id',$titleid)->lists('scene_id');
+            foreach($sceneids as $sceneid){
+                if($this->is_favoritesScene($sceneid)){
+                    $this->favor()->detach($sceneid);
+                }
             }
             return true;
         }

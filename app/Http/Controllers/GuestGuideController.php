@@ -95,38 +95,38 @@ class GuestGuideController extends Controller
 
     public function postGuest(Request $request,$id)
     {
-      $cnt = $request->cnt;
-      for($i=0;$i<=$cnt;$i++){
+      //$cnt = $request->cnt;
+      //for($i=0;$i<=$cnt;$i++){
           if(isset($request->limitdate)){
               $data['limitdate']=$this->replaceDate($request->limitdate);
           }
           if(isset($request->contents)){
               $data['contents']=$request->contents;
           }
-          $data['lat']=$request->centerLat[$i];
-          $data['lng']=$request->centerLng[$i];
-          $data['radius']=$request->circleRadius[$i];
+          $data['lat']=$request->centerLat;
+          $data['lng']=$request->centerLng;
+          $data['radius']=$request->circleRadius;
           $data['type']='guest';
           $request->user()->guestguide()->create($data);
-      }
+      //}
         return redirect()->back();
     }
     public function postGuide(Request $request,$id)
     {
-        $cnt = $request->cnt;
-        for($i=0;$i<=$cnt;$i++){
+        //$cnt = $request->cnt;
+        //for($i=0;$i<=$cnt;$i++){
             if(isset($request->limitdate)){
                 $data['limitdate']=$this->replaceDate($request->limitdate);
             }
             if(isset($request->contents)){
                 $data['contents']=$request->contents;
             }
-            $data['lat']=$request->centerLat[$i];
-            $data['lng']=$request->centerLng[$i];
-            $data['radius']=$request->circleRadius[$i];
+            $data['lat']=$request->centerLat;
+            $data['lng']=$request->centerLng;
+            $data['radius']=$request->circleRadius;
             $data['type']='guide';
             $request->user()->guestguide()->create($data);
-        }
+        //}
         return redirect()->back();
     }
     public function candidateGuide($guide_id){

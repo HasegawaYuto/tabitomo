@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMessagesTable extends Migration
+class RecruitmentsCreate extends Migration
 {
     /**
      * Run the migrations.
@@ -12,26 +12,22 @@ class CreateMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create('recruitments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('send_id')->unsigned()->index();
-            $table->text('message');
-            $table->string('mime')->nullable();
-            $table->binary('data')->nullable();
-            $table->tinyInteger('status')->default(0);
-            $table->timestamps();
-
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->foreign('send_id')
+            $table->integer('recruitment_id')->unsigned()->index();
+            $table->foreign('recruitment_id')
                   ->references('id')
-                  ->on('users')
+                  ->on('guestguides')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
+            $table->timestamps();
+            $table->unique(['user_id','recruitment_id']);
         });
     }
 
@@ -42,6 +38,6 @@ class CreateMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('messages');
+        Schema::drop('recruitments');
     }
 }

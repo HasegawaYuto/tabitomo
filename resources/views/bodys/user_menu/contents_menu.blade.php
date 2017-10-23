@@ -38,7 +38,7 @@
             <div class="modal-body">
                 <div class="list-group">
       <a href="{{ route('show_user_profile',['id'=>$user->id]) }}" class="list-group-item text-center"><i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>プロフィール</a>
-      @if(Auth::user()->id==$user->user_id)
+      @if(Auth::user()->id==$user->id)
       <a href="{{ route('show_user_matching',['id'=>$user->id]) }}" class="list-group-item text-center"><i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング</a>
       @endif
       <a href="{{ route('show_user_messages',['id'=>$user->id]) }}" class="list-group-item text-center"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ

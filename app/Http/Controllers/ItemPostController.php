@@ -12,7 +12,7 @@ use App\User;
 use Carbon\Carbon;
 use App\Location;
 use App\Pref;
-use App\Profile,App\Mylog;
+use App\Mylogdetailtitle,App\Mylogdetailscene,App\Photo;
 use Illuminate\Support\Facades\Log;
 
 class ItemPostController extends Controller
@@ -101,15 +101,63 @@ class ItemPostController extends Controller
     public function createItems(Request $request,$id){
       $user = User::find($id);
       if($request->scene_id==1){
-          $title_id = Mylog::where('user_id',$id)->max('title_id');
-          if(!isset($title_id)){
-              $data['title_id'] = 1;
+          $titleids = $user->title()->lists('title_id');
+          if(!isset($titleids[0])){
+              $theTitleId = 1;
           }else{
-              $data['title_id'] = $title_id + 1;
+              $TitleIds=[]; 
+              foreach($titleids as $titleid){
+                  $TitleIdsArr = explode('-',$titleid);
+                  $TitleIds[] = $TitleIdsArr[1];
+              }
+              $theTitleId = max($TitleIds)+1;
           }
       }else{
-          $data['title_id'] = $request->title_id;
+          $theTitleId = $request->title_id;
       }
+      
+      $theSceneId = $id.'-'.$theTitleId.'-'.$request->scene_id;
+      if(isset($request->firstday)){
+            $firstday = $this->replaceDate($request->firstday);
+      }else{
+            $firstday='';
+      }
+      if(isset($request->lastday)){
+            $lastday = $this->replaceDate($request->lastday);
+      }else{
+            $lastday='';
+      }
+      if($request->scene_id==1){
+            Mylogdetailtitle::create([
+                'user_id'=>$id,
+                'title_id'=>$id.'-'.$theTitleId,
+                'title'=>$request->title,
+                'firstday'=>$firstday,
+                'lastday'=>$lastday,
+            ]);
+      }
+      if(isset($request->theday)){
+            $theday = $this->replaceDate($request->theday);
+      }else{
+            $theday = '';
+      }
+      if(isset($_POST['genre'][0])){
+            $genre=implode("-", $_POST['genre']);
+      }else{
+            $genre='';
+      }
+      Mylogdetailscene::create([
+           'scene_id' => $theSceneId,
+           'title_id' => $id.'-'.$theTitleId,
+           'scene'=>$request->scene,
+           'theday'=>$theday,
+           'publish' => $request->publish,
+           'lat' => $request->spotNS,
+           'lng' => $request->spotEW,
+           'score' => $request->score,
+           'comment' => $request->comment,
+           'genre'=>$genre
+          ]);
       if(\Input::hasFile('image')){
         $files = \Input::file('image');
         $typearray = [
@@ -123,49 +171,15 @@ class ItemPostController extends Controller
           }else{
             if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                 $file = $files[$i];//\Input::file('image');
-                $filename = public_path() . '/image/upload' . $id . '-' . $request->title_id . '-' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
+                $filename = public_path() . '/image/upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($filename);
-                $mylog = new Mylog;
-                $mylog['data']=file_get_contents($filename);
-                $mylog['mime']=$file->getMimeType();
-                $mylog['user_id'] = $id;
-                $mylog['title_id'] = $data['title_id'];
-                $mylog['scene_id'] = $request->scene_id;
-                $mylog['photo_id'] = $i;
-                if(isset($request->title)){
-                    $mylog['title'] = $request->title;
-                }
-                if(isset($request->scene)){
-                    $mylog['scene'] = $request->scene;
-                }
-                if(isset($request->firstday)){
-                    $mylog['firstday'] = $this->replaceDate($request->firstday);
-                }
-                if(isset($request->lastday)){
-                    $mylog['lastday'] = $this->replaceDate($request->lastday);
-                }
-                if(isset($request->theday)){
-                    $mylog['theday'] = $this->replaceDate($request->theday);
-                }
-                if(isset($request->publish)){
-                    $mylog['publish'] = $request->publish;
-                }
-                if(isset($request->spotNS)&&isset($request->spotEW)){
-                    $mylog['lat'] = $request->spotNS;
-                    $mylog['lng'] = $request->spotEW;
-                }
-                if(isset($request->score)){
-                    $mylog['score'] = $request->score;
-                }
-                if(isset($request->comment)){
-                    $mylog['comment'] = $request->comment;
-                }
-                if(isset($_POST['genre'][0])){
-                    $mylog['genre']=implode("-", $_POST['genre']);
-                }
-                $mylog->save();
+                Photo::create([
+                    'data' => file_get_contents($filename),
+                    'mime' => $file->getMimeType(),
+                    'scene_id' => $theSceneId,
+                ]);
                 if(isset($filename)){
                   if (\File::exists($filename)) {
                         \File::delete($filename);
@@ -174,50 +188,12 @@ class ItemPostController extends Controller
             }
           }
         }
-      }else{
-            $mylog = new Mylog;
-            $mylog['user_id'] = $id;
-            $mylog['title_id'] = $data['title_id'];
-            $mylog['scene_id'] = $request->scene_id;
-            if(isset($request->title)){
-                $mylog['title'] = $request->title;
-            }
-            if(isset($request->scene)){
-                $mylog['scene'] = $request->scene;
-            }
-            if(isset($request->firstday)){
-                $mylog['firstday'] = $this->replaceDate($request->firstday);
-            }
-            if(isset($request->lastday)){
-                $mylog['lastday'] = $this->replaceDate($request->lastday);
-            }
-            if(isset($request->theday)){
-                $mylog['theday'] = $this->replaceDate($request->theday);
-            }
-            if(isset($request->publish)){
-                $mylog['publish'] = $request->publish;
-            }
-            if(isset($request->spotNS)&&isset($request->spotEW)){
-                $mylog['lat'] = $request->spotNS;
-                $mylog['lng'] = $request->spotEW;
-            }
-            if(isset($request->score)){
-                $mylog['score'] = $request->score;
-            }
-            if(isset($request->comment)){
-                $mylog['comment'] = $request->comment;
-            }
-            if(isset($_POST['genre'][0])){
-                    $mylog['genre']=implode("-", $_POST['genre']);
-                }
-            $mylog->save();
       }
       if(\Input::get('fin')){
           return redirect('user/'. $id .'/mylog');
       }elseif(\Input::get('con')){
-          //$user = Profile::where('user_id',$id)->first();
           $data['user']=$user;
-          $data['title'] = $request->title;
+          $data['titleStr'] = $request->title;
           $data['activetab'] = '2';
           $data['scene_id'] = $request->scene_id+1;
           $data['spotNS'] = $request->spotNS;
@@ -225,31 +201,17 @@ class ItemPostController extends Controller
           $data['firstday'] = $request->firstday;
           $data['lastday'] = $request->lastday;
           $data['mapzoom'] = $request->mapzoom;
-          $mylogsByTitle = $user->mylogs()
-                          ->where(function($query)use($id){
-                              if(\Auth::user()->id != $id){
-                                  $query->where('publish','public');
-                              }else{
-                                  $query;
-                              }
-                          })
-                          ->groupBy('title_id')
-                          ->select('title_id','title','firstday','lastday','user_id')
-                          ->paginate(10);
-          foreach($mylogsByTitle as $key => $mylogByTitle){
-              $data['scenes'][$key] = $user->title($mylogByTitle->title_id)
-                                    ->where(function($query)use($id){
-                                        if(\Auth::user()->id != $id){
-                                            $query->where('publish','public');
-                                        }else{
-                                            $query;
-                                        }
-                                    })
-                                    ->groupBy('scene_id')
-                                    ->orderBy('theday')
-                                    ->get();
+          $data['title_id'] = $theTitleId;
+          $titles = $user->title()->orderBy('created_at')->get();
+          $data['titles'] = $titles;
+          foreach($titles as $title){
+              $data['scenes'][]=Mylogdetailscene::where('title_id',$title->title_id)->get();
+              $sceneids=Mylogdetailscene::where('title_id',$title->title_id)->lists('scene_id');
+              $data['thumb'][]=Photo::whereIn('scene_id',$sceneids)
+                                    ->whereNotNull('data')
+                                    ->orderByRaw("RAND()")
+                                    ->first();
           }
-          $data['titles']=$mylogsByTitle;
           return view('bodys.user_menu.items',$data);
       }
     }
@@ -257,7 +219,7 @@ class ItemPostController extends Controller
 
     public function editTitle(Request $request ,$id,$title_id){
         $user = User::find($id);
-        $changes = $user->title($title_id)->get();
+        $changes = Mylogdetailtitle::where('title_id',$title_id)->get();
         foreach($changes as $change){
               $change->update([ 'title'=>$request->NewTitle,
                                 'firstday'=>$this->replaceDate($request->firstday),
@@ -272,7 +234,7 @@ class ItemPostController extends Controller
     public function editScene(Request $request ,$id,$title_id,$scene_id){
         if($request->editstyle=='fix'){
             $user = User::find($id);
-            $changes = $user->scene($title_id,$scene_id)->get();
+            $change = Mylogdetailscene::where('scene_id',$scene_id)->first();
             if(isset($_POST['genre'][0])){
                     $valgenre=implode("-", $_POST['genre']);
             }else{
@@ -284,21 +246,55 @@ class ItemPostController extends Controller
                     foreach($postDelNos as $no => $postDelNo){
                         $bool = $postDelNo;
                         if($bool == 'true'){
-                            Mylog::find($no)->delete();
+                            Photo::find($no)->delete();
                         }
                     }
                 }
             }
-            foreach($changes as $change){
-                $change->update([ 'scene'=>$request->scene,
+            $change->update([ 'scene'=>$request->scene,
                                 'theday'=>$this->replaceDate($request->theday),
                                 'publish'=>$request->publish,
                                 'lat'=>$request->spotNS,
                                 'lng'=>$request->spotEW,
                                 'score'=>$request->score,
-                                'genre'=>$valgenre
+                                'genre'=>$valgenre,
+                                'comment'=>$request->comment
                               ]);
+        }else{
+            if(isset($request->spotNS)&&isset($request->spotEW)){
+                  $lat = $request->spotNS;
+                  $lng = $request->spotEW;
+            }else{
+                  $lat = '';
+                  $lng = '';
             }
+            if(isset($request->score)){
+                  $score = $request->score;
+            }else{
+                  $score = 0;
+            }
+            if(isset($request->comment)){
+                  $comment = $request->comment;
+            }else{
+                  $comment = '';
+            }
+            if(isset($_POST['genre'][0])){
+                $genre=implode("-", $_POST['genre']);
+            }else{
+                $genre='';
+            }
+            Mylogdetailscene::create([
+                'title_id' => $title_id,
+                'scene_id' => $scene_id,
+                'scene' => $request->scene,
+                'theday' => $this->replaceDate($request->theday),
+                'publish' => $request->publish,
+                'lat' => $lat,
+                'lng' => $lng,
+                'score' => $score,
+                'comment' => $comment,
+                'genre' => $genre
+            ]);
         }
         if(\Input::hasFile('image')){
           $files = \Input::file('image');
@@ -306,54 +302,21 @@ class ItemPostController extends Controller
             'gif' => 'image/gif',
             'jpg' => 'image/jpeg',
             'png' => 'image/png'];
-          $photoCnt = $user->scene($title_id,$scene_id)->max('photo_id');
-          if(!isset($photoCnt)){
-              $photoCnt = 0;
-          }else{
-              $photoCnt = $photoCnt+1;
-          }
           for($i=0;$i<count($_FILES['image']['name']);$i++){
-            //$mylog = new Mylog;
             if (!isset($_FILES['image']['error'][$i]) || !is_int($_FILES['image']['error'][$i])) {
                 return false;
             }else{
               if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                   $file = $files[$i];//\Input::file('image');
-                  $filename = public_path() . '/image/upload' . $id . '-' . $request->title_id . '-' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
+                  $filename = public_path() . '/image/upload' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
                   $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                         $constraint->aspectRatio();
                       })->orientate()->save($filename);
-                  $mylog = new Mylog;
-                  $mylog['data']=file_get_contents($filename);
-                  $mylog['mime']=$file->getMimeType();
-                  $mylog['user_id'] = $id;
-                  $mylog['title_id'] = $title_id;
-                  $mylog['scene_id'] = $scene_id;
-                  $mylog['photo_id'] = $i+$photoCnt;
-                  $mylog['title'] = $request->title;
-                  $mylog['scene'] = $request->scene;
-                  $mylog['firstday'] = $this->replaceDate($request->firstday);
-                  $mylog['lastday'] = $this->replaceDate($request->lastday);
-                  if(isset($request->theday)){
-                      $mylog['theday'] = $this->replaceDate($request->theday);
-                  }
-                  if(isset($request->publish)){
-                      $mylog['publish'] = $request->publish;
-                  }
-                  if(isset($request->spotNS)&&isset($request->spotEW)){
-                      $mylog['lat'] = $request->spotNS;
-                      $mylog['lng'] = $request->spotEW;
-                  }
-                  if(isset($request->score)){
-                      $mylog['score'] = $request->score;
-                  }
-                  if(isset($request->comment)){
-                      $mylog['comment'] = $request->comment;
-                  }
-                  if(isset($_POST['genre'][0])){
-                    $mylog['genre']=implode("-", $_POST['genre']);
-                }
-                  $mylog->save();
+                  Photo::create([
+                        'data' => file_get_contents($filename),
+                        'mime' => $file->getMimeType(),
+                        'scene_id' => $scene_id
+                    ]);
                   if(isset($filename)){
                     if (\File::exists($filename)) {
                           \File::delete($filename);
@@ -367,57 +330,41 @@ class ItemPostController extends Controller
     }
 
 
-    public function deleteTitle($id,$title_id){
-        User::find($id)->title($title_id)->delete();
-        return redirect('user/'.$id.'/mylog');
+    public function deleteTitle($title_id){
+        Mylogdetailtitle::where('title_id',$title_id)->delete();
+        return redirect('user/'.\Auth::user()->id.'/mylog');
     }
-    public function deleteScene($id,$title_id,$scene_id){
-        User::find($id)->scene($title_id,$scene_id)->delete();
+    public function deleteScene($scene_id){
+        Mylogdetailscene::where('scene_id',$scene_id)->delete();
         return redirect()->back();
     }
-    public function favoriteScene($id,$title_id,$scene_id){
-        $user = User::find($id);
-        //$favscene = $user->scene($title_id,$scene_id)->select('id')->first();
-        \Auth::user()->favoringScene($id,$title_id,$scene_id);
+    public function favoriteScene($scene_id){
+        \Auth::user()->favoringScene($scene_id);
         return redirect()->back();
     }
-    public function unfavoriteScene($id,$title_id,$scene_id){
-        $user = User::find($id);
-        //$favscene = $user->scene($title_id,$scene_id)->select('id')->first();
-        \Auth::user()->unfavoringScene($id,$title_id,$scene_id);
+    public function unfavoriteScene($scene_id){
+        \Auth::user()->unfavoringScene($scene_id);
         return redirect()->back();
     }
-    public function favoriteTitle($id,$title_id){
-        $user = User::find($id);
-        //$favscene = $user->scene($title_id,$scene_id)->select('id')->first();
-        \Auth::user()->favoringTitle($id,$title_id);
+    public function favoriteTitle($title_id){
+        \Auth::user()->favoringTitle($title_id);
         return redirect()->back();
     }
-    public function unfavoriteTitle($id,$title_id){
-        $user = User::find($id);
-        //$favscene = $user->scene($title_id,$scene_id)->select('id')->first();
-        \Auth::user()->unfavoringTitle($id,$title_id);
+    public function unfavoriteTitle($title_id){
+        \Auth::user()->unfavoringTitle($title_id);
         return redirect()->back();
     }
 
-    public function postComment(Request $request,$id,$title_id,$scene_id){
+    public function postComment(Request $request,$scene_id){
          $this->validate($request, [
             'comment' => 'required|max:255',
           ]);
-        $user=User::find($id);
-        \Auth::user()->commentTo($id,$title_id,$scene_id,$request->comment);
+        \Auth::user()->commentTo($scene_id,$request->comment);
         return redirect()->back();
     }
 
-    public function deleteComment($id,$title_id,$scene_id,$comment_user_id,$comment_id){
-      $delSceneCommentIds=User::find($id)->scene($title_id,$scene_id)->lists('mylogs.id');
-      foreach($delSceneCommentIds as $delSceneCommentId){
-        //User::find($comment_user_id)->comments()->where('comments.scene_id',$delSceneCommentId)->wherePivot('comment_id',$comment_id)->detach();
-        \DB::table('comments')->where('user_id',$comment_user_id)
-                              ->where('scene_id',$delSceneCommentId)
-                              ->where('comment_id',$comment_id)
-                              ->delete();
-      }
+    public function deleteComment($comment_id){
+        \DB::table('comments')->where('id',$comment_id)->delete();
       return redirect()->back();
     }
 

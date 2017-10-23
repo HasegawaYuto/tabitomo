@@ -10,8 +10,8 @@
                 <i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング
             </div>
             <div class="panel-body">
-                <button type="button" data-userid="{{$user->user_id}}" data-man="guide" class="btn btn-xs btn-success" data-toggle="modal" data-target="#GuestGuidePost">ガイド募集</button>
-                <button type="button" data-userid="{{$user->user_id}}" data-man="guest" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#GuestGuidePost">ゲスト募集</button>
+                <button type="button" data-userid="{{$user->id}}" data-man="guide" class="btn btn-xs btn-success" data-toggle="modal" data-target="#GuestGuidePost">ガイド募集</button>
+                <button type="button" data-userid="{{$user->id}}" data-man="guest" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#GuestGuidePost">ゲスト募集</button>
             <ul class="list-group">
             <?php
                 function replaceDate($date){
@@ -33,8 +33,8 @@
             @foreach($recruitments as $key => $recruitment)
             <li class="list-group-item list-group-item-{{$recruitment->type =='guide' ? 'success':'warning'}}" style="margin-bottom:10px;">
                       〆{{$recruitment->limitdate !=0 ? replaceDate($recruitment->limitdate):'なし'}}
-                      @if($candidatecnt[$key]!=0)
-                      <span class="badge pull-left">{{$candidatecnt[$key]}}</span>
+                      @if(count($candidateusers[$key])!=0)
+                      <span class="badge pull-left">{{count($candidateusers[$key])}}</span>
                       @endif
                       @if($recruitment->type=="guide")
                       {!!Form::open(['route'=>['guide_delete','guide_id'=>$recruitment->id],'style'=>'display:inline;float:right;'])!!}
@@ -84,7 +84,9 @@
                     {!! Form::text('limitdate',null,['class'=>'form-control','style'=>'width:50%;','id'=>'Relimitdate']) !!}
                 </div>
                 <label>スポット</label>
-                <div id="spotdata"></div>
+                <input type="hidden" value="35" name="centerLat" id="centerLat">
+                <input type="hidden" value="136" name="centerLng" id="centerLng">
+                <input type="hidden" value="20000" name="circleRadius" id="circleRadius">
                 <div id="GuestGuideSpotMap" style="width:300px;height:200px;max-width:100%;"></div>
                 <div id="SpotRadiusArea"></div>
                 <div class="form-group">

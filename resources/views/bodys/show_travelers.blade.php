@@ -22,7 +22,7 @@
                 〆{{$recruitment->limitdate !=0 ? replaceDate($recruitment->limitdate):'なし'}}
         </div>
         <div class="panel-body">
-                <?php $theuser=$recruituser[$key]; ?>
+                <?php $theuser=App\User::find($recruitment->user_id); ?>
                 <a href="{{route('show_user_profile',['id'=>$theuser->user_id])}}" class="black">
                 <div class="GuideImageOuter">
                     @include('parts.avatar',['user'=>$theuser,'class'=>'GuideImage'])
