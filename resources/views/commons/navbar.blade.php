@@ -27,7 +27,7 @@ $browser=((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos(
                     <li>{!! link_to_route('login.get', 'ログイン') !!}</li>
                     @else
                     <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{Auth::user()->name}}<span class="caret"></span></a>
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{Auth::user()->nickname or 'ゲスト'}}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <?php $id=AUth::user()->id ?>
                             <li><a href="{{ route('show_user_profile',['id'=>$id]) }}" class="list-group-item noborder nav-item"><i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>プロフィール</a></li>
