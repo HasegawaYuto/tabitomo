@@ -24,11 +24,11 @@ class CreateUsersTable extends Migration
             $table->string('snsImagePath')->nullable();
             $table->string('mime')->nullable();
             $table->binary('data')->nullable();
-            $table->integer('facebook_id')->unsigned()->nullable();
-            $table->integer('twitter_id')->unsigned()->nullable();
-            $table->integer('google_id')->unsigned()->nullable();
-            $table->integer('line_id')->unsigned()->nullable();
-            $table->integer('yahoo_id')->unsigned()->nullable();
+            $table->bigInteger('facebook_id')->unsigned()->nullable();
+            $table->bigInteger('twitter_id')->unsigned()->nullable();
+            $table->bigInteger('google_id')->unsigned()->nullable();
+            $table->bigInteger('line_id')->unsigned()->nullable();
+            $table->bigInteger('yahoo_id')->unsigned()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
