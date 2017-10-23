@@ -109,12 +109,12 @@ class SocialController extends Controller
             if(!isset($loginuser->facebook_id)){
                 $loginuser['facebook_id']=$fuser->getId();
             }
-            if(!isset($loginuser->name)){
+            if(!isset($loginuser->name)&&isset($fuser->getName())){
                 $loginuser['name']=$fuser->getName();
             }
             $loginuser['snsImagePath']=$fuser->getAvatar();
             $loginuser->save();
-            return redirect($_SERVER['HTTP_REFERER']);
+            return redirect('/');
         } else {
             return 'something went wrong';
         }
@@ -138,10 +138,10 @@ class SocialController extends Controller
             if(!isset($loginuser->nickname)){
                 $loginuser['nickname']=$guser->getNickname();
             }
-            if(!isset($loginuser->facebook_id)){
-                $loginuser['facebook_id']=$guser->getId();
+            if(!isset($loginuser->google_id)){
+                $loginuser['google_id']=$guser->getId();
             }
-            if(!isset($loginuser->name)){
+            if(!isset($loginuser->name)&&isset($guser->getName())){
                 $loginuser['name']=$guser->getName();
             }
             $loginuser['snsImagePath']=$guser->getAvatar();
