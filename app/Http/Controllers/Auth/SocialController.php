@@ -109,7 +109,7 @@ class SocialController extends Controller
             if(!isset($loginuser->facebook_id)){
                 $loginuser['facebook_id']=$fuser->getId();
             }
-            if(!isset($loginuser->name)&&$fuser->getName()!==null){
+            if(!isset($loginuser->name)&&$fuser->getName()!=null){
                 $loginuser['name']=$fuser->getName();
             }
             $loginuser['snsImagePath']=$fuser->getAvatar();
@@ -141,7 +141,7 @@ class SocialController extends Controller
             if(!isset($loginuser->google_id)){
                 $loginuser['google_id']=$guser->getId();
             }
-            if(!isset($loginuser->name)&&$guser->getName()!==null){
+            if(!isset($loginuser->name)&&$guser->getName()!=null){
                 $loginuser['name']=$guser->getName();
             }
             $loginuser['snsImagePath']=$guser->getAvatar();
