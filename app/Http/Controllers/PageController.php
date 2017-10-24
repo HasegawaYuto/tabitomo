@@ -364,11 +364,11 @@ $scenes = $scenes
             ->paginate(24);
       $data['scenes'] = $scenes;
       $sceneids = $scenes->lists('scene_id');
-      if(Photo::whereIn('scene_id',$sceneids)->whereNotNull('data')->exists()){
+      //if(Photo::whereIn('scene_id',$sceneids)->whereNotNull('data')->exists()){
       $data['photos'] = Photo::whereNotNull('data')
                                 ->whereIn('scene_id',$sceneids)
                                 ->get();
-      }
+      //}
       foreach($scenes as $key => $scene){
           $data['user'][]=User::find(Mylogdetailtitle::where('title_id',$scene->title_id)->first()->user_id);
           $comments = \DB::table('comments')->where('scene_id',$scene->scene_id)
