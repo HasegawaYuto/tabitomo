@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Mylogdetailscene extends Model
 {
     protected $guarded = ['id','created_at','updated_at'];
+    public $incrementing = false;
+    protected $primaryKey = 'scene_id';
     public function photo(){
         return $this->hasMany(Photo::class);
     }
