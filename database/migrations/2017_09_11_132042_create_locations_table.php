@@ -22,7 +22,6 @@ class CreateLocationsTable extends Migration
                   ->onUpdate('cascade');
             $table->string('city_id');
             $table->string('city_name');
-            $table->timestamps();
         });
     }
 

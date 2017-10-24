@@ -16,7 +16,6 @@ class CreatePrefsTable extends Migration
             $table->increments('id');
             $table->string('pref_id');
             $table->string('pref_name');
-            $table->timestamps();
         });
     }
 

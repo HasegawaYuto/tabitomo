@@ -73,7 +73,7 @@
         ];
 
     foreach($pref_id as $key => $pref_name ){
-        $sql = 'INSERT INTO prefs (pref_id,pref_name) Value (:pref_id,:pref_name)';
+        $sql = 'INSERT INTO prefs (pref_id,pref_name) VALUES (:pref_id,:pref_name)';
         $statement = $database->prepare($sql);
         $statement->bindParam(':pref_id', $key);
         $statement->bindParam(':pref_name', $pref_name);
@@ -95,7 +95,7 @@
     $json_count = count($result["data"]);
 
     for($city_cnt = 0;$city_cnt<=$json_count-1;$city_cnt++){
-    $sql = 'INSERT INTO locations (pref_id,city_id,city_name) Value (:pref_id,:city_id,:city_name)';
+    $sql = 'INSERT INTO locations (pref_id,city_id,city_name) VALUES (:pref_id,:city_id,:city_name)';
     $statement = $database->prepare($sql);
     $statement->bindParam(':pref_id', $idPad);
     $statement->bindParam(':city_id', $result['data'][$city_cnt]['id']);
