@@ -72,7 +72,7 @@
                               </label>
                               </div>
                         </div>
-          @if(isset($photos[0]))
+          @if(isset($photos[0]->data))
               <div class="col-xs-12" id="photosField">
                   @foreach($photos as $photo)
                       <img class="img-responsive imgPhotos lazyload" data-src="data:{{$photo->mime}};base64,{{base64_encode($photo->data)}}" sceneID="{{$photo->scene_id}}" photoID="{{$photo->id}}" />
