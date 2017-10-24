@@ -492,7 +492,7 @@ $(function(){/////////////////////シーン更新
         $('#fixScene0').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var $sceneID = button.data('sceneid');
-            if($('#photosField img').length){
+            if($('#photosField > img').length){
             $('#photosField').html(originalImg).find('img').each(function(){
                 var $photoSceneId = $(this).attr('sceneID');
                 if($photoSceneId != $sceneID){
@@ -566,7 +566,7 @@ $(function(){/////////////////////シーン更新
                  $("input[name='publish'][value='friend']").prop('checked',true);
             }
 
-            if($('#photosField').length){
+            if($('#photosField').length && $('#photosField > img').length){
                 var num = 0;
                 $('#photosField img').on('click',function(){
                     $(this).data("click",++num);

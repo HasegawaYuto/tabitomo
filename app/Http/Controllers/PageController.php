@@ -587,10 +587,8 @@ $scenes = $scenes
       $sceneids = $scenes->lists('scene_id');
       $data['scoreAve'] = Mylogdetailscene::whereIn('scene_id',$sceneids)
                                           ->avg('score');
-      //if(Photo::whereIn('scene_id',$sceneids)->whereNotNull('data')->exists()){
       $data['photos'] = Photo::whereIn('scene_id',$sceneids)
                               ->get();
-      //}
       foreach($scenes as $key => $scene){
           $comments = \DB::table('comments')
                           ->where('scene_id',$scene->scene_id)
