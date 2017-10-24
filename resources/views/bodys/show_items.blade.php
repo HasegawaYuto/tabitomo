@@ -101,6 +101,7 @@
                     <p class="text-center"><small>No Image</small></p>
                     @endif
                     </div>
+                    {{$scene->lat}}-{{$scene->lng}}-{{$key}}
                     <input type="hidden" value="{{$scene->lat}}" id="googlemapLat{{$key}}" />
                     <input type="hidden" value="{{$scene->lng}}" id="googlemapLng{{$key}}" />
                     <div class="googlemapSpot googlemapSizeM" id="googlemapSpotID{{$key}}"></div>
