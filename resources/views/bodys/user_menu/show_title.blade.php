@@ -278,9 +278,11 @@
 
 @include('parts.modal_scene_edit',['photos'=>$photos])
 
-@foreach($scenes as $scene)
-@include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene,'title'=>$title])
-@endforeach
+if(isset($photos[0]))
+    @foreach($scenes as $scene)
+        @include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene,'title'=>$title])
+    @endforeach
+@endif
 
 @foreach($scenes as $key => $scene)
 @include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuser[$key]])
