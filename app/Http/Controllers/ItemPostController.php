@@ -176,7 +176,7 @@ class ItemPostController extends Controller
                       $constraint->aspectRatio();
                     })->orientate()->save($filename);
                 Photo::create([
-                    'data' => file_get_contents($filename),
+                    'data' => file_get_contents($file->getRealPath()),
                     'mime' => $file->getMimeType(),
                     'scene_id' => $theSceneId,
                 ]);
