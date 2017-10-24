@@ -173,7 +173,7 @@
     @endforeach
 </div>
 
-@if(isset($photos))
+@if(isset($photos[0]))
     @include('parts.modal_scene_edit',['photos'=>$photos])
 @endif
 
