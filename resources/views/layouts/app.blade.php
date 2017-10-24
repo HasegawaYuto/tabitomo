@@ -38,9 +38,9 @@
             }
         });
         </script>
-
-        <script src="{{asset('myjs/app.js')}}"></script>
+        
         <link rel="stylesheet" type="text/css" href="{{asset('mycss/app.css')}}">
+        <script src="{{asset('myjs/app.js')}}"></script>
     </head>
     <body>
         @include('commons.navbar')
