@@ -57,7 +57,7 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany(Mylogdetailscene::class,'mylog_user','user_id','scene_id')->withTimestamps();
     }
     public function is_favoritesScene($sceneid){
-        return $this->favor()->where('scene_id',$sceneid)->exists();
+        return $this->favor()->where('mylogdetailscenes.scene_id',$sceneid)->exists();
     }
     public function favoringScene($sceneid){
         $exists = $this->is_favoritesScene($sceneid);
