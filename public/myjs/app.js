@@ -690,6 +690,7 @@ $(function(){/////////////////////シーン更新
   }
 });
 //////////////////////////////////////////////////////
+/*
 $(function(){///オススメ更新
     if($('.showRaty').length){
         $.fn.raty.defaults.path = "/raty/lib/images";
@@ -707,6 +708,7 @@ $(function(){///オススメ表示
             $('#showRatyAveDiv').raty({ readOnly: true, score: parseInt($('#showRatyAve').val()*2)/2 });
     }
 });
+*/
 ////////////////////////////////////////////////////////////////////////
 $(function(){///グーグルマップ複数表示
     if($('.googlemapSpot').length){
