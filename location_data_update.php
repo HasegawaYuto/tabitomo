@@ -6,6 +6,7 @@
     $DB_HOST = "ec2-54-235-250-15.compute-1.amazonaws.com options='--client_encoding=UTF8'";
     $DB_PASSWORD = '3604b9e39c1afedc5438cd41de8f68f885cad0cd5494110ac31e1e2f6ae22a64';
     $DB_USERNAME = 'pmgorahtvfbzzp';
+    //$database = new PDO('mysql:host=localhost;dbname=tabitomo_database;charset=UTF8;', $username, $password);
     //$database = new PDO('pgsql:host='.$DB_HOST.';dbname='.$DB_DATABASE.';', $DB_USERNAME, $DB_PASSWORD);
     //$database = new PDO('pgsql://pmgorahtvfbzzp:3604b9e39c1afedc5438cd41de8f68f885cad0cd5494110ac31e1e2f6ae22a64@ec2-54-235-250-15.compute-1.amazonaws.com:5432/dajmgrpqvdjoar');
     //$database = new PDO('postgresql://pmgorahtvfbzzp:3604b9e39c1afedc5438cd41de8f68f885cad0cd5494110ac31e1e2f6ae22a64@ec2-54-235-250-15.compute-1.amazonaws.com:5432/dajmgrpqvdjoar');
