@@ -171,10 +171,12 @@ $scenes = $scenes
           $data['comments'][] = $comments;
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
+          if(Photo::where('scene_id',$scene->scene_id)->exists()){
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->orderByRaw("RAND()")
                                   ->first();
+          }
           $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)
                                             ->first();
       }
@@ -371,10 +373,12 @@ $scenes = $scenes
           $data['comments'][] = $comments;
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
+          if(Photo::where('scene_id',$scene->scene_id)->exists()){
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->orderByRaw("RAND()")
                                   ->first();
+          }
           $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)
                                             ->first();
       }
@@ -476,10 +480,12 @@ $scenes = $scenes
                                 ->get();
           $data['scenes'][]=$scenes;
           $sceneids = $scenes->lists('scene_id');
+          if(Photo::where('scene_id',$scene->scene_id)->exists()){
           $data['thumb'][] = Photo::whereIn('scene_id',$sceneids)
                             ->whereNotNull('data')
                             ->orderByRaw("RAND()")
                             ->first();
+          }
       }
       $data['user']=$user;
       $data['titles']=$titles;
@@ -575,8 +581,10 @@ $scenes = $scenes
       $sceneids = $scenes->lists('scene_id');
       $data['scoreAve'] = Mylogdetailscene::whereIn('scene_id',$sceneids)
                                           ->avg('score');
+      if(Photo::whereIn('scene_id',$sceneids)->exists()){
       $data['photos'] = Photo::whereIn('scene_id',$sceneids)
                               ->get();
+      }
       foreach($scenes as $key => $scene){
           $comments = \DB::table('comments')
                           ->where('scene_id',$scene->scene_id)
@@ -585,10 +593,12 @@ $scenes = $scenes
           $data['comments'][] = $comments;                          
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
+          if(Photo::where('scene_id',$scene->scene_id)->exists()){
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
                                   ->orderByRaw("RAND()")
                                   ->first();
+          }
       }
       $data['user']=$user;
       $data['thisyear']=Carbon::now()->year;
