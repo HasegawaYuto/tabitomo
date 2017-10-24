@@ -49,7 +49,7 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany(Mylogdetailscene::class,'comments','user_id','scene_id')->withPivot('comment','comment_id')->withTimestamps();
     }
     public function commentTo($sceneid,$comment){
-        $this->comments()->attach($sceneid,['comments.comment'=>$comment]);
+        $this->comments()->attach($sceneid,['comment'=>$comment]);
         return true;
     }
     
