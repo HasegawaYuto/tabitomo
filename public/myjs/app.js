@@ -486,9 +486,13 @@ $(function(){//////////////マッチングデータ登録
 $(function(){/////////////////////シーン更新
     if($('#fixScene0').length){
         var originalImg = $('#photosField').html();
+        $('#fixScene0').on('hidden.bs.modal', function (event){
+            $('#photosField').html(originalImage);
+        });
         $('#fixScene0').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var $sceneID = button.data('sceneid');
+            if($('#photosField img').length){
             $('#photosField').html(originalImg).find('img').each(function(){
                 var $photoSceneId = $(this).attr('sceneID');
                 if($photoSceneId != $sceneID){
@@ -498,6 +502,7 @@ $(function(){/////////////////////シーン更新
             if($('#photosField > img').length){
                 $('#photosField').prepend('<div><small>消去する画像をクリック</small></div>');
             }
+          }
         });
         $('#fixScene0').on('shown.bs.modal', function (event) {
             var button = $(event.relatedTarget);
