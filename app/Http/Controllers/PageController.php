@@ -480,7 +480,7 @@ $scenes = $scenes
                                 ->get();
           $data['scenes'][]=$scenes;
           $sceneids = $scenes->lists('scene_id');
-          if(Photo::where('scene_id',$scene->scene_id)->exists()){
+          if(Photo::whereIn('scene_id',$sceneids)->exists()){
           $data['thumb'][] = Photo::whereIn('scene_id',$sceneids)
                             ->whereNotNull('data')
                             ->orderByRaw("RAND()")
