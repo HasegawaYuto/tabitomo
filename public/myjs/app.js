@@ -623,12 +623,13 @@ $(function(){/////////////////////シーン更新
                 }
             }
 
-
+/*
             if($('#editRateField0').length){
                     $.fn.raty.defaults.path = "/raty/lib/images";
                     rateF = $('#editRateField0');
                         rateF.raty({score: parseInt($('#oldScore').val())});
             }
+*/
             if($('#editPhotoSpotSetArea0').length){
                 var $pSS = $('#editPhotoSpotSetArea0');
                 //$pSS.css('height','40vh');
