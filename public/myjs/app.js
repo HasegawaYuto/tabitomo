@@ -971,7 +971,7 @@ $(function(){
 ////////////////////////////////////////////////////////////////////
 $(function(){
     if($('#createRateField0').length){
-            $.fn.raty.defaults.path = "/raty/lib/images";
+            $.fn.raty.defaults.path = "/";
             rateF = $('#createRateField0');
                 //rateF.raty({score: parseInt($('#oldScore').val())});
                 rateF.raty();
