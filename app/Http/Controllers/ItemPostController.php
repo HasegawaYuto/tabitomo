@@ -176,8 +176,8 @@ class ItemPostController extends Controller
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($filename);
-                //$escaped_data = pg_escape_bytea( file_get_contents($filename) );
-                $escaped_data = file_get_contents($file->getRealPath());
+                $escaped_data = pg_escape_bytea( file_get_contents($file->getRealPath()) );
+                //$escaped_data = file_get_contents($file->getRealPath());
                 $mime = $file->getMimeType();
                 $db = \DB::connection('pgsql')->getPdo();
                 $stmt = $db->prepare('insert into photos (scene_id,data) values (?,?)');
