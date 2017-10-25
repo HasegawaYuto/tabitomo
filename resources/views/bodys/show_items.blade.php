@@ -179,12 +179,11 @@
 
 @if(isset($photos[500]))
     @include('parts.modal_scene_edit',['photos'=>$photos])
-@endif
-
-@foreach($scenes as $key => $scene)
+    @foreach($scenes as $key => $scene)
 @include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene,'title'=>$titles[$key]])
 @include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuser[$key]])
 @endforeach
+@endif
 
 @else
     <div class="center jumbotron">
