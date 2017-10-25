@@ -380,7 +380,7 @@ $scenes = $scenes
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
-                                  ->orderByRaw("RAND()")
+                                  //->orderByRaw("RAND()")
                                   ->first();
           }
           $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)
