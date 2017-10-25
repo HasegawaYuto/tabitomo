@@ -78,7 +78,7 @@ class UserOptionController extends Controller
               ];
               if(array_search(mime_content_type($_FILES['avatar']['tmp_name']),$typearray)){
                   $file = \Input::file('avatar');
-                  $filename = public_path() . '/image/avatar' . $id . '.' . $file->getClientOriginalExtension();
+                  $filename = '/tmp/avatar' . $id . '.' . $file->getClientOriginalExtension();
                   $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
                         $constraint->aspectRatio();
                       })->orientate()->save($filename);
