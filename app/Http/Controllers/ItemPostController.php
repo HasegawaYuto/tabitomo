@@ -176,8 +176,9 @@ class ItemPostController extends Controller
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($filename);
+                $escaped_data = pg_escape_bytea( file_get_contents($filename) );
                 Photo::create([
-                    'data' => file_get_contents($filename),
+                    'data' => $escaped_data,
                     'mime' => $file->getMimeType(),
                     'scene_id' => $theSceneId,
                 ]);
