@@ -178,7 +178,7 @@ class ItemPostController extends Controller
                     })->orientate()->save($filename);
                 //$escaped_data = pg_escape_bytea( file_get_contents($filename) );
                 $escaped_data = pg_escape_bytea(file_get_contents($filename));
-                $db = DB::connection('pgsql')->getPdo();
+                $db = \DB::connection('pgsql')->getPdo();
                 $stmt = $db->prepare('insert into photos (scene_id,mime,data) values (?, ?, ?)');
                 $stmt->bindParam(1,$theSceneId);
                 $stmt->bindParam(2,$file->getMimeType());
