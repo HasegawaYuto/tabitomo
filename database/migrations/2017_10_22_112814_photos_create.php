@@ -23,7 +23,6 @@ class PhotosCreate extends Migration
                   ->onUpdate('cascade');
             $table->string('mime')->nullable();
             $table->binary('data')->nullable();
-            $table->timestamps();
         });
     }
 
