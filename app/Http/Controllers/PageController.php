@@ -365,9 +365,11 @@ $scenes = $scenes
       $data['scenes'] = $scenes;
       $sceneids = $scenes->lists('scene_id');
       //if(Photo::whereIn('scene_id',$sceneids)->whereNotNull('data')->exists()){
+      /*
       $data['photos'] = Photo::whereNotNull('data')
                                 ->whereIn('scene_id',$sceneids)
                                 ->get();
+      */
       //}
       foreach($scenes as $key => $scene){
           $data['user'][]=User::find(Mylogdetailtitle::where('title_id',$scene->title_id)->first()->user_id);
