@@ -90,10 +90,10 @@
                     @if(isset($thumb[$key]->data))
                     <?php
                         $mime = $thumb[$key]->mime;
-                        //$phase1 = pg_fetch_object($thumb[$key]->escdata);
-                        //$phase2 = pg_unescape_bytea($phase1);
-                        //$dataImage = base64_encode($phase2);
-                        $dataImage = base64_encode($thumb[$key]->data);
+                        $phase1 = pg_fetch_object($thumb[$key]->data);
+                        $phase2 = pg_unescape_bytea($phase1);
+                        $dataImage = base64_encode($phase2);
+                        //$dataImage = base64_encode($thumb[$key]->data);
                     ?>
                     <a href="#modal_carousel{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}">
                         <div class="ItemImageShow lazyload" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
