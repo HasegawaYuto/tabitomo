@@ -625,7 +625,7 @@ $(function(){/////////////////////シーン更新
 
 /*
             if($('#editRateField0').length){
-                    $.fn.raty.defaults.path = "/raty/lib/images";
+                    $.fn.raty.defaults.path = "/";
                     rateF = $('#editRateField0');
                         rateF.raty({score: parseInt($('#oldScore').val())});
             }
@@ -693,7 +693,7 @@ $(function(){/////////////////////シーン更新
 /*
 $(function(){///オススメ更新
     if($('.showRaty').length){
-        $.fn.raty.defaults.path = "/raty/lib/images";
+        $.fn.raty.defaults.path = "/";
         var $showRatyCnt = $('.showRaty').length;
         for($i=0;$i<$showRatyCnt;$i++){
             $('#showRatyDiv'+$i).raty({ readOnly: true, score: parseInt($('#showRaty'+$i).val()) });
@@ -703,7 +703,7 @@ $(function(){///オススメ更新
 ////////////////////////////////////////////////////////////////
 $(function(){///オススメ表示
     if($('.showRatyAve').length){
-        $.fn.raty.defaults.path = "/raty/lib/images";
+        $.fn.raty.defaults.path = "/";
         var $showRatyAveCnt = $('.showRatyAve').length;
             $('#showRatyAveDiv').raty({ readOnly: true, score: parseInt($('#showRatyAve').val()*2)/2 });
     }
