@@ -180,10 +180,10 @@ class ItemPostController extends Controller
                 $escaped_data = pg_escape_bytea(file_get_contents($filename));
                 $mime = $file->getMimeType();
                 $db = \DB::connection('pgsql')->getPdo();
-                $stmt = $db->prepare('insert into photos (data) values (?)');
-                //$stmt->bindParam(1,$theSceneId);
+                $stmt = $db->prepare('insert into photos (scene_id,data) values (?,?)');
+                $stmt->bindParam(1,$theSceneId);
                 //$stmt->bindParam(2,$mime);
-                $stmt->bindParam(1,$escaped_data,$db::PARAM_LOB);
+                $stmt->bindParam(2,$escaped_data,$db::PARAM_LOB);
                 $stmt->execute();
                 /*
                 Photo::create([
