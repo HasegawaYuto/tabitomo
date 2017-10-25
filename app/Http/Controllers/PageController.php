@@ -380,7 +380,7 @@ $scenes = $scenes
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
-                                  ->select('data','mime')
+                                  ->select('encode(data,"escape") AS esdata','mime')
                                   //->orderByRaw("RAND()")
                                   ->first();
           }
