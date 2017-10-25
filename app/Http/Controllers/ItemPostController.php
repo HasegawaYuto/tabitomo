@@ -172,7 +172,7 @@ class ItemPostController extends Controller
             if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                 $file = $files[$i];//\Input::file('image');
                 //$filename = public_path() . '/image/upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
-                $filename = './tmp/upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
+                $filename = '/tmp/upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($filename);
