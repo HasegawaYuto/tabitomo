@@ -14,7 +14,6 @@ use App\Location;
 use App\Pref;
 use App\Mylogdetailtitle,App\Mylogdetailscene,App\Photo;
 use Illuminate\Support\Facades\Log;
-use Storage;
 
 class ItemPostController extends Controller
 {
@@ -178,8 +177,12 @@ class ItemPostController extends Controller
                       $constraint->aspectRatio();
                     })->orientate()->save($path);
                 $filedata = file_get_contents($file->getRealPath());
-                $disk = Storage::disk('s3');
-                $disk->put('hoge/hogege'.$i.$file->getClientOriginalExtension(), $filedata,'public');
+                $s3 = AWS::createClient('s3');
+                    $result = $s3->putObject(array(
+                        'Bucket'     => 'bucket-for-tabitomo',
+                        'Key'        => $id.'/'.$filename,
+                        'SourceFile' => $path
+                ));
                 if(isset($filename)){
                   if (\File::exists($filename)) {
                         \File::delete($filename);

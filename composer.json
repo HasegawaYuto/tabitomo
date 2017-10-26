@@ -13,7 +13,8 @@
         "doctrine/dbal": "^2.5",
         "ext-exif": "*",
         "ext-gd": "*",
-        "league/flysystem-aws-s3-v3": "~1.0"
+        "aws/aws-sdk-php-laravel": "2.*",
+        "aws/aws-sdk-php": "2.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
