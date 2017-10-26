@@ -22,7 +22,7 @@ class PhotosCreate extends Migration
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
             $table->string('path')->nullable();
-            
+            $table->timestamps();
         });
     }
 
