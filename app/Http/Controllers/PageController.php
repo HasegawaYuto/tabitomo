@@ -508,10 +508,10 @@ $scenes = $scenes
                            ->orderBy('updated_at','desc')
                            ->get();
       foreach($scenes as $key => $scene){
-          if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
+          if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
           $data['thumb'][]=Photo::where('scene_id',$scene->scene_id)
-                                    ->whereNotNull('data')
-                                    ->orderByRaw("RAND()")
+                                    ->whereNotNull('path')
+                                    //->orderByRaw("RAND()")
                                     ->first();
           }
           $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)->first();

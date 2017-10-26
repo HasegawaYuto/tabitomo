@@ -28,12 +28,8 @@
                                     </div>
                                     <div class="panel-body">
                                       <a href="{{route('show_title',['id'=>$titles[$key]->user_id,'title_id'=>$scene->title_id])}}">
-                                              @if(isset($thumb[$key]->data))
-                                                  <?php
-                                                      $mime = $thumb[$key]->mime;
-                                                      $dataImage = base64_encode($thumb[$key]->data);
-                                                  ?>
-                                                  <div class="lazyload col-xs-12 favscene" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                              @if(isset($thumb[$key]->path))
+                                                  <div class="lazyload col-xs-12 favscene" data-bg="{{$thumb[$key]->path}}"></div>
                                               @else
                                                   <div class="lazyload col-xs-12 favscene" data-bg="{{asset('noimage.png')}}"></div>
                                               @endif

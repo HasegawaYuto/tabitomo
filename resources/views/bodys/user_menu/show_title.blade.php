@@ -180,13 +180,9 @@
                         </div>
                             <div class="text-center">
                                 <dvi class="col-sm-4 col-xs-12">
-                                    @if(isset($thumb[$key]->data))
-                                    <?php
-                                        $mime = $thumb[$key]->mime;
-                                        $dataImage = base64_encode($thumb[$key]->data);
-                                    ?>
+                                    @if(isset($thumb[$key]->path))
                                     <a href="#modal_carousel{{$scene->scene_id}}" data-toggle="modal" data-local="#myCarousel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}">
-                                        <div class="ItemImageShow lazyload" data-bg="data:{{$mime}};base64,{{$dataImage}}"></div>
+                                        <div class="ItemImageShow lazyload" data-bg="{{$thumb[$key]->path}}"></div>
                                     </a>
                                     <p class="text-center"><small>↑クリック</small></p>
                                     @else
