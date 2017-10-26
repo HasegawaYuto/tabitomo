@@ -178,7 +178,7 @@ class ItemPostController extends Controller
                       $constraint->aspectRatio();
                     })->orientate()->save($path);
                 $filedata = file_get_contents($file->getRealPath());
-                $s3 = AWS::createClient('s3');
+                $s3 = AWS::get('s3');
                     $result = $s3->putObject(array(
                         'Bucket'     => 'bucket-for-tabitomo',
                         'Key'        => $id.'/'.$filename,
