@@ -206,8 +206,8 @@
                                 {!! Form::hidden('spotNS', $spotNS, ['id' => 'ido0']) !!}
                                 {!! Form::hidden('spotEW', $spotEW, ['id' => 'keido0']) !!}
                             @else
-                                {!! Form::hidden('spotNS', null, ['id' => 'ido0']) !!}
-                                {!! Form::hidden('spotEW', null, ['id' => 'keido0']) !!}
+                                {!! Form::hidden('spotNS', '35', ['id' => 'ido0']) !!}
+                                {!! Form::hidden('spotEW', '136', ['id' => 'keido0']) !!}
                             @endif
                             @if(isset($mapzoom))
                                 {!! Form::hidden('mapzoom', $mapzoom, ['id' => 'mapzoom0']) !!}

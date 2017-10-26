@@ -14,7 +14,7 @@ use App\Location;
 use App\Pref;
 use App\Mylogdetailtitle,App\Mylogdetailscene,App\Photo;
 use Illuminate\Support\Facades\Log;
-use Storage;
+use App\Storage;
 
 class ItemPostController extends Controller
 {
@@ -179,10 +179,10 @@ class ItemPostController extends Controller
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($path);
-                $filedata = file_get_contents($path);
-                $mime = $file->getMimeType();
+                $filedata = file_get_contents($file->getRealPath());
+                //$mime = $file->getMimeType();
                 $disk = Storage::disk('s3');
-                $disk->put($filename, $filedata,'public');
+                $disk->put('hoge/hogege'.$i.$fie->getClientOriginalExtension(), $filedata,'public');
                 /*
                 $db = \DB::connection('pgsql')->getPdo();
                 $stmt = $db->prepare('insert into photos (scene_id,data) values (?,?)');
