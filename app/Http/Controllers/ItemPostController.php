@@ -183,21 +183,6 @@ class ItemPostController extends Controller
                 //$mime = $file->getMimeType();
                 $disk = Storage::disk('s3');
                 $disk->put('hoge/hogege'.$i.$fie->getClientOriginalExtension(), $filedata,'public');
-                /*
-                $db = \DB::connection('pgsql')->getPdo();
-                $stmt = $db->prepare('insert into photos (scene_id,data) values (?,?)');
-                $stmt->bindParam(1,$theSceneId);
-                //$stmt->bindParam(2,$mime);
-                $stmt->bindParam(2,$escaped_data,$db::PARAM_LOB);
-                $stmt->execute();
-                */
-                /*
-                Photo::create([
-                    'data' => $escaped_data,
-                    'mime' => $file->getMimeType(),
-                    'scene_id' => $theSceneId,
-                ]);
-                */
                 if(isset($filename)){
                   if (\File::exists($filename)) {
                         \File::delete($filename);
