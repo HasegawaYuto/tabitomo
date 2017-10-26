@@ -342,6 +342,7 @@ $scenes = $scenes
       $data['recruitments']=$recruitments;
       return view('bodys.show_travelers',$data);
     }
+    
 
     public function showItems(){
       $scenes = Mylogdetailscene::where(function($query){

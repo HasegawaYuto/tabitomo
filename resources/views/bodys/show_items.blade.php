@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+
 @if(isset($scenes[0]))
 <div class="container-fluid">
     @include('parts.searchItem')
