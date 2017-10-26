@@ -186,7 +186,7 @@ class ItemPostController extends Controller
                 ));
                 Photo::create([
                         'scene_id' => $theSceneId,
-                        'path' =>Storage::disk('s3')->url($id.'/'.$filename)
+                        'path' => 'https://s3-ap-northeast-1.amazonaws.com/bucket-for-tabitomo/'.$id.'/'.$filename
                     ]);
                 if(isset($filename)){
                   if (\File::exists($filename)) {
