@@ -177,10 +177,9 @@ class ItemPostController extends Controller
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($path);
-                $filedatadayone = file_get_contents($file->getRealPath());
-                //元：$filedata
+                $filedata = file_get_contents($file->getRealPath());
                 $disk = Storage::disk('s3');
-                $disk->put('hoge/hogege'.$i.$fie->getClientOriginalExtension(), $filedatadayone,'public');
+                $disk->put('hoge/hogege'.$i.$fie->getClientOriginalExtension(), $filedata,'public');
                 if(isset($filename)){
                   if (\File::exists($filename)) {
                         \File::delete($filename);
