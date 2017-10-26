@@ -13,7 +13,7 @@
 
 Route::get('/', function(){
     return view('toppage');
-})->name('show_items');
+})->name('bodys.show_items');
 //Route::get('/', 'PageController@showItems')->name('show_items');
 Route::post('/search', 'PageController@showItemsSearch')->name('show_items_search');
 Route::post('/', 'PageController@showItems')->name('break_condition');
