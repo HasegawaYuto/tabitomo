@@ -44,7 +44,6 @@
                             <div class="col-xs-12 col-sm-4">
                           @if(isset($thumb[$key]->path))
                           <div class="ItemImageShow lazyload" data-bg="{{$thumb[$key]->path}}"></div>
-                          <!--img class="img-responsive titleImage" src="data:{{$mime}};base64,{{$dataImage}}"/-->
                           @else
                           <div class="ItemImageShow lazyload" data-bg="{{asset('noimage.png')}}"></div>
                           @endif
