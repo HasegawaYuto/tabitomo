@@ -179,7 +179,7 @@ class ItemPostController extends Controller
                     })->orientate()->save($path);
                 $filedata = file_get_contents($file->getRealPath());
                 $disk = Storage::disk('s3');
-                $disk->put('hoge/hogege'.$i.$fie->getClientOriginalExtension(), $filedata,'public');
+                $disk->put('hoge/hogege'.$i.$file->getClientOriginalExtension(), $filedata,'public');
                 if(isset($filename)){
                   if (\File::exists($filename)) {
                         \File::delete($filename);
