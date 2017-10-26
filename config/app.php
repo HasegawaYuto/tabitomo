@@ -148,7 +148,6 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
-        //Aws\Laravel\AwsServiceProvider::class,
 
     ],
 
@@ -202,7 +201,6 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        //'Aws' => Aws\Laravel\AwsFacade::class,
 
     ],
 
