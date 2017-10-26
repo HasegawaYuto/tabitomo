@@ -202,7 +202,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        /'Aws' => Aws\Laravel\AwsFacade::class,
+        'AW' => Aws\Laravel\AwsFacade::class,
 
     ],
 
