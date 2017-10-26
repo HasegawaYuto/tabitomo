@@ -172,13 +172,16 @@
 </div>
 
 
-@if(isset($photos[500]))
+@if(isset($photos[0]))
     @include('parts.modal_scene_edit',['photos'=>$photos])
-    @foreach($scenes as $key => $scene)
-@include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene,'title'=>$titles[$key]])
-@include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuser[$key]])
-@endforeach
 @endif
+
+@foreach($scenes as $key => $scene)
+    @if(isset($photos[0]))
+        @include('parts.modal_carousel',['photos'=>$photos,'scene'=>$scene,'title'=>$titles[$key]])
+    @endif
+        @include('parts.showFavoriteUsers',['key'=>$key,'users'=>$favuser[$key]])
+@endforeach
 
 @else
     <div class="center jumbotron">

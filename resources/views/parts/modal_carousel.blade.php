@@ -6,7 +6,7 @@
       <div class="modal-body" style="padding:0" id="modal-carousel-body">
         <div id="myCarousel{{$scene->scene_id}}" class="carousel slide carousel-fit" data-ride="carousel">
           <ol class="carousel-indicators">
-              @if(isset($photos[0]->data))
+              @if(isset($photos[0]->path))
                   <?php $cnt = -1; ?>
                   @foreach($photos as $photo)
                       @if($photo->scene_id == $scene->scene_id)
@@ -21,7 +21,7 @@
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-              @if(isset($photos[0]->data))
+              @if(isset($photos[0]->path))
                   <?php $cnt = -1; ?>
                   @foreach($photos as $photo)
                       @if($photo->scene_id == $scene->scene_id)
@@ -30,7 +30,7 @@
                             $cnt++;
                           ?>
                           <div class="item {{ $cnt == 0 ? 'active':''}}">
-                              <img data-src="data:{{$photo->mime}};base64,{{$dataPhoto}}" class="lazyload" style="margin:auto;">
+                              <img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;">
                           </div>
                       @endif
                   @endforeach
