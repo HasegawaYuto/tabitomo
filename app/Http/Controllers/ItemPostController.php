@@ -14,7 +14,7 @@ use App\Location;
 use App\Pref;
 use App\Mylogdetailtitle,App\Mylogdetailscene,App\Photo;
 use Illuminate\Support\Facades\Log;
-use App\Storage;
+use Storage;
 
 class ItemPostController extends Controller
 {
