@@ -166,16 +166,14 @@ class ItemPostController extends Controller
           'jpg' => 'image/jpeg',
           'png' => 'image/png'];
         for($i=0;$i<count($_FILES['image']['name']);$i++){
-          //$mylog = new Mylog;
           if (!isset($_FILES['image']['error'][$i]) || !is_int($_FILES['image']['error'][$i])) {
               return false;
           }else{
             if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                 $file = $files[$i];//\Input::file('image');
-                //$filename = public_path() . '/image/upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
-                $folderval = '/tmp/';
+                $folder = '/tmp/';
                 $filename = 'upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
-                $path = $folderval.$filename;
+                $path = $folder.$filename;
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($path);
