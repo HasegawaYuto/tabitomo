@@ -343,7 +343,6 @@ $scenes = $scenes
       return view('bodys.show_travelers',$data);
     }
     
-
     public function showItems(){
       $scenes = Mylogdetailscene::where(function($query){
                 if(\Auth::check()){
@@ -367,7 +366,7 @@ $scenes = $scenes
       $sceneids = $scenes->lists('scene_id');
       //if(Photo::whereIn('scene_id',$sceneids)->whereNotNull('data')->exists()){
 
-      $data['photos'] = Photo::whereNotNull('data')
+      $data['photos'] = Photo::whereNotNull('path')
                                 ->whereIn('scene_id',$sceneids)
                                 ->get();
       //}
@@ -379,9 +378,9 @@ $scenes = $scenes
           $data['comments'][] = $comments;
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
-          if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
+          if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
-                                  ->whereNotNull('data')
+                                  ->whereNotNull('path')
                                   //->select('encode(data::bytea,"escape") escdata','mime')
                                   //->orderByRaw("RAND()")
                                   ->first();

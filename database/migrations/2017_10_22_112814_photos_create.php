@@ -21,8 +21,7 @@ class PhotosCreate extends Migration
                   ->on('mylogdetailscenes')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->string('mime')->nullable();
-            $table->binary('data')->nullable();
+            $table->string('path')->nullable();
         });
     }
 

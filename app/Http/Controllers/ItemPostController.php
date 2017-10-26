@@ -14,7 +14,7 @@ use App\Location;
 use App\Pref;
 use App\Mylogdetailtitle,App\Mylogdetailscene,App\Photo;
 use Illuminate\Support\Facades\Log;
-use AWS;
+use AWS,Storage;
 
 class ItemPostController extends Controller
 {
@@ -184,6 +184,10 @@ class ItemPostController extends Controller
                         'Key'        => $id.'/'.$filename,
                         'SourceFile' => $path
                 ));
+                Photo::create([
+                        'scene_id' => $theSceneId,
+                        'path' =>Storage::disk('s3')->url($id.'/'.$filename)
+                    ]);
                 if(isset($filename)){
                   if (\File::exists($filename)) {
                         \File::delete($filename);

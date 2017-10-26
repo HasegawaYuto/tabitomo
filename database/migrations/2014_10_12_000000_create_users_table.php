@@ -22,8 +22,7 @@ class CreateUsersTable extends Migration
             $table->date('birthday')->nullable();
             $table->string('area')->nullable();
             $table->string('snsImagePath')->nullable();
-            $table->string('mime')->nullable();
-            $table->binary('data')->nullable();
+            $table->string('avatar_path')->nullable();
             $table->bigInteger('facebook_id')->unsigned()->nullable();
             $table->bigInteger('twitter_id')->unsigned()->nullable();
             $table->bigInteger('google_id')->unsigned()->nullable();
