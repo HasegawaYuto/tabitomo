@@ -602,7 +602,7 @@ $scenes = $scenes
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('path')
-                                  ->orderByRaw("RAND()")
+                                  //->orderByRaw("RAND()")
                                   ->first();
           }
       }
