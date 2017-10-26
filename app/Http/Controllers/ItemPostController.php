@@ -14,6 +14,7 @@ use App\Location;
 use App\Pref;
 use App\Mylogdetailtitle,App\Mylogdetailscene,App\Photo;
 use Illuminate\Support\Facades\Log;
+use AWS;
 
 class ItemPostController extends Controller
 {
