@@ -14,6 +14,7 @@ use App\Location;
 use App\Pref;
 use App\Mylogdetailtitle,App\Mylogdetailscene,App\Photo;
 use Illuminate\Support\Facades\Log;
+use Storage;
 
 class ItemPostController extends Controller
 {
@@ -172,19 +173,24 @@ class ItemPostController extends Controller
             if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                 $file = $files[$i];//\Input::file('image');
                 //$filename = public_path() . '/image/upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
-                $filename = '/tmp/upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
+                $folder = '/tmp/';
+                $filename = 'upload' . $theSceneId . '-' . $i . '.' . $file->getClientOriginalExtension();
+                $path = $folder.$filename;
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
-                    })->orientate()->save($filename);
-                $escaped_data = pg_escape_bytea( file_get_contents($file->getRealPath()) );
-                //$escaped_data = file_get_contents($file->getRealPath());
+                    })->orientate()->save($path);
+                $filedata = file_get_contents($path);
                 $mime = $file->getMimeType();
+                $disk = Storage::disk('s3');
+                $disk->put($filename, $filedata,'public');
+                /*
                 $db = \DB::connection('pgsql')->getPdo();
                 $stmt = $db->prepare('insert into photos (scene_id,data) values (?,?)');
                 $stmt->bindParam(1,$theSceneId);
                 //$stmt->bindParam(2,$mime);
                 $stmt->bindParam(2,$escaped_data,$db::PARAM_LOB);
                 $stmt->execute();
+                */
                 /*
                 Photo::create([
                     'data' => $escaped_data,
