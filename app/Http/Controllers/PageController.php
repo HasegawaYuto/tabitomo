@@ -486,10 +486,10 @@ $scenes = $scenes
                                 ->get();
           $data['scenes'][]=$scenes;
           $sceneids = $scenes->lists('scene_id');
-          if(Photo::whereIn('scene_id',$sceneids)->whereNotNull('data')->exists()){
+          if(Photo::whereIn('scene_id',$sceneids)->whereNotNull('path')->exists()){
           $data['thumb'][] = Photo::whereIn('scene_id',$sceneids)
-                            ->whereNotNull('data')
-                            ->orderByRaw("RAND()")
+                            ->whereNotNull('path')
+                            //->orderByRaw("RAND()")
                             ->first();
           }
       }
@@ -599,9 +599,9 @@ $scenes = $scenes
           $data['comments'][] = $comments;                          
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
-          if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
+          if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
-                                  ->whereNotNull('data')
+                                  ->whereNotNull('path')
                                   ->orderByRaw("RAND()")
                                   ->first();
           }
