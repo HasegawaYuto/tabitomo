@@ -336,7 +336,7 @@ class ItemPostController extends Controller
               if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                   $file = $files[$i];//\Input::file('image');
                   $folder = '/tmp/';
-                $filename = 'upload' . $theSceneId . '-' . $ii . '.' . $file->getClientOriginalExtension();
+                $filename = 'upload' . $scene_id . '-' . $ii . '.' . $file->getClientOriginalExtension();
                 $path = $folder.$filename;
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
@@ -348,7 +348,7 @@ class ItemPostController extends Controller
                         'SourceFile' => $path
                 ));
                 Photo::create([
-                        'scene_id' => $theSceneId,
+                        'scene_id' => $scene_id,
                         'photo_id' => $ii,
                         'path' => 'https://s3-ap-northeast-1.amazonaws.com/bucket-for-tabitomo/'.$id.'/'.$filename
                     ]);
