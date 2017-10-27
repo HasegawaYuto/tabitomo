@@ -216,7 +216,7 @@ class ItemPostController extends Controller
               $data['scenes'][]=Mylogdetailscene::where('title_id',$title->title_id)->get();
               $sceneids=Mylogdetailscene::where('title_id',$title->title_id)->lists('scene_id');
               $data['thumb'][]=Photo::whereIn('scene_id',$sceneids)
-                                    ->whereNotNull('puth')
+                                    ->whereNotNull('path')
                                     //->orderByRaw("RAND()")
                                     ->first();
           }
@@ -267,12 +267,17 @@ class ItemPostController extends Controller
                     }
                 }
             }
+            if(isset($request->score)){
+                  $score = $request->score;
+            }else{
+                  $score = 0;
+            }
             $change->update([ 'scene'=>$request->scene,
                                 'theday'=>$this->replaceDate($request->theday),
                                 'publish'=>$request->publish,
                                 'lat'=>$request->spotNS,
                                 'lng'=>$request->spotEW,
-                                'score'=>$request->score,
+                                'score'=>$score,
                                 'genre'=>$valgenre,
                                 'comment'=>$request->comment
                               ]);
