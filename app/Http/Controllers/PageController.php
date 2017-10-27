@@ -175,7 +175,7 @@ $scenes = $scenes
           $data['comments'][] = $comments;
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
-          if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
+          if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
           $thumbs = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('path')
                                   ->get();
