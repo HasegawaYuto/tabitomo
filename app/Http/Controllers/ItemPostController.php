@@ -375,7 +375,7 @@ class ItemPostController extends Controller
                 $s3 = AWS::get('s3');
                     $result = $s3->deleteObject(array(
                         'Bucket'     => 'bucket-for-tabitomo',
-                        'Key'        => $userid[0].'/upload'.$photo->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
+                        'Key'        => $userid[0].'/upload'.$thephoto->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
                     ));
                 $thephoto->delete();
             }
@@ -396,7 +396,7 @@ class ItemPostController extends Controller
                 $s3 = AWS::get('s3');
                     $result = $s3->deleteObject(array(
                         'Bucket'     => 'bucket-for-tabitomo',
-                        'Key'        => $userid[0].'/upload'.$photo->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
+                        'Key'        => $userid[0].'/upload'.$thephoto->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
                     ));
                 $thephoto->delete();
             }
