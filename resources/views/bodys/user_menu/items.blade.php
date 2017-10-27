@@ -213,11 +213,11 @@
                               </div>
                             <!--/div-->
                         </div>
-                        <div class="form-group">
+                        <!--div class="form-group">
                             <label>おすすめ度</label>
                             <div id="createRateField0" class="rateField">
                             </div>
-                        </div>
+                        </div-->
                         <div class="form-group">
                               {!! Form::label('comment','コメント') !!}
                               {!! Form::textarea('comment',null,['class'=>"form-control",'placeholder'=>"ひとこと",'rows'=>'3']) !!}

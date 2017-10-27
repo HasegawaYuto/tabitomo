@@ -110,12 +110,12 @@
                 </div>
                 </div>
           </div>
-          <div class="form-group clearfix">
+          <!--div class="form-group clearfix">
               <label>おすすめ度</label>
               {!! Form::hidden('score',2,['id'=>'oldScore']) !!}
               <div id="editRateField0" class="rateField">
               </div>
-          </div>
+          </div-->
           <div class="form-group">
                 {!! Form::label('comment','コメント') !!}
                 {!! Form::textarea('comment',null,['class'=>"form-control",'rows'=>'3','id'=>'comment0']) !!}
