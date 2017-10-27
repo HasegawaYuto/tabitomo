@@ -23,11 +23,11 @@ class CreateUsersTable extends Migration
             $table->string('area')->nullable();
             $table->string('snsImagePath')->nullable();
             $table->string('avatar_path')->nullable();
-            $table->bigInteger('facebook_id')->unsigned()->nullable();
-            $table->bigInteger('twitter_id')->unsigned()->nullable();
-            $table->bigInteger('google_id')->unsigned()->nullable();
-            $table->bigInteger('line_id')->unsigned()->nullable();
-            $table->bigInteger('yahoo_id')->unsigned()->nullable();
+            $table->string('facebook_id')->nullable();
+            $table->string('twitter_id')->nullable();
+            $table->string('google_id')->nullable();
+            $table->string('line_id')->nullable();
+            $table->string('yahoo_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
