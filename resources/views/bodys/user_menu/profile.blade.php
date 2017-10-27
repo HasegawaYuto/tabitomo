@@ -59,7 +59,7 @@
                     {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
                     {!! Form::close() !!}
                     @if(isset($user->snsImagePath))
-                    {!! Form::open(['route'=>['avatar_sns_change',$user->id]'])!!}
+                    {!! Form::open(['route'=>['avatar_sns_change',$user->id]])!!}
                     {!! Form::submit('SNS',['class'=>'btn btn-warning btn-xs']) !!}
                     {!! Form::close() !!}
                     @endif
