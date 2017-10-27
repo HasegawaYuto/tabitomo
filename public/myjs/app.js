@@ -447,7 +447,7 @@ $(function(){//////////////マッチングデータ登録
                     var circle = new google.maps.Circle({
 	                            center: centerPosition,
 	                            map: googlemap,
-                              radius: parseInt(parseFloat(20)*1000),
+                              radius: parseInt(parseFloat(40)*1000),
                               fillColor: '#FF0000', 		// 塗りつぶし色
 	                            fillOpacity: 0.5,
                               strokeColor: '#FF0000',		// 外周色
