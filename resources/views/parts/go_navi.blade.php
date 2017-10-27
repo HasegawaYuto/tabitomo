@@ -7,5 +7,5 @@ $browser=((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos(
 @else
     <a href="comgooglemaps://?daddr={{$scene->lat}},{{$scene->lng}}&directionsmode=driving" class="btn btn-danger col-xs-4"><i class="fa fa-car" aria-hidden="true"></i></a>
     <a href="comgooglemaps://?daddr={{$scene->lat}},{{$scene->lng}}&directionsmode=transit" class="btn btn-info col-xs-4"><i class="fa fa-subway" aria-hidden="true"></i></a>
-    <a href="comgooglemaps://?daddr={{$scene->lat}},{{$scene->lng}}&directionsmode=walking" class="btn btn-warning col-xs-4"><i class="fa fa-male" aria-hidden="true"></i></a>
+    <a href="comgooglemaps://?q=35.709246,139.716318&center=35.709246,139.716318&zoom=17" class="btn btn-warning col-xs-4"><i class="fa fa-male" aria-hidden="true"></i></a>
 @endif
