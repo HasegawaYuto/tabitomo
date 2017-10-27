@@ -177,7 +177,7 @@ $scenes = $scenes
           $data['favuser'][] = User::whereIn('id',$userids)->get();
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
           $thumbs = Photo::where('scene_id',$scene->scene_id)
-                                  ->whereNotNull('data')
+                                  ->whereNotNull('path')
                                   ->get();
           $data['thumb'][]=$thumbs->random();
           }
