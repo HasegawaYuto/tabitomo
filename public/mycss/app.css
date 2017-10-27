@@ -427,6 +427,7 @@ a:hover{
 .smallp{
     font-size:8pt;
     margin:0 5px 0 5px;
+    font-family:sans-serif;
 }
 .messageShow{
     overflow-y:scroll;
