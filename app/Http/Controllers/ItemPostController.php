@@ -186,6 +186,7 @@ class ItemPostController extends Controller
                 ));
                 Photo::create([
                         'scene_id' => $theSceneId,
+                        'photo_id' => $i,
                         'path' => 'https://s3-ap-northeast-1.amazonaws.com/bucket-for-tabitomo/'.$id.'/'.$filename
                     ]);
                 if(isset($filename)){

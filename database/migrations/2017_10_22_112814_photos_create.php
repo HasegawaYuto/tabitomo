@@ -21,6 +21,7 @@ class PhotosCreate extends Migration
                   ->on('mylogdetailscenes')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
+            $table->integer('photo_id')->nullable();
             $table->string('path')->nullable();
             $table->timestamps();
         });
