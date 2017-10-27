@@ -371,10 +371,11 @@ class ItemPostController extends Controller
             foreach($thephotos as $thephoto){
                 $filename = explode('upload',$thephoto->path);
                 $thephotoextension = explode('.',$filename[1]);
+                $userid = explode('-',$thephotoextension[0]);
                 $s3 = AWS::get('s3');
                     $result = $s3->deleteObject(array(
                         'Bucket'     => 'bucket-for-tabitomo',
-                        'Key'        => $id.'/upload'.$photo->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
+                        'Key'        => $userid[0].'/upload'.$photo->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
                     ));
                 $thephoto->delete();
             }
@@ -391,10 +392,11 @@ class ItemPostController extends Controller
             foreach($thephotos as $thephoto){
                 $filename = explode('upload',$thephoto->path);
                 $thephotoextension = explode('.',$filename[1]);
+                $userid = explode('-',$thephotoextension[0]);
                 $s3 = AWS::get('s3');
                     $result = $s3->deleteObject(array(
                         'Bucket'     => 'bucket-for-tabitomo',
-                        'Key'        => $id.'/upload'.$photo->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
+                        'Key'        => $userid[0].'/upload'.$photo->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
                     ));
                 $thephoto->delete();
             }
