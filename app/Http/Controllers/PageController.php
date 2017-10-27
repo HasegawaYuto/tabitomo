@@ -149,11 +149,6 @@ class PageController extends Controller
           $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
           $scenes=$scenes->where('theday','<=',$lastday);
       }
-      /*
-      $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
-      $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
-      $scenes = $scenes->whereBetween('theday',[$date2,$date3]);
-      */
       if(!$areaNot){
 $scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
@@ -237,18 +232,24 @@ $scenes = $scenes
           }
       }
       if($request->year1!='0000'){
-          $recruitments=$recruitments->where('limitdate','like',$request->year1.'-__-__');
+          $recruitments=$recruitments->whereYear('limitdate','=',$request->year1);
       }
       if($request->month1!='00'){
-          $recruitments=$recruitments->where('limitdate','like','____-'.$request->month1.'-__');
+          $recruitments=$recruitments->whereMonth('limitdate','=',$request->month1);
       }
       if($request->day1!='00'){
-          $recruitments=$recruitments->where('limitdate','like','____-__-'.$request->day1);
+          $recruitments=$recruitments->whereDay('limitdate','=',$request->day1);
       }
-      if(!$termNotBetween){
-        $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
-        $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
-        $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
+      if($request->day3!='00'&&$request->month3!='00'&&$request->year3!='0000'&&$request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
+          $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
+          $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
+          $recruitments=$recruitments->whereBetween('limirdate',[$startday,$lastday]);
+      }elseif($request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
+          $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
+          $recruitments=$recruitments->where('limitdate','>=',$startday);
+      }elseif($request->day3!='00'&&$request->month3!='00'&&$request->year3!='0000'){
+          $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
+          $recruitments=$recruitments->where('limitdate','<=',$lastday);
       }
       if(!$areaNot){
           $recruitments = $recruitments
@@ -316,18 +317,24 @@ $scenes = $scenes
           }
       }
       if($request->year1!='0000'){
-          $recruitments=$recruitments->where('limitdate','like',$request->year1.'-__-__');
+          $recruitments=$recruitments->whereYear('limitdate','=',$request->year1);
       }
       if($request->month1!='00'){
-          $recruitments=$recruitments->where('limitdate','like','____-'.$request->month1.'-__');
+          $recruitments=$recruitments->whereMonth('limitdate','=',$request->month1);
       }
       if($request->day1!='00'){
-          $recruitments=$recruitments->where('limitdate','like','____-__-'.$request->day1);
+          $recruitments=$recruitments->whereDay('limitdate','=',$request->day1);
       }
-      if(!$termNotBetween){
-        $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
-        $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
-        $recruitments = $recruitments->whereBetween('limitdate',[$date2,$date3]);
+      if($request->day3!='00'&&$request->month3!='00'&&$request->year3!='0000'&&$request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
+          $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
+          $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
+          $recruitments=$recruitments->whereBetween('limirdate',[$startday,$lastday]);
+      }elseif($request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
+          $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
+          $recruitments=$recruitments->where('limitdate','>=',$startday);
+      }elseif($request->day3!='00'&&$request->month3!='00'&&$request->year3!='0000'){
+          $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
+          $recruitments=$recruitments->where('limitdate','<=',$lastday);
       }
       if(!$areaNot){
           $recruitments = $recruitments
