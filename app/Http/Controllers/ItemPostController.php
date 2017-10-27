@@ -177,7 +177,6 @@ class ItemPostController extends Controller
                 $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
                       $constraint->aspectRatio();
                     })->orientate()->save($path);
-                $filedata = file_get_contents($file->getRealPath());
                 $s3 = AWS::get('s3');
                     $result = $s3->putObject(array(
                         'Bucket'     => 'bucket-for-tabitomo',
@@ -217,8 +216,8 @@ class ItemPostController extends Controller
               $data['scenes'][]=Mylogdetailscene::where('title_id',$title->title_id)->get();
               $sceneids=Mylogdetailscene::where('title_id',$title->title_id)->lists('scene_id');
               $data['thumb'][]=Photo::whereIn('scene_id',$sceneids)
-                                    ->whereNotNull('data')
-                                    ->orderByRaw("RAND()")
+                                    ->whereNotNull('puth')
+                                    //->orderByRaw("RAND()")
                                     ->first();
           }
           return view('bodys.user_menu.items',$data);
@@ -255,7 +254,15 @@ class ItemPostController extends Controller
                     foreach($postDelNos as $no => $postDelNo){
                         $bool = $postDelNo;
                         if($bool == 'true'){
-                            Photo::find($no)->delete();
+                            $thephoto = Photo::find($no);
+                            $filename = explode('upload',$thephoto->path);
+                            $thephotoextension = explode('.',$filename[1]);
+                            $s3 = AWS::get('s3');
+                            $result = $s3->deleteObject(array(
+                                'Bucket'     => 'bucket-for-tabitomo',
+                                'Key'        => $id.'/upload'.$scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
+                            ));
+                            $thephoto->delete();
                         }
                     }
                 }
@@ -311,20 +318,34 @@ class ItemPostController extends Controller
             'gif' => 'image/gif',
             'jpg' => 'image/jpeg',
             'png' => 'image/png'];
+          if($request->editstyle=='fix'){
+              $starti = Photo::where('scene_id',$scene_id)->max('photo_id')+1;
+          }else{
+              $starti = 0;
+          }
           for($i=0;$i<count($_FILES['image']['name']);$i++){
+            $ii = $i + $starti;
             if (!isset($_FILES['image']['error'][$i]) || !is_int($_FILES['image']['error'][$i])) {
                 return false;
             }else{
               if(array_search(mime_content_type($_FILES['image']['tmp_name'][$i]),$typearray)){
                   $file = $files[$i];//\Input::file('image');
-                  $filename = public_path() . '/image/upload' . $request->scene_id . '-' . $i . '.' . $file->getClientOriginalExtension();
-                  $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                      })->orientate()->save($filename);
-                  Photo::create([
-                        'data' => file_get_contents($filename),
-                        'mime' => $file->getMimeType(),
-                        'scene_id' => $scene_id
+                  $folder = '/tmp/';
+                $filename = 'upload' . $theSceneId . '-' . $ii . '.' . $file->getClientOriginalExtension();
+                $path = $folder.$filename;
+                $image = \Image::make($file->getRealPath())->resize(900, null, function ($constraint) {
+                      $constraint->aspectRatio();
+                    })->orientate()->save($path);
+                $s3 = AWS::get('s3');
+                    $result = $s3->putObject(array(
+                        'Bucket'     => 'bucket-for-tabitomo',
+                        'Key'        => $id.'/'.$filename,
+                        'SourceFile' => $path
+                ));
+                Photo::create([
+                        'scene_id' => $theSceneId,
+                        'photo_id' => $ii,
+                        'path' => 'https://s3-ap-northeast-1.amazonaws.com/bucket-for-tabitomo/'.$id.'/'.$filename
                     ]);
                   if(isset($filename)){
                     if (\File::exists($filename)) {

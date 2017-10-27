@@ -78,13 +78,19 @@ class UserOptionController extends Controller
               ];
               if(array_search(mime_content_type($_FILES['avatar']['tmp_name']),$typearray)){
                   $file = \Input::file('avatar');
-                  $filename = '/tmp/avatar' . $id . '.' . $file->getClientOriginalExtension();
-                  $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                      })->orientate()->save($filename);
-                  $profile['data']=file_get_contents($filename);
-                  $profile['mime']=$file->getMimeType();
-                  //$profile['path']=
+                  $folder = '/tmp/';
+                $filename = 'avatar' . $ii . '.' . $file->getClientOriginalExtension();
+                $path = $folder.$filename;
+                $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
+                      $constraint->aspectRatio();
+                    })->orientate()->save($path);
+                $s3 = AWS::get('s3');
+                    $result = $s3->putObject(array(
+                        'Bucket'     => 'bucket-for-tabitomo',
+                        'Key'        => $id.'/'.$filename,
+                        'SourceFile' => $path
+                ));
+                $profile['avatar_path'] = 'https://s3-ap-northeast-1.amazonaws.com/bucket-for-tabitomo/'.$id.'/'.$filename;
               }
             }
         }
