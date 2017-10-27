@@ -65,6 +65,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('mylog/title/{title_id}/delete','ItemPostController@deleteTitle')->name('title_delete');
     Route::post('guestpost','GuestGuideController@postGuest')->name('guest_post');
     Route::post('guidepost','GuestGuideController@postGuide')->name('guide_post');
+    Route::post('user/{id}/avatardelete','UserOptionController@avatardelete')->name('avatar_delete');
+    Route::post('user/{id}/avatarsns','UserOptionController@avatarsns')->name('avatar_sns_change');
     
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {

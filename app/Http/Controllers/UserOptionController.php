@@ -147,4 +147,17 @@ class UserOptionController extends Controller
     {
         //
     }
+    
+    public function avatardelete(Request $request,$id){
+        User::find($id)->update([
+                'avatar_path'=>$request->avatarpath
+            ]);
+        return redirect()->back();
+    }
+    public function avatarsns(Request $request,$id){
+        User::find($id)->update([
+                'avatar_path'=>'NULL'
+            ]);
+        return redirect()->back();
+    }
 }

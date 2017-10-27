@@ -366,10 +366,39 @@ class ItemPostController extends Controller
 
 
     public function deleteTitle($title_id){
+        if(Photo::whereIn('scene_id','like',$title_id.'-%')->exists()){
+            $thephotos = whereIn('scene_id','like',$title_id.'-%')->get();
+            foreach($thephotos as $thephoto){
+                $filename = explode('upload',$thephoto->path);
+                $thephotoextension = explode('.',$filename[1]);
+                $s3 = AWS::get('s3');
+                    $result = $s3->deleteObject(array(
+                        'Bucket'     => 'bucket-for-tabitomo',
+                        'Key'        => $id.'/upload'.$photo->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
+                    ));
+                $thephoto->delete();
+            }
+        }
+        if(Milogdetailscene::whereIn('title_id',$title_id)->exists()){
+            Milogdetailscene::whereIn('title_id',$title_id)->delete();
+        }
         Mylogdetailtitle::where('title_id',$title_id)->delete();
         return redirect('user/'.\Auth::user()->id.'/mylog');
     }
     public function deleteScene($scene_id){
+        if(Photo::whereIn('scene_id',$scene_id)->exists()){
+            $thephotos = whereIn('scene_id',$scene_id)->get();
+            foreach($thephotos as $thephoto){
+                $filename = explode('upload',$thephoto->path);
+                $thephotoextension = explode('.',$filename[1]);
+                $s3 = AWS::get('s3');
+                    $result = $s3->deleteObject(array(
+                        'Bucket'     => 'bucket-for-tabitomo',
+                        'Key'        => $id.'/upload'.$photo->scene_id.'-'.$thephoto->photo_id.'.'.$thephotoextension[1],
+                    ));
+                $thephoto->delete();
+            }
+        }
         Mylogdetailscene::where('scene_id',$scene_id)->delete();
         return redirect()->back();
     }

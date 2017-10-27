@@ -29,6 +29,12 @@
             <td class="text-center">
                 <div class="col-xs-6">
                 <div  id="avatarBeforeChange">
+                  @if(isset($user->avatar_path)&&$user->avatar_path!=asset('noimage.png')||isset($user->snsImagePath))
+                {!! Form::open(['route'=>['avatar_delete','id'=>$user->id],'style'=>'display:inline;float:left;']) !!}
+                <input value="{{asset('noimage.png')}}" name="avatarpath" type="hidden">
+                <button type="submit" class="btn btn-xs btn-default"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                {!! Form::close() !!}
+                @endif
                     @include('parts.avatar',['user'=>$user,'class'=>'avatarBeforeChangeArea'])
                 </div>
                 </div>
@@ -52,6 +58,11 @@
                     </div>
                     {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
                     {!! Form::close() !!}
+                    @if(isset($user->snsImagePath))
+                    {!! Form::open(['route'=>['avatar_sns_change',$user->id]'])!!}
+                    {!! Form::submit('SNS',['class'=>'btn btn-warning btn-xs']) !!}
+                    {!! Form::close() !!}
+                    @endif
                     <p class="wrap smallp">スマホで撮った画像などは保存の際に向きを調節します</p>
                 </div>
             </td>
