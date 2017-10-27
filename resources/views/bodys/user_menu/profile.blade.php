@@ -58,12 +58,12 @@
                     </div>
                     {!! Form::submit('保存',['class'=>'btn btn-primary btn-xs']) !!}
                     {!! Form::close() !!}
-                    @if(isset($user->snsImagePath))
+                    <p class="wrap smallp">スマホで撮った画像などは保存の際に向きを調節します</p>
+                     @if(isset($user->snsImagePath))
                     {!! Form::open(['route'=>['avatar_sns_change',$user->id]])!!}
                     {!! Form::submit('SNS',['class'=>'btn btn-warning btn-xs']) !!}
                     {!! Form::close() !!}
                     @endif
-                    <p class="wrap smallp">スマホで撮った画像などは保存の際に向きを調節します</p>
                 </div>
             </td>
           </tr>
