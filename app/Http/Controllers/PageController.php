@@ -603,7 +603,7 @@ $scenes = $scenes
           $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('path')
                                   //->orderByRaw("RAND()")
-                                  ->first();
+                                  ->random();
           }
       }
       $data['user']=$user;
