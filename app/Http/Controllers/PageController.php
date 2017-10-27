@@ -600,10 +600,11 @@ $scenes = $scenes
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
-          $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
+          $thumbs = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('path')
                                   //->orderByRaw("RAND()")
-                                  ->random();
+                                  ->get();
+          $data['thumb'][] = $thumbs->random();
           }
       }
       $data['user']=$user;
