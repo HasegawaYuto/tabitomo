@@ -199,7 +199,7 @@ $scenes = $scenes
       $data['recruitments']=Guestguide::where('type','guide')
                                       ->where('user_id','<>',\Auth::user()->id)
                                       ->where(function($query)use($chdate){
-                                          $query->where('limitdate','0000-00-00')->orWhere('limitdate','>',$chdate);
+                                          $query->where('limitdate','>',$chdate);
                                       })
                                       ->orderBy('created_at','desc')
                                       ->paginate(30);
@@ -223,7 +223,7 @@ $scenes = $scenes
       $recruitments=Guestguide::where('type','guide')
                           ->where('user_id','<>',\Auth::user()->id)
                           ->where(function($query)use($chdate){
-                              $query->where('limitdate','0000-00-00')->orWhere('limitdate','>',$chdate);
+                              $query->where('limitdate','>',$chdate);
                           });
       if(isset($request->keywords)){
           $keywords = explode(' ',$request->keywords);
@@ -243,7 +243,7 @@ $scenes = $scenes
       if($request->day3!='00'&&$request->month3!='00'&&$request->year3!='0000'&&$request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
           $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
           $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
-          $recruitments=$recruitments->whereBetween('limirdate',[$startday,$lastday]);
+          $recruitments=$recruitments->whereBetween('limitdate',[$startday,$lastday]);
       }elseif($request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
           $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
           $recruitments=$recruitments->where('limitdate','>=',$startday);
@@ -284,7 +284,7 @@ $scenes = $scenes
       $data['recruitments']=Guestguide::where('type','guest')
                           ->where('user_id','<>',\Auth::user()->id)
                           ->where(function($query)use($chdate){
-                              $query->where('limitdate','0000-00-00')->orWhere('limitdate','>',$chdate);
+                              $query->where('limitdate','>',$chdate);
                           })
                           ->orderBy('created_at','desc')
                           ->paginate(30);
@@ -308,7 +308,7 @@ $scenes = $scenes
       $recruitments=Guestguide::where('type','guest')
                           ->where('user_id','<>',\Auth::user()->id)
                           ->where(function($query)use($chdate){
-                              $query->where('limitdate','0000-00-00')->orWhere('limitdate','>',$chdate);
+                              $query->where('limitdate','>',$chdate);
                           });
       if(isset($request->keywords)){
           $keywords = explode(' ',$request->keywords);
@@ -328,7 +328,7 @@ $scenes = $scenes
       if($request->day3!='00'&&$request->month3!='00'&&$request->year3!='0000'&&$request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
           $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
           $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
-          $recruitments=$recruitments->whereBetween('limirdate',[$startday,$lastday]);
+          $recruitments=$recruitments->whereBetween('limitdate',[$startday,$lastday]);
       }elseif($request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
           $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
           $recruitments=$recruitments->where('limitdate','>=',$startday);

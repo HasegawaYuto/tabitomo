@@ -194,6 +194,7 @@
                 {!! Link_to_route('show_user_items','シーンを追加する',['id'=>Auth::user()->id]) !!}
             @else
                 {!! link_to_route('login.get', 'ログイン') !!}
+                して、シーンを追加しましょう。ログイン後は右上のメニューから進むことができます
             @endif
         </div>
     </div>
