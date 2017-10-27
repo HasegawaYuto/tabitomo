@@ -164,7 +164,7 @@ $scenes = $scenes
       $sceneids = $scenes->lists('scene_id');
       //if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
       $data['photos'] = Photo::whereIn('scene_id',$sceneids)
-                              ->whereNotNull('data')
+                              ->whereNotNull('path')
                               ->get();
       //}
       foreach($scenes as $key => $scene){
