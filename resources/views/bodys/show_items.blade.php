@@ -116,14 +116,14 @@
                                 <input type="hidden" value="0" id="showRaty{{$key}}" />
                             @endif
                         </div><br>
-                        <div>
+                        <!--div>
                             <label>お気に入り</label>
                             <div style="margin-bottom:10px;" class="text-center">
                               <a data-target="#modalFavoriteUsers{{$key}}" data-toggle="modal">
                                 <span class="badge">{{count($favuser[$key])}}</span>
                             </a>
                             </div>
-                        </div>
+                        </div-->
                     <!--div class="col-xs-12"-->
                         <label>コメント</label>
                         <div class="list-group wrap">

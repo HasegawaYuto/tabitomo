@@ -83,7 +83,7 @@
                 {{$firstdayarray[0]}}年{{(int)$firstdayarray[1]}}月{{(int)$firstdayarray[2]}}日～
                 {{$lastdayarray[0]==$firstdayarray[0] ? '':$lastdayarray[0].'年'}}{{(int)$lastdayarray[1]}}月{{(int)$lastdayarray[2]}}日
             </div>
-            <div class="col-xs-12 col-sm-4">
+            <!--div class="col-xs-12 col-sm-4">
                 <label>おすすめ</label><br>
                 <div id="showRatyAveDiv" class="showRatyAve text-center">
                     {{(int)($scoreAve*2)/2}}
@@ -93,7 +93,7 @@
                         <input type="hidden" value="0" id="showRatyAve" />
                     @endif
                 </div>
-            </div>
+            </div-->
             <div class="col-xs-12 col-sm-3">
                 <label>お気に入り</label>
                 <div class="text-center">
@@ -208,14 +208,14 @@
                                             <input type="hidden" value="0" id="showRaty{{$key}}" />
                                         @endif
                                     </div>
-                                    <div>
+                                    <!--div>
                                         <label>お気に入り</label>
                                         <div class="text-center">
                                             <a data-target="#modalFavoriteUsers{{$key}}" data-toggle="modal">
                                                 <span class="badge">{{count($favuser[$key])}}</span>
                                             </a>
                                         </div>
-                                    </div>
+                                    </div-->
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
