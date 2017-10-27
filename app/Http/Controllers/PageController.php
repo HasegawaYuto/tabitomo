@@ -130,17 +130,19 @@ class PageController extends Controller
           }
       }
       if($request->year1!='0000'){
-          $scenes=$scenes->where('theday','like',$request->year1.'-__-__');
+          $scenes=$scenes->whereYear('theday',$request->year1);
       }
       if($request->month1!='00'){
-          $scenes=$scenes->where('theday','like','____-'.$request->month1.'-__');
+          $scenes=$scenes->whereMonth('theday',$request->month1);
       }
       if($request->day1!='00'){
-          $scenes=$scenes->where('theday','like','____-__-'.$request->day1);
+          $scenes=$scenes->whereDay('theday',$request->day1);
       }
+      /*
       $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
       $date3 = $request->year3.'-'.$request->month3.'-'.$request->day3;
       $scenes = $scenes->whereBetween('theday',[$date2,$date3]);
+      */
       if(!$areaNot){
 $scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
