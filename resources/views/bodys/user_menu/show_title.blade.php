@@ -200,22 +200,22 @@
                                         {{(int)$thedayarray[1]}}月
                                         {{(int)$thedayarray[2]}}日
                                     </div>
-                                    <label>おすすめ</label>
+                                    <!--label>おすすめ</label>
                                     <div class="showRaty text-center" id="showRatyDiv{{$key}}">
                                         @if($scene->score !="")
                                             <input type="hidden" value="{{$scene->score}}" id="showRaty{{$key}}" />
                                         @else
                                             <input type="hidden" value="0" id="showRaty{{$key}}" />
                                         @endif
-                                    </div>
-                                    <!--div>
+                                    </div-->
+                                    <div>
                                         <label>お気に入り</label>
                                         <div class="text-center">
                                             <a data-target="#modalFavoriteUsers{{$key}}" data-toggle="modal">
                                                 <span class="badge">{{count($favuser[$key])}}</span>
                                             </a>
                                         </div>
-                                    </div-->
+                                    </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
