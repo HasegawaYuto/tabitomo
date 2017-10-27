@@ -29,7 +29,7 @@
             <td class="text-center">
                 <div class="col-xs-6">
                 <div  id="avatarBeforeChange">
-                  @if($user->avatar_path!='NULL'&&isset($user->avatar_path)&&$user->avatar_path!=asset('noimage.png'))
+                  @if($user->avatar_path!=$user->snsImagePath&&$user->avatar_path!='NULL'&&isset($user->avatar_path)&&$user->avatar_path!=asset('noimage.png'))
                 {!! Form::open(['route'=>['avatar_delete','id'=>$user->id],'style'=>'display:inline;float:left;']) !!}
                 <input value="{{asset('noimage.png')}}" name="avatarpath" type="hidden">
                 <button type="submit" class="btn btn-xs btn-default"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
