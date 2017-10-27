@@ -212,7 +212,7 @@ if($('#monthSelect3').length && $('#daySelect3').length && $('#yearSelect3').len
                  }
              }
         }
-        $('#daySelect3 option:last-child').val($('#daySelect3 option:first-child').val());
+        //$('#daySelect3 option:last-child').val($('#daySelect3 option:first-child').val());
    });
  }
 }

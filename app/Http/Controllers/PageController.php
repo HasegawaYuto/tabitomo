@@ -130,13 +130,31 @@ class PageController extends Controller
           }
       }
       if($request->year1!='0000'){
-          $scenes=$scenes->whereYear('theday',$request->year1);
+          $scenes=$scenes->whereYear('theday','=',$request->year1);
       }
       if($request->month1!='00'){
           $scenes=$scenes->whereMonth('theday','=',$request->month1);
       }
       if($request->day1!='00'){
-          $scenes=$scenes->whereDay('theday',$request->day1);
+          $scenes=$scenes->whereDay('theday','=',$request->day1);
+      }
+      if($request->year2!='0000'){
+          $scenes=$scenes->whereYear('theday','>=',$request->year2);
+      }
+      if($request->month2!='00'){
+          $scenes=$scenes->whereMonth('theday','>=',$request->month2);
+      }
+      if($request->day2!='00'){
+          $scenes=$scenes->whereDay('theday','>=',$request->day2);
+      }
+      if($request->year3!='0000'){
+          $scenes=$scenes->whereYear('theday','<=',$request->year3);
+      }
+      if($request->month3!='00'){
+          $scenes=$scenes->whereMonth('theday','<=',$request->month3);
+      }
+      if($request->day3!='00'){
+          $scenes=$scenes->whereDay('theday','<=',$request->day3);
       }
       /*
       $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;

@@ -82,7 +82,7 @@
                         ?>
                         <option value="{{$month0}}">{{$month}}</option>
                     @endfor
-                    <option value="01" selected>--</option>
+                    <option value="00" selected>--</option>
                 </select>
                 <label>月</label>
                 <select name="day2" id="daySelect2" class="form-control">
@@ -92,7 +92,7 @@
                         ?>
                         <option data-val="{{$day0}}" value="{{$day0}}">{{$day}}</option>
                     @endfor
-                    <option data-val="00" value="01" selected>--</option>
+                    <option data-val="00" value="00" selected>--</option>
                 </select>
                 <label>日以降</label>
             </div>
@@ -101,7 +101,7 @@
                   @for($year=$thisyear;$year>=1900;$year--)
                       <option value="{{$year}}">{{$year}}</option>
                   @endfor
-                  <option value="9999" selected>----</option>
+                  <option value="0000" selected>----</option>
                 </select>
                 <label>年</label>
                 <select name="month3" id="monthSelect3" class="form-control">
@@ -111,7 +111,7 @@
                         ?>
                         <option value="{{$month0}}">{{$month}}</option>
                     @endfor
-                    <option value="12" selected>--</option>
+                    <option value="00" selected>--</option>
                 </select>
                 <label>月</label>
                 <select name="day3" id="daySelect3" class="form-control">
