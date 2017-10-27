@@ -387,7 +387,7 @@ class ItemPostController extends Controller
     }
     public function deleteScene($scene_id){
         if(Photo::whereIn('scene_id',$scene_id)->exists()){
-            $thephotos = whereIn('scene_id',$scene_id)->get();
+            $thephotos = where('scene_id',$scene_id)->get();
             foreach($thephotos as $thephoto){
                 $filename = explode('upload',$thephoto->path);
                 $thephotoextension = explode('.',$filename[1]);
