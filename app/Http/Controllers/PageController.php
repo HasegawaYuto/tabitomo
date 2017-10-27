@@ -133,7 +133,7 @@ class PageController extends Controller
           $scenes=$scenes->whereYear('theday',$request->year1);
       }
       if($request->month1!='00'){
-          $scenes=$scenes->whereMonth('theday',$request->month1);
+          $scenes=$scenes->whereMonth('theday','=',$request->month1);
       }
       if($request->day1!='00'){
           $scenes=$scenes->whereDay('theday',$request->day1);
