@@ -61,7 +61,7 @@
                     <p class="wrap smallp">スマホで撮った画像などは保存の際に向きを調節します</p>
                      @if(isset($user->snsImagePath))
                     {!! Form::open(['route'=>['avatar_sns_change',$user->id]])!!}
-                    {!! Form::submit('SNS',['class'=>'btn btn-success btn-block']) !!}
+                    {!! Form::submit('SNS',['class'=>'btn btn-success btn-l']) !!}
                     {!! Form::close() !!}
                     @endif
                 </div>
