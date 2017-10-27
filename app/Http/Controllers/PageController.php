@@ -138,23 +138,16 @@ class PageController extends Controller
       if($request->day1!='00'){
           $scenes=$scenes->whereDay('theday','=',$request->day1);
       }
-      if($request->year2!='0000'){
-          $scenes=$scenes->whereYear('theday','>=',$request->year2);
-      }
-      if($request->month2!='00'){
-          $scenes=$scenes->whereMonth('theday','>=',$request->month2);
-      }
-      if($request->day2!='00'){
-          $scenes=$scenes->whereDay('theday','>=',$request->day2);
-      }
-      if($request->year3!='0000'){
-          $scenes=$scenes->whereYear('theday','<=',$request->year3);
-      }
-      if($request->month3!='00'){
-          $scenes=$scenes->whereMonth('theday','<=',$request->month3);
-      }
-      if($request->day3!='00'){
-          $scenes=$scenes->whereDay('theday','<=',$request->day3);
+      if($request->day3!='00'&&$request->month3!='00'&&$request->year3!='0000'&&$request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
+          $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
+          $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
+          $scenes=$scenes->whereBetween('theday',[$startday,$lastday]);
+      }elseif($request->year2!='0000'&&$request->month2!='00'&&$request->day2!='00'){
+          $startday = $request->year2.'-'.$request->month2.'-'.$request->day2;
+          $scenes=$scenes->where('theday','>=',$startday);
+      }elseif($request->day3!='00'&&$request->month3!='00'&&$request->year3!='0000'){
+          $lastday = $request->year3.'-'.$request->month3.'-'.$request->day3;
+          $scenes=$scenes->where('theday','<=',$lastday);
       }
       /*
       $date2 = $request->year2.'-'.$request->month2.'-'.$request->day2;
