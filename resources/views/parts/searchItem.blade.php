@@ -19,6 +19,7 @@
         <li><a href="#tab4" data-toggle="tab">ジャンル</a></li>
     </ul>
     {!! Form::open(['route'=>'show_items_search']) !!}
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="tab-content tabContents">
         <div class="tab-pane active" id="tab1">
             <div class="col-xs-10 col-xs-offset-1 searchArea">
