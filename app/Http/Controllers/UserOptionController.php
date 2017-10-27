@@ -12,6 +12,7 @@ use App\Location;
 use App\Profile,App\User;
 use App;
 use Carbon\Carbon;
+use AWS;
 
 class UserOptionController extends Controller
 {
