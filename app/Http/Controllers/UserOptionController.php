@@ -79,7 +79,7 @@ class UserOptionController extends Controller
               if(array_search(mime_content_type($_FILES['avatar']['tmp_name']),$typearray)){
                   $file = \Input::file('avatar');
                   $folder = '/tmp/';
-                $filename = 'avatar' . $i . '.' . $file->getClientOriginalExtension();
+                $filename = 'avatar' . $id . '.' . $file->getClientOriginalExtension();
                 $path = $folder.$filename;
                 $image = \Image::make($file->getRealPath())->resize(300, null, function ($constraint) {
                       $constraint->aspectRatio();
