@@ -174,10 +174,10 @@ $scenes = $scenes
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('data')->exists()){
-          $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
+          $thumbs = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('data')
-                                  ->orderByRaw("RAND()")
-                                  ->first();
+                                  ->get();
+          $data['thumb'][]=$thumbs->random();
           }
           $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)
                                             ->first();
@@ -379,11 +379,10 @@ $scenes = $scenes
           $userids = \DB::table('mylog_user')->where('scene_id',$scene->scene_id)->lists('user_id');
           $data['favuser'][] = User::whereIn('id',$userids)->get();
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
-          $data['thumb'][] = Photo::where('scene_id',$scene->scene_id)
+          $thumbs = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('path')
-                                  //->select('encode(data::bytea,"escape") escdata','mime')
-                                  //->orderByRaw("RAND()")
-                                  ->first();
+                                  ->get();
+          $data['thumb'][]=$thumbs->random();
           }
           $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)
                                             ->first();
@@ -487,10 +486,10 @@ $scenes = $scenes
           $data['scenes'][]=$scenes;
           $sceneids = $scenes->lists('scene_id');
           if(Photo::whereIn('scene_id',$sceneids)->whereNotNull('path')->exists()){
-          $data['thumb'][] = Photo::whereIn('scene_id',$sceneids)
+          $thumbs = Photo::whereIn('scene_id',$sceneids)
                             ->whereNotNull('path')
-                            //->orderByRaw("RAND()")
-                            ->first();
+                            ->get();
+          $data['thumb'][] = $thumbs->random();
           }
       }
       $data['user']=$user;
@@ -509,10 +508,10 @@ $scenes = $scenes
                            ->get();
       foreach($scenes as $key => $scene){
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
-          $data['thumb'][]=Photo::where('scene_id',$scene->scene_id)
+          $thumbs=Photo::where('scene_id',$scene->scene_id)
                                     ->whereNotNull('path')
-                                    //->orderByRaw("RAND()")
-                                    ->first();
+                                    ->get();
+          $data['thumb'][] = $thumbs->random();
           }
           $data['titles'][]=Mylogdetailtitle::where('title_id',$scene->title_id)->first();
       }
@@ -602,7 +601,6 @@ $scenes = $scenes
           if(Photo::where('scene_id',$scene->scene_id)->whereNotNull('path')->exists()){
           $thumbs = Photo::where('scene_id',$scene->scene_id)
                                   ->whereNotNull('path')
-                                  //->orderByRaw("RAND()")
                                   ->get();
           $data['thumb'][] = $thumbs->random();
           }
