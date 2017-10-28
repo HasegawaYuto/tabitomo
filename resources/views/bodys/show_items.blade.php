@@ -80,7 +80,7 @@
                             </div>
                         @endif
                       <p class="smallp">【タイトル】</p>
-                    <p class="overCut" styke="min-height:18pt;">{{isset($titles[$key]->title)||$titles[$key]->title!=""?$titles[$key]->title:'No Title'}}</p>
+                    <p class="overCut" style="min-height:18pt;">{{isset($titles[$key]->title)||$titles[$key]->title!=""?$titles[$key]->title:'No Title'}}</p>
                   </div></a>
                   <a href="{{route('show_user_profile',['id'=>$titles[$key]->user_id])}}">
                   <div class="itemAvatarOuter text-center black overCut">
