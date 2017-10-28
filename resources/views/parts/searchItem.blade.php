@@ -141,32 +141,32 @@
               <div class="form-group">
                               {!! Form::label('genre','ジャンル') !!}<br>
                               <?php
-                              if(in_array('A',old('genre'))){
+                              if(isset(old('genre'))&&in_array('A',old('genre'))){
                                   $chA = 'true';
                               }else{
                                   $chA = 'false';
                               }
-                              if(in_array('B',old('genre'))){
+                              if(isset(old('genre'))&&in_array('B',old('genre'))){
                                   $chB = 'true';
                               }else{
                                   $chB = 'false';
                               }
-                              if(in_array('C',old('genre'))){
+                              if(isset(old('genre'))&&in_array('C',old('genre'))){
                                   $chC = 'true';
                               }else{
                                   $chC = 'false';
                               }
-                              if(in_array('D',old('genre'))){
+                              if(isset(old('genre'))&&in_array('D',old('genre'))){
                                   $chD = 'true';
                               }else{
                                   $chD = 'false';
                               }
-                              if(in_array('E',old('genre'))){
+                              if(isset(old('genre'))&&in_array('E',old('genre'))){
                                   $chE = 'true';
                               }else{
                                   $chE = 'false';
                               }
-                              if(in_array('F',old('genre'))){
+                              if(isset(old('genre'))&&in_array('F',old('genre'))){
                                   $chF = 'true';
                               }else{
                                   $chF = 'false';
