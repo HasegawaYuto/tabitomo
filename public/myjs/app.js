@@ -42,6 +42,11 @@ $(function(){
             }else{
             var centerPosition = {lat: 36, lng: 136};
             }
+            if($('#circleRadius').val()!=""){
+                var circRadius = $('#circleRadius').val();
+            }else{
+                var circRadius = 60000;
+            }
             var googlemap = new google.maps.Map(document.getElementById("searchMap"),
                     {
                       zoom : 5,
@@ -61,7 +66,7 @@ $(function(){
             var Circle = new google.maps.Circle({
                       center: centerPosition,
                       map: googlemap,
-                      radius: parseInt($('#circleRadius').val()),
+                      radius: parseInt(circRadius),
                       fillColor: '#FF0000', 		// 塗りつぶし色
                       fillOpacity: 0.5,
                       strokeColor: '#FF0000',		// 外周色
