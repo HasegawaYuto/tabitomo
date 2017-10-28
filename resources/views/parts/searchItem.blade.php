@@ -141,32 +141,32 @@
               <div class="form-group">
                               {!! Form::label('genre','ジャンル') !!}<br>
                               <?php
-                              if(old('genre')!=null&&in_array('A',old('genre'))){
+                              if(old('genre[]')!=null&&in_array('A',old('genre[]'))){
                                   $chA = 'true';
                               }else{
                                   $chA = 'false';
                               }
-                              if(old('genre')!=null&&in_array('B',old('genre'))){
+                              if(old('genre[]')!=null&&in_array('B',old('genre[]'))){
                                   $chB = 'true';
                               }else{
                                   $chB = 'false';
                               }
-                              if(old('genre')!=null&&in_array('C',old('genre'))){
+                              if(old('genre[]')!=null&&in_array('C',old('genre[]'))){
                                   $chC = 'true';
                               }else{
                                   $chC = 'false';
                               }
-                              if(old('genre')!=null&&in_array('D',old('genre'))){
+                              if(old('genre[]')!=null&&in_array('D',old('genre[]'))){
                                   $chD = 'true';
                               }else{
                                   $chD = 'false';
                               }
-                              if(old('genre')!=null&&in_array('E',old('genre'))){
+                              if(old('genre[]')!=null&&in_array('E',old('genre[]'))){
                                   $chE = 'true';
                               }else{
                                   $chE = 'false';
                               }
-                              if(old('genre')!=null&&in_array('F',old('genre'))){
+                              if(old('genre[]')!=null&&in_array('F',old('genre[]'))){
                                   $chF = 'true';
                               }else{
                                   $chF = 'false';
