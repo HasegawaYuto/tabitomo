@@ -130,9 +130,9 @@
         </div>
         <div class="tab-pane" id="tab3">
             <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
-              <input type="hidden" name="{{old('lat') or '35'}}" id="centerLat" value="0">
-              <input type="hidden" name="{{old('lng') or '136'}}" id="centerLng" value="0">
-              <input type="hidden" name="{{old('radius') or '60000'}}" id="circleRadius" value="0">
+              <input type="hidden" name="lat" id="centerLat" value="{{old('lat') or '35'}}">
+              <input type="hidden" name="lng" id="centerLng" value="{{old('lng') or '136'}}">
+              <input type="hidden" name="radius" id="circleRadius" value="{{old('radius') or '60000'}}">
               <div id="searchMap" class="col-xs-12"></div>
             </div>
         </div>
