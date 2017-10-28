@@ -85,7 +85,7 @@
                   <a href="{{route('show_user_profile',['id'=>$titles[$key]->user_id])}}">
                   <div class="itemAvatarOuter text-center black overCut">
                       @include('parts.avatar',['user'=>$user[$key],'class'=>'itemAvatar'])
-                    <p class="smallp">{{isset($user[$key]->nickname)?$user[$key]->nickname:"未設定"}}</p>
+                    <p class="smallp">{{isset($user[$key]->nickname)||$user[$key]->nickname!=""?$user[$key]->nickname:"未設定"}}</p>
                   </div>
                   </a>
                     <div class="col-xs-12">
