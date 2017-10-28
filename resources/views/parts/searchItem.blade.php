@@ -40,7 +40,7 @@
                   @for($year=$thisyear;$year>=1900;$year--)
                       <option value="{{$year}}">{{$year}}</option>
                   @endfor
-                  <option value="0000" selected>----</option>
+                  <option value="0000" {{!isset(old('year1'))||old('year1')=="0000"?'selected':''}}>----</option>
                 </select>
                 <label>年</label>
                 <select name="month1" id="monthSelect1" class="form-control">
