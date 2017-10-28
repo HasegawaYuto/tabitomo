@@ -37,12 +37,12 @@ topBtn.click(function(){
 $(function(){
     if($('#searchMap').length){
         $('.tabArea a[href = "#tab3"]').on('shown.bs.tab', function(){
-            if($('#centerLat').val()!="" && $('#centerLng').val()!=""){
+            if($('#centerLat').val()!="0" && $('#centerLng').val()!="0"){
             var centerPosition = {lat: parseFloat($('#centerLat').val()), lng: parseFloat($('#centerLng').val())};
             }else{
             var centerPosition = {lat: 36, lng: 136};
             }
-            if($('#circleRadius').val()!=""){
+            if($('#circleRadius').val()!="0"){
                 var circRadius = $('#circleRadius').val();
             }else{
                 var circRadius = 60000;
