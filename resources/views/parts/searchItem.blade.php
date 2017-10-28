@@ -50,7 +50,7 @@
                         ?>
                         <option value="{{$month0}}" {{old('month1')==$month0?'selected':''}}>{{$month}}</option>
                     @endfor
-                    <option value="00" {{old('month1')==null||old('year1')=="00"?'selected':''}}>--</option>
+                    <option value="00" {{old('month1')==null||old('month1')=="00"?'selected':''}}>--</option>
                 </select>
                 <label>月</label>
                 <select name="day1" id="daySelect1" class="form-control">
@@ -71,9 +71,9 @@
             <div class="form-group form-inline">
                 <select name="year2" id="yearSelect2" class="form-control">
                   @for($year=$thisyear;$year>=1900;$year--)
-                      <option value="{{$year}}">{{$year}}</option>
+                      <option value="{{$year}}" {{old('year2')==$year?'selected':''}}>{{$year}}</option>
                   @endfor
-                  <option value="0000" selected>----</option>
+                  <option value="0000" {{old('year2')==null||old('year2')=="0000"?'selected':''}}>----</option>
                 </select>
                 <label>年</label>
                 <select name="month2" id="monthSelect2" class="form-control">
@@ -81,9 +81,9 @@
                         <?php
                           $month0 = str_pad($month, 2, 0, STR_PAD_LEFT);
                         ?>
-                        <option value="{{$month0}}">{{$month}}</option>
+                        <option value="{{$month0}}" {{old('month2')==$month0?'selected':''}}>{{$month}}</option>
                     @endfor
-                    <option value="00" selected>--</option>
+                    <option value="00" {{old('month2')==null||old('month2')=="00"?'selected':''}}>--</option>
                 </select>
                 <label>月</label>
                 <select name="day2" id="daySelect2" class="form-control">
@@ -91,18 +91,18 @@
                         <?php
                             $day0 = str_pad($day, 2, 0, STR_PAD_LEFT);
                         ?>
-                        <option data-val="{{$day0}}" value="{{$day0}}">{{$day}}</option>
+                        <option data-val="{{$day0}}" value="{{$day0}}" {{old('day2')==$day0?'selected':''}}>{{$day}}</option>
                     @endfor
-                    <option data-val="00" value="00" selected>--</option>
+                    <option data-val="00" value="00" {{old('day2')==null||old('day2')=="00"?'selected':''}}>--</option>
                 </select>
                 <label>日以降</label>
             </div>
             <div class="form-group form-inline">
                 <select name="year3" id="yearSelect3" class="form-control">
                   @for($year=$thisyear;$year>=1900;$year--)
-                      <option value="{{$year}}">{{$year}}</option>
+                      <option value="{{$year}}" {{old('year3')==$year?'selected':''}}>{{$year}}</option>
                   @endfor
-                  <option value="0000" selected>----</option>
+                  <option value="0000" {{old('year3')==null||old('year3')=="0000"?'selected':''}}>----</option>
                 </select>
                 <label>年</label>
                 <select name="month3" id="monthSelect3" class="form-control">
@@ -110,9 +110,9 @@
                         <?php
                           $month0 = str_pad($month, 2, 0, STR_PAD_LEFT);
                         ?>
-                        <option value="{{$month0}}">{{$month}}</option>
+                        <option value="{{$month0}}" {{old('month2')==$month0?'selected':''}}>{{$month}}</option>
                     @endfor
-                    <option value="00" selected>--</option>
+                    <option value="00" {{old('month3')==null||old('month3')=="00"?'selected':''}}>--</option>
                 </select>
                 <label>月</label>
                 <select name="day3" id="daySelect3" class="form-control">
@@ -120,9 +120,9 @@
                         <?php
                             $day0 = str_pad($day, 2, 0, STR_PAD_LEFT);
                         ?>
-                        <option data-val="{{$day0}}" value="{{$day0}}">{{$day}}</option>
+                        <option data-val="{{$day0}}" value="{{$day0}}" {{old('day3')==$day0?'selected':''}}>{{$day}}</option>
                     @endfor
-                    <option data-val="00" value="00" selected>--</option>
+                    <option data-val="00" value="00" {{old('day3')==null||old('day3')=="00"?'selected':''}}>--</option>
                 </select>
                 <label>日まで</label>
             </div>
@@ -130,9 +130,9 @@
         </div>
         <div class="tab-pane" id="tab3">
             <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
-              <input type="hidden" name="lat" id="centerLat" value="0">
-              <input type="hidden" name="lng" id="centerLng" value="0">
-              <input type="hidden" name="radius" id="circleRadius" value="0">
+              <input type="hidden" name="{{old('lat') or '35'}}" id="centerLat" value="0">
+              <input type="hidden" name="{{old('lng') or '136'}}" id="centerLng" value="0">
+              <input type="hidden" name="{{old('radius') or '60000'}}" id="circleRadius" value="0">
               <div id="searchMap" class="col-xs-12"></div>
             </div>
         </div>

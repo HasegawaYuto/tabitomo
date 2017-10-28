@@ -37,7 +37,7 @@ topBtn.click(function(){
 $(function(){
     if($('#searchMap').length){
         $('.tabArea a[href = "#tab3"]').on('shown.bs.tab', function(){
-            var centerPosition = {lat:35, lng: 136};
+            var centerPosition = {lat:parseFloat($('#centerLat').val()), lng: parseFloat($('#centerLng').val())};
             var googlemap = new google.maps.Map(document.getElementById("searchMap"),
                     {
                       zoom : 5,
@@ -57,7 +57,7 @@ $(function(){
             var Circle = new google.maps.Circle({
                       center: centerPosition,
                       map: googlemap,
-                      radius: parseInt(parseFloat(60)*1000),
+                      radius: parseInt($('#circleRadius').val()),
                       fillColor: '#FF0000', 		// 塗りつぶし色
                       fillOpacity: 0.5,
                       strokeColor: '#FF0000',		// 外周色
