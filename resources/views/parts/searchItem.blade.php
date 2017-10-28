@@ -48,9 +48,9 @@
                         <?php
                           $month0 = str_pad($month, 2, 0, STR_PAD_LEFT);
                         ?>
-                        <option value="{{$month0}}">{{$month}}</option>
+                        <option value="{{$month0}}" {{old('month1')==$month0?'selected':''}}>{{$month}}</option>
                     @endfor
-                    <option value="00" selected>--</option>
+                    <option value="00" {{old('month1')==null||old('year1')=="00"?'selected':''}}>--</option>
                 </select>
                 <label>月</label>
                 <select name="day1" id="daySelect1" class="form-control">
@@ -58,9 +58,9 @@
                         <?php
                             $day0 = str_pad($day, 2, 0, STR_PAD_LEFT);
                         ?>
-                        <option data-val="{{$day0}}" value="{{$day0}}">{{$day}}</option>
+                        <option data-val="{{$day0}}" value="{{$day0}}"  {{old('day1')==$day0?'selected':''}}>{{$day}}</option>
                     @endfor
-                    <option data-val="00" value="00" selected>--</option>
+                    <option data-val="00" value="00"  {{old('day1')==null||old('day1')=="00"?'selected':''}}>--</option>
                 </select>
                 <label>日</label>
             </div>
