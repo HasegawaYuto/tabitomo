@@ -211,6 +211,7 @@ $scenes = $scenes
     }
 
     public function searchGuides(Request $request){
+      $request->flash();
       $keywordNotExists = $request->keywords=="";
       $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
       $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
@@ -296,11 +297,12 @@ $scenes = $scenes
     }
 
     public function searchTravelers(Request $request){
+      $request->flash();
       $keywordNotExists = $request->keywords=="";
       $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
       $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
       $areaNot = $request->lat=="0"&&$request->lng=="0"&&$request->radius=="0";
-      $personalNot = !isset($request->sex)&&!isset($request->age);
+      $personalNot = !isset($request->sex)&&$request->age==0;
       if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot && $personalNot){
         return redirect('/guests');
       }
