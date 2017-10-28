@@ -141,7 +141,7 @@
               <div class="form-group">
                               {!! Form::label('genre','ジャンル') !!}<br>
                               <div class="chdiv">
-                              {!! Form::checkbox('genre[]','A') !!}
+                              {!! Form::checkbox('genre[]','A',{{in_array('A',old('genre'))?'ture':''}}) !!}
                               <label>
                                   <div class="white chlbl" style="background-color:#228b22;">
                                       自然<i class="fa fa-leaf fa-lg" aria-hidden="true"></i>
@@ -149,7 +149,7 @@
                               </label>
                               </div>
                               <div class="chdiv">
-                              {!! Form::checkbox('genre[]','B') !!}
+                              {!! Form::checkbox('genre[]','B',{{in_array('B',old('genre'))?'ture':''}}) !!}
                               <label>
                                   <div class="black chlbl" style="background-color:#ffff00;">
                                       歴史・人物<i class="fa fa-history fa-lg" aria-hidden="true"></i>
@@ -157,7 +157,7 @@
                               </label>
                               </div>
                               <div class="chdiv">
-                              {!! Form::checkbox('genre[]','C') !!}
+                              {!! Form::checkbox('genre[]','C',{{in_array('C',old('genre'))?'ture':''}}) !!}
                               <label>
                                   <div class="white chlbl" style="background-color:#a0522d;">
                                       建物<i class="fa fa-university fa-lg" aria-hidden="true"></i>
@@ -165,7 +165,7 @@
                               </label>
                               </div>
                               <div class="chdiv">
-                              {!! Form::checkbox('genre[]','D') !!}
+                              {!! Form::checkbox('genre[]','D',{{in_array('D',old('genre'))?'ture':''}}) !!}
                               <label>
                                   <div class="black chlbl" style="background-color:#ff69b4;">
                                       食べる<i class="fa fa-cutlery fa-lg" aria-hidden="true"></i>
@@ -173,7 +173,7 @@
                               </label>
                               </div>
                               <div class="chdiv">
-                              {!! Form::checkbox('genre[]','E') !!}
+                              {!! Form::checkbox('genre[]','E',{{in_array('E',old('genre'))?'ture':''}}) !!}
                               <label>
                                   <div class="black chlbl" style="background-color:#00ffff;">
                                       買う<i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
@@ -181,7 +181,7 @@
                               </label>
                               </div>
                               <div class="chdiv">
-                              {!! Form::checkbox('genre[]','F') !!}
+                              {!! Form::checkbox('genre[]','F',{{in_array('',old('genre'))?'ture':''}}) !!}
                               <label>
                                   <div class="black chlbl" style="background-color:#ffffff;border:solid 0.5px #000000;">
                                       遊ぶ<i class="fa fa-futbol-o fa-lg" aria-hidden="true"></i>
