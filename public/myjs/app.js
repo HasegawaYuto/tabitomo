@@ -37,7 +37,11 @@ topBtn.click(function(){
 $(function(){
     if($('#searchMap').length){
         $('.tabArea a[href = "#tab3"]').on('shown.bs.tab', function(){
-            var centerPosition = {lat:parseFloat($('#centerLat').val()), lng: parseFloat($('#centerLng').val())};
+            if($('#centerLat').val()!="" && $('#centerLng').val()!=""){
+            var centerPosition = {lat: parseFloat($('#centerLat').val()), lng: parseFloat($('#centerLng').val())};
+            }else{
+            var centerPosition = {lat: 36, lng: 136};
+            }
             var googlemap = new google.maps.Map(document.getElementById("searchMap"),
                     {
                       zoom : 5,
