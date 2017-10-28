@@ -164,7 +164,7 @@
                               if(old('genre')!=null&&in_array('E',old('genre'))){
                                   $chE = '';
                               }else{
-                                  $chE = 'false';
+                                  $chE = '';
                               }
                               if(old('genre')!=null&&in_array('F',old('genre'))){
                                   $chF = 'true';
