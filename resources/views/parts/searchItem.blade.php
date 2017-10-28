@@ -25,7 +25,7 @@
             <div class="col-xs-10 col-xs-offset-1 searchArea">
             <div class="form-group">
                 {!! Form::label('keywords','キーワード') !!}
-                {!! Form::text('keywords',null,['class'=>'form-control','placeholder'=>'キーワード']) !!}
+                {!! Form::text('keywords',old('keywords'),['class'=>'form-control','placeholder'=>'キーワード']) !!}
             </div>
           </div>
         </div>

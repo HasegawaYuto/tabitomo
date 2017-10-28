@@ -95,6 +95,7 @@ class PageController extends Controller
     }
 
     public function showItemsSearch(Request $request){
+      $request->flash();
       $keywordNotExists = $request->keywords=="";
       $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
       $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
