@@ -38,7 +38,7 @@
             <div class="form-group form-inline">
                 <select name="year1" id="yearSelect1" class="form-control">
                   @for($year=$thisyear;$year>=1900;$year--)
-                      <option value="{{$year}}">{{$year}}</option>
+                      <option value="{{$year}}" {{old('year1')==$year?'selected':''}}>{{$year}}</option>
                   @endfor
                   <option value="0000" {{old('year1')==null||old('year1')=="0000"?'selected':''}}>----</option>
                 </select>
