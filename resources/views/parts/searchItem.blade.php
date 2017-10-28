@@ -144,32 +144,32 @@
                               if(old('genre[]')!=null&&in_array('A',old('genre[]'))){
                                   $chA = 'true';
                               }else{
-                                  $chA = 'false';
+                                  $chA = '';
                               }
                               if(old('genre[]')!=null&&in_array('B',old('genre[]'))){
                                   $chB = 'true';
                               }else{
-                                  $chB = 'false';
+                                  $chB = '';
                               }
                               if(old('genre[]')!=null&&in_array('C',old('genre[]'))){
                                   $chC = 'true';
                               }else{
-                                  $chC = 'false';
+                                  $chC = '';
                               }
                               if(old('genre[]')!=null&&in_array('D',old('genre[]'))){
                                   $chD = 'true';
                               }else{
-                                  $chD = 'false';
+                                  $chD = '';
                               }
                               if(old('genre[]')!=null&&in_array('E',old('genre[]'))){
-                                  $chE = 'true';
+                                  $chE = '';
                               }else{
                                   $chE = 'false';
                               }
                               if(old('genre[]')!=null&&in_array('F',old('genre[]'))){
                                   $chF = 'true';
                               }else{
-                                  $chF = 'false';
+                                  $chF = '';
                               }
                               ?>
                               <div class="chdiv">
