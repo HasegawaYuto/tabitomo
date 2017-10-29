@@ -123,10 +123,10 @@ class PageController extends Controller
           $keywords = explode(' ',$request->keywords);
           foreach($keywords as $keyword){
             $scenes = $scenes->where(function($query)use($keyword){
-                                    $titleids = Mylogdetailtitle::where('title','~','*'.$keyword.'*')->lists('title_id');
+                                    $titleids = Mylogdetailtitle::where('title','like','*'.$keyword.'*')->lists('title_id');
                                     $query->whereIn('title_id',$titleids)
-                                          ->orWhere('scene','~','*'.$keyword.'*')
-                                          ->orWhere('comment','~','*'.$keyword.'*');
+                                          ->orWhere('scene','like','*'.$keyword.'*')
+                                          ->orWhere('comment','like','*'.$keyword.'*');
                               });
           }
       }
@@ -155,11 +155,11 @@ $scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
       if(!$genreNot){
-          $genres = implode("",$request->genre);
-          $scenes = $scenes->where('genre','~','^[BC]*');
-          //foreach($request->genre as $genre){
-          //    $scenes = $scenes->where('genre','like','%'.$genre.'%');
-          //}
+          //$genres = implode("",$request->genre);
+          //$scenes = $scenes->where('genre','~','^[BC]*');
+          foreach($request->genre as $genre){
+              $scenes = $scenes->where('genre','like','*'.$genre.'*');
+          }
       }
       $scenes=$scenes->orderBy('updated_at','desc')
                     ->paginate(24);
