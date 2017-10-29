@@ -100,7 +100,7 @@ class PageController extends Controller
       $termNotWildCard = $request->year1=="0000"&&$request->month1=="00"&&$request->day1=="00";
       $termNotBetween = $request->year2=="0000"&&$request->month2=="01"&&($request->day2=="01" xor $request->day2=="00")&&$request->year3=="9999"&&$request->month3=="12"&&($request->day3=="31" xor $request->day3=="00");
       $areaNot = $request->lat=="0"&&$request->lng=="0"&&$request->radius=="0";
-      $genreNot = !isset($request->genre);
+      $genreNot = !isset($request->genre[0]);
       if($keywordNotExists && $termNotWildCard && $termNotBetween && $areaNot && $genreNot){
         return redirect('/');
       }
@@ -154,7 +154,7 @@ class PageController extends Controller
 $scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
-      if(isset($request->genre[0])){
+      if(!$genreNot){
           $genres = implode("",$request->genre);
           $scenes = $scenes->where('genre','~','^B*');
           //foreach($request->genre as $genre){
