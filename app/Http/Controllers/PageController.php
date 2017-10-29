@@ -155,9 +155,11 @@ $scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
       if(isset($request->genre)){
-          foreach($request->genre as $genre){
-              $scenes = $scenes->where('genre','like','%'.$genre.'%');
-          }
+          $genres = implode('',$request->genre);
+          $scenes = $scenes->where('genre','like','%['.$genres.']%');
+          //foreach($request->genre as $genre){
+          //    $scenes = $scenes->where('genre','like','%'.$genre.'%');
+          //}
       }
       $scenes=$scenes->orderBy('updated_at','desc')
                     ->paginate(24);
