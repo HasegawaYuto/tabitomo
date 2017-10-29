@@ -30,7 +30,7 @@
                             $cnt++;
                           ?>
                           <div class="item {{ $cnt == 0 ? 'active':''}}">
-                              <img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;">
+                              <a href="{{$photo->path}}" download><img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;"></a>
                           </div>
                       @endif
                   @endforeach
