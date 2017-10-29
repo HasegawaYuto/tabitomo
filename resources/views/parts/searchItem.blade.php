@@ -177,6 +177,8 @@
                                   $genretypeA = 'true';
                               }elseif(old('genretype')=='or'){
                                   $genretypeO = 'true';
+                              }else{
+                                  $genretypeA = 'true';
                               }
                               ?>
                               <div>
