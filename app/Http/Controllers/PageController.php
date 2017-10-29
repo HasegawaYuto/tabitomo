@@ -156,13 +156,15 @@ $scenes = $scenes
       }
       if(!$genreNot){
           //$genres = implode("",$request->genre);
-          $scenes = $scenes->where('genre','REGEXP','[A]%');
+          $scenes = $scenes->where('genre','REGEXP','^[A]');
+          
           //foreach($request->genre as $genre){
           //    $scenes = $scenes->where('genre','like','%'.$genre.'%');
           //}
       }
-      $scenes=$scenes->orderBy('updated_at','desc')
-                    ->paginate(24);
+      $scenes = $scenes->get();
+      //$scenes=$scenes->orderBy('updated_at','desc')
+      //              ->paginate(24);
       $data['scenes'] = $scenes;
       /*
       $sceneids=[];
