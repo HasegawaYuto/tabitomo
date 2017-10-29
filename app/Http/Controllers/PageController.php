@@ -119,7 +119,7 @@ class PageController extends Controller
                     $query->where('publish','public');
                 }
             });
-      if(isset($request->keywords)){
+      if($request->keywords!=""){
           $keywords = explode(' ',$request->keywords);
           foreach($keywords as $keyword){
             $scenes = $scenes->where(function($query)use($keyword){
