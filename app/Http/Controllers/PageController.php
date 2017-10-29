@@ -155,11 +155,11 @@ $scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
       if(!$genreNot){
-          //$genres = implode("",$request->genre);
+          $genres = implode("",$request->genre);
           //$scenes = $scenes->where('genre','REGEXP','^[A]');
           // $scenes = $scenes->where('genre', 'regexp', 'B');
           
-          $scenes =$scenes->where('genre', '~', '[AB]');
+          $scenes =$scenes->where('genre', '~', '['.$genre.']');
           //$scenes = $scenes->whereRaw('("genre" ~ \'[BC]*\')');
           // dd($scenes);
           
