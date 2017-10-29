@@ -111,9 +111,9 @@ class PageController extends Controller
                         $titleids = Mylogdetailtitle::where('user_id',$userids)->lists('title_id');
                         $query->whereIn('title_id',$titleids)
                               ->where('publish','<>','private')
-                              ->orWhere('scene_id','like',\Auth::user()->id.'-%-%');
+                              ->orWhere('scene_id','like',\Auth::user()->id.'-*-*');
                     }else{
-                        $query->where('publish','public')->orWhere('scene_id','like',\Auth::user()->id.'-%-%');
+                        $query->where('publish','public')->orWhere('scene_id','like',\Auth::user()->id.'-*-*');
                     }
                 }else{
                     $query->where('publish','public');
@@ -123,10 +123,10 @@ class PageController extends Controller
           $keywords = explode(' ',$request->keywords);
           foreach($keywords as $keyword){
             $scenes = $scenes->where(function($query)use($keyword){
-                                    $titleids = Mylogdetailtitle::where('title','~','%'.$keyword.'%')->lists('title_id');
+                                    $titleids = Mylogdetailtitle::where('title','~','*'.$keyword.'*')->lists('title_id');
                                     $query->whereIn('title_id',$titleids)
-                                          ->orWhere('scene','~','%'.$keyword.'%')
-                                          ->orWhere('comment','~','%'.$keyword.'%');
+                                          ->orWhere('scene','~','*'.$keyword.'*')
+                                          ->orWhere('comment','~','*'.$keyword.'*');
                               });
           }
       }
