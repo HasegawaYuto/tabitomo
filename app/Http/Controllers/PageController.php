@@ -156,10 +156,10 @@ $scenes = $scenes
       }
       if(isset($request->genre)){
           $genres = implode('',$request->genre);
-          $scenes = $scenes->where('genre','like','%['.$genres.']%');
-          //foreach($request->genre as $genre){
-          //    $scenes = $scenes->where('genre','like','%'.$genre.'%');
-          //}
+          //$scenes = $scenes->where('genre','like','%['.$genres.']%');
+          foreach($request->genre as $genre){
+              $scenes = $scenes->where('genre','like','%'.$genre.'%');
+          }
       }
       $scenes=$scenes->orderBy('updated_at','desc')
                     ->paginate(24);
