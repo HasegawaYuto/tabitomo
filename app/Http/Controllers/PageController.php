@@ -160,7 +160,7 @@ $scenes = $scenes
           // $scenes = $scenes->where('genre', 'regexp', 'B');
           
           //$scenes =$scenes->where('genre', 'regexp', '%B%');
-          $scenes = $scenes->whereRaw('genre ~ "^[ABC]*"');
+          $scenes = $scenes->whereRaw('genre ~ "[ABC]*"');
           // dd($scenes);
           
           //foreach($request->genre as $genre){
