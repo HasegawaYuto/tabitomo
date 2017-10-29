@@ -126,7 +126,7 @@ class PageController extends Controller
                                     $titleids = Mylogdetailtitle::where('title','like','%'.$keyword.'%')->lists('title_id');
                                     $query->whereIn('title_id',$titleids)
                                           ->orWhere('scene','like','%'.$keyword.'%')
-                                          ->orWhere('comment','like',''.$keyword.'%');
+                                          ->orWhere('comment','like','%'.$keyword.'%');
                               });
           }
       }
@@ -158,7 +158,7 @@ $scenes = $scenes
           //$genres = implode("",$request->genre);
           //$scenes = $scenes->where('genre','~','^[BC]*');
           foreach($request->genre as $genre){
-              $scenes = $scenes->where('genre','like','*'.$genre.'*');
+              $scenes = $scenes->where('genre','like','%'.$genre.'');
           }
       }
       $scenes=$scenes->orderBy('updated_at','desc')
