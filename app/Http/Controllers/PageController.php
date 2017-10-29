@@ -157,7 +157,11 @@ $scenes = $scenes
       if(!$genreNot){
           //$genres = implode("",$request->genre);
           //$scenes = $scenes->where('genre','REGEXP','^[A]');
-          $scenes = $scenes->where('genre','LIKE','%B%');
+          // $scenes = $scenes->where('genre', 'regexp', 'B');
+          
+          $scenes = Mylogdetailscene::where('genre', 'regexp', 'B');
+          // dd($scenes);
+          
           //foreach($request->genre as $genre){
           //    $scenes = $scenes->where('genre','like','%'.$genre.'%');
           //}
