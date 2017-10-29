@@ -26,11 +26,10 @@
                   @foreach($photos as $photo)
                       @if($photo->scene_id == $scene->scene_id)
                           <?php
-                            $dataPhoto = base64_encode($photo->data);
-                            $cnt++;
+                            $ex = explode('.',$photo->path);
                           ?>
                           <div class="item {{ $cnt == 0 ? 'active':''}}">
-                              <a href="{{$photo->path}}" download><img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;"></a>
+                              <a href="{{$photo->path}}" download="image.{{$ex[1]}}"><img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;"></a>
                           </div>
                       @endif
                   @endforeach
