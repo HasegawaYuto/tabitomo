@@ -179,11 +179,11 @@
                                   $genretypeO = 'true';
                               }
                               ?>
-                              <div class="chdiv">
-                            　{!! Form::radio('genretype','and',$genretypeA)!!}
+                              {!! Form::radio('genretype','and',$genretypeA)!!}
                             　<label>AND検索</label>
                             　{!! Form::radio('genretype','or',$genretypeO)!!}
-                            　<label>OR検索</label><br>
+                            　<label>OR検索</label>
+                              <div class="chdiv">
                               {!! Form::checkbox('genre[]','A',$chA) !!}
                               <label>
                                   <div class="white chlbl" style="background-color:#228b22;">
