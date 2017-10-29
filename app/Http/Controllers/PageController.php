@@ -156,12 +156,7 @@ $scenes = $scenes
       }
       if(!$genreNot){
           $genres = implode($request->genre);
-          //$scenes = $scenes->where('genre','REGEXP','^[A]');
-          // $scenes = $scenes->where('genre', 'regexp', 'B');
-          
           $scenes =$scenes->where('genre', '~', '['.$genres.']');
-          //$scenes = $scenes->whereRaw('("genre" ~ \'[BC]*\')');
-          // dd($scenes);
           
           //foreach($request->genre as $genre){
           //    $scenes = $scenes->where('genre','like','%'.$genre.'%');

@@ -171,8 +171,21 @@
                               }else{
                                   $chF = '';
                               }
+                              $genretypeA='false';
+                              $genretypeO='false';
+                              if(old('genretype')=='and'){
+                                  $genretypeA = 'true';
+                              }elseif(old('genretype')=='or'){
+                                  $genretypeO = 'true';
+                              }
                               ?>
                               <div class="chdiv">
+                              <div>
+                            　{!! From::radio('genretype','and',$genretypeA)!!}
+                            　<label>AND検索</label>
+                            　{!! From::radio('genretype','or',$genretypeO)!!}
+                            　<label>OR検索</label>
+                            　</div>
                               {!! Form::checkbox('genre[]','A',$chA) !!}
                               <label>
                                   <div class="white chlbl" style="background-color:#228b22;">
