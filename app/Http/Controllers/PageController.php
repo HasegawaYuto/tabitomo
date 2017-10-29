@@ -123,10 +123,10 @@ class PageController extends Controller
           $keywords = explode(' ',$request->keywords);
           foreach($keywords as $keyword){
             $scenes = $scenes->where(function($query)use($keyword){
-                                    $titleids = Mylogdetailtitle::where('title','like','*'.$keyword.'*')->lists('title_id');
+                                    $titleids = Mylogdetailtitle::where('title','like','%'.$keyword.'%')->lists('title_id');
                                     $query->whereIn('title_id',$titleids)
-                                          ->orWhere('scene','like','*'.$keyword.'*')
-                                          ->orWhere('comment','like','*'.$keyword.'*');
+                                          ->orWhere('scene','like','%'.$keyword.'%')
+                                          ->orWhere('comment','like',''.$keyword.'%');
                               });
           }
       }
