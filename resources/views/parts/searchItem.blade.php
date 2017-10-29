@@ -131,7 +131,7 @@
         <div class="tab-pane" id="tab3">
             <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
               <input type="hidden" name="lat" id="centerLat" value="{{old('lat')!=null?old('lat'):'0'}}">
-              <input type="hidden" name="lng" id="centerLng" value="{{old('lng')!=null?old('lat'):'0'}}">
+              <input type="hidden" name="lng" id="centerLng" value="{{old('lng')!=null?old('lng'):'0'}}">
               <input type="hidden" name="radius" id="circleRadius" value="{{old('radius')!=null?old('radius'):'0'}}">
               <div id="searchMap" class="col-xs-12"></div>
             </div>
