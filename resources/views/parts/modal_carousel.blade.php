@@ -27,9 +27,12 @@
                       @if($photo->scene_id == $scene->scene_id)
                           <?php
                             $ex = explode('.',$photo->path);
+                            $cnt++
                           ?>
                           <div class="item {{ $cnt == 0 ? 'active':''}}">
-                              <img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;">
+                              <a href="{{$photo->path}}" download="image.{{end($ex)}}">
+                                <img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;">
+                              </a>
                           </div>
                       @endif
                   @endforeach
