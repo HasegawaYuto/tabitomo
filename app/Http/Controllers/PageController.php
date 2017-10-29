@@ -156,7 +156,7 @@ $scenes = $scenes
       }
       if(isset($request->genre[0])){
           $genres = implode("",$request->genre);
-          $scenes = $scenes->where('genre','~','^[BC]*');
+          $scenes = $scenes->where('genre','~','*B*');
           //foreach($request->genre as $genre){
           //    $scenes = $scenes->where('genre','like','%'.$genre.'%');
           //}
