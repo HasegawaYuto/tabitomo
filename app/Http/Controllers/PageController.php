@@ -156,8 +156,8 @@ $scenes = $scenes
       }
       if(!$genreNot){
           //$genres = implode("",$request->genre);
-          $scenes = $scenes->where('genre','REGEXP','^[A]');
-          
+          //$scenes = $scenes->where('genre','REGEXP','^[A]');
+          $scenes = $scenes->where('genre','LIKE','%A%');
           //foreach($request->genre as $genre){
           //    $scenes = $scenes->where('genre','like','%'.$genre.'%');
           //}
