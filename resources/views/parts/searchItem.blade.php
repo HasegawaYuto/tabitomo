@@ -171,8 +171,8 @@
                               }else{
                                   $chF = '';
                               }
-                              $genretypeA='false';
-                              $genretypeO='false';
+                              $genretypeA='';
+                              $genretypeO='';
                               if(old('genretype')=='and'){
                                   $genretypeA = 'true';
                               }elseif(old('genretype')=='or'){
