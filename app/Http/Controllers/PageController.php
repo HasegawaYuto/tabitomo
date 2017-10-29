@@ -156,10 +156,10 @@ $scenes = $scenes
       }
       if(!$genreNot){
           //$genres = implode("",$request->genre);
-          //$scenes = $scenes->where('genre','~','^[BC]*');
-          foreach($request->genre as $genre){
-              $scenes = $scenes->where('genre','like',$genre.'%');
-          }
+          $scenes = $scenes->where('genre','ERGEXP','^[BC]*');
+          //foreach($request->genre as $genre){
+          //    $scenes = $scenes->where('genre','like',$genre.'%');
+          //}
       }
       $scenes=$scenes->orderBy('updated_at','desc')
                     ->paginate(24);
