@@ -111,9 +111,9 @@ class PageController extends Controller
                         $titleids = Mylogdetailtitle::where('user_id',$userids)->lists('title_id');
                         $query->whereIn('title_id',$titleids)
                               ->where('publish','<>','private')
-                              ->orWhere('scene_id','like',\Auth::user()->id.'-*-*');
+                              ->orWhere('scene_id','~',\Auth::user()->id.'-*-*');
                     }else{
-                        $query->where('publish','public')->orWhere('scene_id','like',\Auth::user()->id.'-*-*');
+                        $query->where('publish','public')->orWhere('scene_id','~',\Auth::user()->id.'-*-*');
                     }
                 }else{
                     $query->where('publish','public');
@@ -156,7 +156,7 @@ $scenes = $scenes
       }
       if($request->genre[0]!=""){
           $genres = implode("",$request->genre);
-          $scenes = $scenes->where('genre','~','*[BC]*');
+          $scenes = $scenes->where('genre','~','[^BC]*');
           //foreach($request->genre as $genre){
           //    $scenes = $scenes->where('genre','like','%'.$genre.'%');
           //}
@@ -229,7 +229,7 @@ $scenes = $scenes
                           ->where(function($query)use($chdate){
                               $query->where('limitdate','>',$chdate);
                           });
-      if(isset($request->keywords)){
+      if($request->keywords!=""){
           $keywords = explode(' ',$request->keywords);
           foreach($keywords as $keyword){
             $recruitments = $recruitments->where('contents','like','%'.$keyword.'%');
@@ -259,7 +259,7 @@ $scenes = $scenes
           $recruitments = $recruitments
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
-      if(isset($request->sex)){
+      if($request->sex!=""){
           $ids = User::where('sex',$request->sex)->whereNotNull('sex')->lists('id');
           $recruitments=$recruitments->whereIn('user_id',$ids);
       }
@@ -315,7 +315,7 @@ $scenes = $scenes
                           ->where(function($query)use($chdate){
                               $query->where('limitdate','>',$chdate);
                           });
-      if(isset($request->keywords)){
+      if($request->keywords!=""){
           $keywords = explode(' ',$request->keywords);
           foreach($keywords as $keyword){
             $recruitments = $recruitments->where('contents','like','%'.$keyword.'%');
@@ -345,7 +345,7 @@ $scenes = $scenes
           $recruitments = $recruitments
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
-      if(isset($request->sex)){
+      if($request->sex!=""){
           $ids = User::where('sex',$request->sex)->whereNotNull('sex')->lists('id');
           $recruitments=$recruitments->whereIn('user_id',$ids);
       }
