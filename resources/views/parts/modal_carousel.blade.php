@@ -29,7 +29,7 @@
                             $ex = explode('.',$photo->path);
                           ?>
                           <div class="item {{ $cnt == 0 ? 'active':''}}">
-                              <a href="{{$photo->path}}"><img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;"></a>
+                              <img data-src="{{$photo->path}}" class="lazyload" style="margin:auto;">
                           </div>
                       @endif
                   @endforeach
