@@ -154,7 +154,7 @@ class PageController extends Controller
 $scenes = $scenes
 ->whereRaw('6371000*acos(cos(radians(?))*cos(radians(lat))*cos(radians(lng)-radians(?))+sin(radians(?))*sin(radians(lat)))<?',[$request->lat,$request->lng,$request->lat,$request->radius]);
       }
-      if(isset($request->genre)){
+      if($request->genre[0]!=""){
           $genres = implode("",$request->genre);
           $scenes = $scenes->where('genre','~','*[BC]*');
           //foreach($request->genre as $genre){
