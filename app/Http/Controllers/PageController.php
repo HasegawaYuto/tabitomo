@@ -158,7 +158,7 @@ $scenes = $scenes
           //$genres = implode("",$request->genre);
           //$scenes = $scenes->where('genre','~','^[BC]*');
           foreach($request->genre as $genre){
-              $scenes = $scenes->where('genre','like','%'.$genre.'');
+              $scenes = $scenes->where('genre','like',$genre.'%');
           }
       }
       $scenes=$scenes->orderBy('updated_at','desc')
