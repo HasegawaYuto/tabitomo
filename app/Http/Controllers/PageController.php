@@ -14,6 +14,7 @@ use App\Location;
 use App\Pref;
 use App\Mylogdetailtitle,App\Mylogdetailscene,App\Guestguide,App\Photo;
 use Illuminate\Support\Facades\Log;
+use App\Plandetail;
 
 class PageController extends Controller
 {
@@ -637,4 +638,23 @@ $scenes = $scenes
       $data['thisyear']=Carbon::now()->year;
       return view('bodys.user_menu.show_title',$data);
     }
+    
+    public function showPlans($id){
+        if(\Auth::user()->id != $id){
+          return redirect()->back();
+        }
+        $data['user'] = User::find($id);
+        $plans = Plandetail::where('user_id',$id)->orderBy('updated_at','desc')->get();
+        $data['plans'] = $plans;
+        return view('bodys.user_menu.plans',$data);
+    }
+    
+    public function showPlan($id,$title_id){
+        if(\Auth::user()->id != $id){
+          return redirect()->back();
+        }
+        $data['plan'] = Plandetail::where('title_id',$title_id)->first();
+        $data['user'] = User::find($id);
+        return view('bodys.user_menu.plans_detail',$data);
+    } 
 }

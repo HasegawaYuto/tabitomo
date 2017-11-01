@@ -1,6 +1,10 @@
 body {
     padding-top: 70px;
 }
+#planData{
+    max-height:70vh;
+    overflow-y: scroll;
+}
 .chdiv{
     display:inline-block;
     margin-right:8px;
@@ -463,7 +467,7 @@ a:hover{
     height:calc(50vw*0.66*0.8*0.5);
     width:calc((6/12)*100%);
 }
-#createPhotoSpotSetArea0{
+#createPhotoSpotSetArea0,#planMap{
     width:80%;
     height:calc(50vw*0.6*0.8);
 }
@@ -491,7 +495,7 @@ a:hover{
     width:66%;
     height:calc(50vw*0.6*0.8);
 }
-#createPhotoSpotSetArea0{
+#createPhotoSpotSetArea0,#planMap{
     width:100%;
     height:calc(50vw*0.8*0.6);
 }
@@ -515,7 +519,7 @@ a:hover{
     width:83%;
     height:calc(50vw*0.8*0.8);
 }
-#createPhotoSpotSetArea0{
+#createPhotoSpotSetArea0,#planMap{
     width:100%;
     height:calc(80vw*0.8*0.6);
 }
@@ -539,7 +543,7 @@ a:hover{
     width:100%;
     height:calc(100vw*0.8*0.8);
 }
-#createPhotoSpotSetArea0{
+#createPhotoSpotSetArea0,#planMap{
     width:100%;
     height:calc(100vw*0.8*0.6);
 }

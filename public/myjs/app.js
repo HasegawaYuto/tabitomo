@@ -1,4 +1,160 @@
 $(function(){
+    if($('#planMap').length){
+        var centerPosition = {lat:35, lng: 136};
+        var googlemap = new google.maps.Map(document.getElementById("planMap"),
+            {
+              zoom : 5,
+              center : centerPosition,
+              mapTypeId: google.maps.MapTypeId.ROADMAP,//
+              mapTypeControl: false,//
+              fullscreenControl: true,
+              streetViewControl: false,//
+              scrollwheel: true,//
+              zoomControl: true
+            });
+        var directionsDisplay = new google.maps.DirectionsRenderer({
+            "map": googlemap,
+            "preserveViewport": false,
+        });
+        var directionsService = new google.maps.DirectionsService();
+        var Marker = [],Lats = [],Lngs = [],Waypoints = [],resultMap = [];
+        var MarkerCnt = $('#planData .list-group-item').length;
+        $('#planAddButton').click(function(){
+            var MarkerCnt = $('#planData .list-group-item').length;
+            var spotcnt = MarkerCnt+1;
+            var phase0 = '<label>スポット'+spotcnt+'：<label><input type="text" name="searchWord[]" class="form-control searchBox" id="search'+MarkerCnt+'">';
+            var phase2 = '<div class="list-group-item from-group form-inline list-group-item-warning" id="spotData'+MarkerCnt+'">'+phase0+'</div>';
+            var BMarkerCnt = MarkerCnt-1;
+            if(BMarkerCnt in Marker || MarkerCnt == 0){
+                $('#planData').append(phase2);
+                $('#search'+MarkerCnt).change(searchPlace);
+            }
+        });
+        
+        function searchPlace(){
+            var key=$(this).val();
+            index = $('#planData .searchBox').index(this);
+            var request = {
+                query: key,
+            };
+            service = new google.maps.places.PlacesService(googlemap);
+            service.textSearch(request, callback);
+        }
+        
+        function callback(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+               var stopcnt = results.length;
+               if(stopcnt == 0){
+                   alert('Not Found');
+               }else{
+                   createMarker(results[0]);
+               }
+            }
+        }
+        
+        function createMarker(place) {
+            if(index in Marker){
+                Marker[index].setPosition(place.geometry.location);
+            }else{
+	            Marker[index] = new google.maps.Marker({
+		            map: googlemap,
+		            position: place.geometry.location,
+		            draggable:true,
+	            });
+            }
+            drawRoute();
+            Lats[index] = Marker[index].getPosition().lat();
+            Lngs[index] = Marker[index].getPosition().lng();
+            if(1 in Marker){
+                var sw = new google.maps.LatLng(Math.max.apply(null,Lats), Math.min.apply(null,Lngs));
+                var ne = new google.maps.LatLng(Math.min.apply(null,Lats), Math.max.apply(null,Lngs));
+                var bounds = new google.maps.LatLngBounds(sw, ne);
+                googlemap.fitBounds(bounds);
+            }
+        }
+        
+        function drawRoute(){
+            if(Marker.length > 1){
+                //currentDirections=null;
+                directionsDisplay.setMap(null);
+                var done = 0,requestIndex =0;
+                var $start = null,$end = null;
+                for($i in Marker){
+                    if($start == null){
+                        $start = Marker[$i];
+                    }else if(Waypoints.length == 8 || $i == Marker.length-1){
+                        $end = Marker[$i];
+                        
+                        (function(index){
+                        var request = {
+                            origin: $start.getPosition(),
+                            destination: $end.getPosition(),
+                            waypoints:Waypoints,
+                            travelMode: 'DRIVING'
+                            //transitOptions:{
+                            //    modes:['RAIL']
+                            //}
+                        };
+                        directionsService.route(request, function(result, status) {
+                            if (status == 'OK') {
+                                resultMap[index] = result;
+                                //directionsDisplay.setMap(googlemap);
+                                //directionsDisplay.setDirections(result);
+                                done++
+                            }
+                        });
+                        })(requestIndex);
+                        $start = Marker[$i];
+                        Waypoints = [];
+                        requestIndex++;
+                    }else{
+                        Waypoints.push({ location: Marker[$i].getPosition(), stopover: true });
+                    }
+                }
+        var sid = setInterval(function(){
+            if (requestIndex > done) return;
+                clearInterval(sid);
+            var path = [];
+            var result;
+            for (var i = 0, len = requestIndex; i < len; i++) {
+                result = resultMap[i];
+                var legs = result.routes[0].legs;
+                for (var li = 0, llen = legs.length; li < llen; li++) {
+                    var leg = legs[li];
+                    var steps = leg.steps;
+                    var _path = steps.map(function(step){ return step.path })
+                        .reduce(function(all, paths){ return all.concat(paths) });
+                    path = path.concat(_path);
+                }
+            }
+        var line = new google.maps.Polyline({
+            map: googlemap,
+            strokeColor: "#2196f3", // 線の色
+            strokeOpacity: 0.8, // 線の不透明度
+            strokeWeight: 6, // 先の太さ
+            path: path // 描画するパスデータ
+        });
+        function deletePath(){
+            line.setMap(null);
+            //$('#hoge').append('hoge');
+        }
+        if(Marker.length ==2){
+            $('#search0').off('change.delPath');
+            $('#search1').off('change.delPath');
+            $('#search0').on('change.delPath',deletePath);
+            $('#search1').on('change.delPath',deletePath);
+        }else{
+            var No = Marker.length-1;
+            $('#search'+No).off('change.delPath');
+            $('#search'+No).on('change.delPath',deletePath);
+        }
+    }, 1000);
+	        }
+        }
+    }
+});
+///////////////////////////////////////////////////////////
+$(function(){
     if($('#QRdiv').length){
     $('#QRdiv').qrcode({
 	text: window.location.href,

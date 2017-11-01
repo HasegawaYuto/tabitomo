@@ -34,11 +34,15 @@ $browser=((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos(
                             @if($browser!='sp')
                                 <li role="separator" class="divider"></li>
                             @endif
-                            <li><a href="{{ route('show_user_matching',['id'=>$id]) }}" class="list-group-item noborder"><i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング</a></li>
+                            <li><a href="{{ route('show_user_matching',['id'=>$id]) }}" class="list-group-item noborder nav-item"><i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i>マッチング</a></li>
                             @if($browser!='sp')
                                 <li role="separator" class="divider"></li>
                             @endif
-                            <li><a href="{{ route('show_user_messages',['id'=>$id]) }}" class="list-group-item noborder">
+                            <li><a href="{{ route('show_user_plans',['id'=>$id]) }}" class="list-group-item noborder nav-item"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i>マイプラン</a></li>
+                            @if($browser!='sp')
+                                <li role="separator" class="divider"></li>
+                            @endif
+                            <li><a href="{{ route('show_user_messages',['id'=>$id]) }}" class="list-group-item noborder nav-item">
                                     <i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ
                                     @if(Auth::user()->newMessageHas())
                                         <button class="btn btn-xs btn-danger" type="button">新着</button>
@@ -48,7 +52,7 @@ $browser=((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos(
                             @if($browser!='sp')
                                 <li role="separator" class="divider"></li>
                             @endif
-                            <li><a href="{{ route('show_user_items',['id'=>$id]) }}" class="list-group-item noborder"><i class="fa fa-camera fa-fw" aria-hidden="true"></i>マイログ</a></li>
+                            <li><a href="{{ route('show_user_items',['id'=>$id]) }}" class="list-group-item noborder nav-item"><i class="fa fa-camera fa-fw" aria-hidden="true"></i>マイログ</a></li>
                             @if($browser!='sp')
                                 <li role="separator" class="divider"></li>
                             @endif

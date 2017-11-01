@@ -70,6 +70,10 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
+        Route::get('plans/{title_id}','PageController@showPlan')->name('show_plan_detail');
+        Route::get('print', 'PlanController@getPrint')->name('get_print');
+        Route::post('plan/create', 'PlanController@createPlan')->name('make_plan');
+        Route::get('plans','PageController@showPlans')->name('show_user_plans');
         Route::post('message/{send_id}/send','MessageController@sendMessage')->name('send_message');
         Route::post('message/{partner_id}/show','MessageController@loadMessage')->name('load_message');
         Route::post('mylog/title/{title_id}/edit','ItemPostController@editTitle')->name('edit_title');
