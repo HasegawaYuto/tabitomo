@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::get('/user/{id}','PageController@showUserProfile')->name('show_user');
     Route::group(['prefix' => 'user/{id}'], function () {
+        Route::post('editplans/{title_id}','PlanController@addSpots')->name('add_spots');
         Route::get('plans/{title_id}','PageController@showPlan')->name('show_plan_detail');
         Route::get('print', 'PlanController@getPrint')->name('get_print');
         Route::post('plan/create', 'PlanController@createPlan')->name('make_plan');

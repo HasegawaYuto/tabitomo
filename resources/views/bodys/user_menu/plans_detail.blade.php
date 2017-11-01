@@ -11,7 +11,7 @@
             <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>マイプラン
         </div>
         <div class="panel-body">
-           {!! Form::open() !!}
+           {!! Form::open(['route'=>['add_spots','id'=>$user->id,'title_id'=>$plan->title_id]]) !!}
           {!! csrf_field() !!}
           <?php
                 function replaceDate($date){
@@ -42,7 +42,7 @@
             <div class="list-group" id="planData">
             </div>
           </div>
-          <div id="hoge"></div>
+          <div id="latlngs"></div>
           <div id="planMap"></div>
           {!! Form::close() !!}
         </div>

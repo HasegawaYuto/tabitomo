@@ -123,4 +123,13 @@ class PlanController extends Controller
             ]);
         return redirect()->back();
     }
+    
+    public function addSpots(){
+        $thetitle=Plandetail::where('title_id',$titleid)->first();
+        $thetitle->update([
+                'point' => 'hoge',
+                'trans' => 'driving'
+            ]);
+        return false;
+    }
 }

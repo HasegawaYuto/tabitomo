@@ -53,14 +53,17 @@ $(function(){
         }
         
         function createMarker(place) {
+            var pos = place.geometry.location;
             if(index in Marker){
                 Marker[index].setPosition(place.geometry.location);
+                $('#latlng'+index).val(pos.lat()+','+pos.lng());
             }else{
 	            Marker[index] = new google.maps.Marker({
 		            map: googlemap,
 		            position: place.geometry.location,
 		            draggable:true,
 	            });
+	            $('#latlngs').append('<input name="latlang[]" value="'+pos.lat()+','+pos.lng()+'" id="latlng'+index+'" type="hidden">');
             }
             drawRoute();
             Lats[index] = Marker[index].getPosition().lat();
