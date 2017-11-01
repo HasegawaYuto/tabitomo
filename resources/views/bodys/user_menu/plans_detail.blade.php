@@ -11,8 +11,9 @@
             <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>マイプラン
         </div>
         <div class="panel-body">
-           {!! Form::open(['route'=>['add_spots','id'=>$user->id,'title_id'=>$plan->title_id]]) !!}
-          {!! csrf_field() !!}
+           {!! Form::open(['route'=>['add_spots','id'=>$user->id,'title_id'=>$plan->title_id],'id'=>'addSpots']) !!}
+           <input type="hidden" id="planCSRF" value="{{ csrf_token() }}" name="_token">
+           <input type="hidden" id="titleid" value="{{$plan->title_id}}">
           <?php
                 function replaceDate($date){
                     $theday = new Carbon\Carbon($date);
@@ -21,7 +22,7 @@
           ?>
           <div class="form-group">
               {!! Form::label('title','タイトル') !!}
-              {!! Form::text('title',$plan->title,['class'=>'form-control']) !!}
+              {!! Form::text('title',$plan->title,['class'=>'form-control','id'=>'titleStr']) !!}
           </div>
           <?php
             $today = Carbon\Carbon::now()->format('Y年m月d日');
@@ -34,7 +35,7 @@
           </div>
           <div class="form-group">
               {!! Form::label('describe','概要') !!}
-              {!! Form::textarea('describe',$plan->describe,['rows'=>'5','class'=>'form-control','placeholder'=>'プラン概要、予算、必需品など']) !!}
+              {!! Form::textarea('describe',$plan->describe,['id'=>'planDescribe','rows'=>'5','class'=>'form-control','placeholder'=>'プラン概要、予算、必需品など']) !!}
           </div>
           <input type="hidden" value="0" id="planCnt">
           <div class="col-xs-12">

@@ -66,6 +66,7 @@ $(function(){
 	            $('#latlngs').append('<input name="latlang[]" value="'+pos.lat()+','+pos.lng()+'" id="latlng'+index+'" type="hidden">');
             }
             drawRoute();
+            //savePlan();
             Lats[index] = Marker[index].getPosition().lat();
             Lngs[index] = Marker[index].getPosition().lng();
             if(1 in Marker){
@@ -153,6 +154,32 @@ $(function(){
         }
     }, 1000);
 	        }
+        }
+        
+        function savePlan(){
+            $.ajaxSetup({
+　　              headers: {
+　　　               'X-CSRF-TOKEN': $('#planCSRF').val()
+　　              }
+　             });
+　          $.ajax({
+                  url:$('#addSpots').attr('action'),
+                  type:"POST",
+                  dataType:"json",
+                  data:{
+                    'titleid':$('#titleid').val(),
+                    'title':$('#titleStr').val(),
+                    'firstday':$('#firstday0').val(),
+                    'lastday':$('#lastday0').val(),
+                    'describe':$('#planDescribe').val()
+                  },
+                  success :function(json){
+                      
+                  },
+                  error : function(XMLHttpRequest, textStatus, errorThrown) {
+    　　　　              alert('保存に失敗');
+    　　　　    　　　  }
+                });
         }
     }
 });
