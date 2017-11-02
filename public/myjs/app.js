@@ -17,22 +17,51 @@ $(function(){
             "preserveViewport": false,
         });
         var directionsService = new google.maps.DirectionsService();
-        var Marker = [],Lats = [],Lngs = [],Waypoints = [],resultMap = [];
+        var Marker = [],Lats = [],Lngs = [],Waypoints = [],resultMap = [],Keys=[];
         var MarkerCnt = $('#planData .list-group-item').length;
+        $('#titleStr').change(savePlan);
+        $('#firstday0').change(savePlan);
+        $('#lastday0').change(savePlan);
+        $('#planDescribe').change(savePlan);
+        if(MarkerCnt > 0){
+            for($i=0;$i<MarkerCnt;$i++){
+                var spotval = $('#latlng'+$i).val();
+                var latlng = spotval.split(',');
+                var position = {lat:parseFloat(latlng[0]) ,lng:parseFloat(latlng[1])}
+                Marker[$i] = new google.maps.Marker({
+		            map: googlemap,
+		            position: position,
+		            draggable:true,
+	            });
+	            Keys[$i] = $('#search'+$i).val();
+	            Lats[$i] = parseFloat(latlng[0]);
+	            Lngs[$i] = parseFloat(latlng[1]);
+	            if(1 in Marker){
+                    var sw = new google.maps.LatLng(Math.max.apply(null,Lats), Math.min.apply(null,Lngs));
+                    var ne = new google.maps.LatLng(Math.min.apply(null,Lats), Math.max.apply(null,Lngs));
+                    var bounds = new google.maps.LatLngBounds(sw, ne);
+                    googlemap.fitBounds(bounds);
+                }
+                $('#search'+$i).change(searchPlace);
+                $('#planData').scrollTop($('#planData')[0].scrollHeight);
+            }
+            drawRoute();
+        }
         $('#planAddButton').click(function(){
             var MarkerCnt = $('#planData .list-group-item').length;
             var spotcnt = MarkerCnt+1;
             var phase0 = '<label>スポット'+spotcnt+'：<label><input type="text" name="searchWord[]" class="form-control searchBox" id="search'+MarkerCnt+'">';
-            var phase2 = '<div class="list-group-item from-group form-inline list-group-item-warning" id="spotData'+MarkerCnt+'">'+phase0+'</div>';
+            var phase2 = '<div class="list-group-item form-group list-group-item-warning" id="spotData'+MarkerCnt+'">'+phase0+'</div>';
             var BMarkerCnt = MarkerCnt-1;
             if(BMarkerCnt in Marker || MarkerCnt == 0){
                 $('#planData').append(phase2);
                 $('#search'+MarkerCnt).change(searchPlace);
+                $('#planData').scrollTop($('#planData')[0].scrollHeight);
             }
         });
         
         function searchPlace(){
-            var key=$(this).val();
+            key=$(this).val();
             index = $('#planData .searchBox').index(this);
             var request = {
                 query: key,
@@ -56,17 +85,14 @@ $(function(){
             var pos = place.geometry.location;
             if(index in Marker){
                 Marker[index].setPosition(place.geometry.location);
-                $('#latlng'+index).val(pos.lat()+','+pos.lng());
             }else{
 	            Marker[index] = new google.maps.Marker({
 		            map: googlemap,
 		            position: place.geometry.location,
 		            draggable:true,
 	            });
-	            $('#latlngs').append('<input name="latlang[]" value="'+pos.lat()+','+pos.lng()+'" id="latlng'+index+'" type="hidden">');
             }
-            drawRoute();
-            //savePlan();
+            Keys[index] = key;
             Lats[index] = Marker[index].getPosition().lat();
             Lngs[index] = Marker[index].getPosition().lng();
             if(1 in Marker){
@@ -75,11 +101,12 @@ $(function(){
                 var bounds = new google.maps.LatLngBounds(sw, ne);
                 googlemap.fitBounds(bounds);
             }
+            savePlan();
+            drawRoute();
         }
         
         function drawRoute(){
             if(Marker.length > 1){
-                //currentDirections=null;
                 directionsDisplay.setMap(null);
                 var done = 0,requestIndex =0;
                 var $start = null,$end = null;
@@ -88,7 +115,6 @@ $(function(){
                         $start = Marker[$i];
                     }else if(Waypoints.length == 8 || $i == Marker.length-1){
                         $end = Marker[$i];
-                        
                         (function(index){
                         var request = {
                             origin: $start.getPosition(),
@@ -102,8 +128,6 @@ $(function(){
                         directionsService.route(request, function(result, status) {
                             if (status == 'OK') {
                                 resultMap[index] = result;
-                                //directionsDisplay.setMap(googlemap);
-                                //directionsDisplay.setDirections(result);
                                 done++
                             }
                         });
@@ -140,7 +164,6 @@ $(function(){
         });
         function deletePath(){
             line.setMap(null);
-            //$('#hoge').append('hoge');
         }
         if(Marker.length ==2){
             $('#search0').off('change.delPath');
@@ -162,24 +185,57 @@ $(function(){
 　　　               'X-CSRF-TOKEN': $('#planCSRF').val()
 　　              }
 　             });
-　          $.ajax({
+　          if(Marker.length){
+　              $.ajax({
                   url:$('#addSpots').attr('action'),
                   type:"POST",
-                  dataType:"json",
+                  dataType:"text",
                   data:{
                     'titleid':$('#titleid').val(),
                     'title':$('#titleStr').val(),
                     'firstday':$('#firstday0').val(),
                     'lastday':$('#lastday0').val(),
-                    'describe':$('#planDescribe').val()
+                    'describe':$('#planDescribe').val(),
+                    'lats[]':Lats,
+                    'lngs[]':Lngs,
+                    'keys[]':Keys
                   },
-                  success :function(json){
-                      
+                  success :function(saveDone){
+                      $('#saveInfo').modal('show');
+                      setTimeout(function(){
+                        $('#saveInfo').modal('hide');
+                      },800);
                   },
                   error : function(XMLHttpRequest, textStatus, errorThrown) {
     　　　　              alert('保存に失敗');
     　　　　    　　　  }
                 });
+　          }else{
+　          $.ajax({
+                  url:$('#addSpots').attr('action'),
+                  type:"POST",
+                  dataType:"text",
+                  data:{
+                    'titleid':$('#titleid').val(),
+                    'title':$('#titleStr').val(),
+                    'firstday':$('#firstday0').val(),
+                    'lastday':$('#lastday0').val(),
+                    'describe':$('#planDescribe').val(),
+                    'lats[]':Lats,
+                    'lngs[]':Lngs,
+                    'keys[]':Keys
+                  },
+                  success :function(saveDone){
+                      $('#saveInfo').modal('show');
+                      setTimeout(function(){
+                        $('#saveInfo').modal('hide');
+                      },800);
+                  },
+                  error : function(XMLHttpRequest, textStatus, errorThrown) {
+    　　　　              alert('保存に失敗');
+    　　　　    　　　  }
+                });
+　          }
         }
     }
 });

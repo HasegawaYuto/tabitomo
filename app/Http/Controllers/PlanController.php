@@ -21,6 +21,7 @@ class PlanController extends Controller
       $theday = str_replace(array("月","年","日"),array("-","-",""),$DateString);
       return $theday;
     }
+    
     public function index()
     {
         //
@@ -125,11 +126,36 @@ class PlanController extends Controller
     }
     
     public function addSpots(){
-        $thetitle=Plandetail::where('title_id',$titleid)->first();
+        $titleid = \Input::get('titleid');
+        if(\Input::get('keys') && \Input::get('lats') && \Input::get('lngs')){
+            $Keys = \Input::get('keys');
+            $Lats = \Input::get('lats');
+            $Lngs = \Input::get('lngs');
+            $spots = [];
+            foreach($Keys as $key => $keyword){
+                $spots[$key] = $keyword . ':' . $Lats[$key] . ':' . $Lngs[$key];
+            }
+            $spotdata = implode('->',$spots);
+        }else{
+            $Keys = [];
+            $Lats = [];
+            $Lngs = [];
+            $spotdata = '';
+        }
+        $title = \Input::get('title');
+        $firstday = \Input::get('firstday');
+        $lastday = \Input::get('lastday');
+        $describe = \Input::get('describe');
+        $thetitle = Plandetail::where('title_id',$titleid)->first();
         $thetitle->update([
-                'point' => 'hoge',
+                'title' => $title,
+                'firstday' => $this->replaceDate($firstday),
+                'lastday' => $this->replaceDate($lastday),
+                'describe' => $describe,
+                'point' => $spotdata,
                 'trans' => 'driving'
             ]);
-        return false;
+        $saveDone = 'true';
+        return $saveDone;
     }
 }

@@ -5,6 +5,9 @@
 <div class="row">
 @include('bodys.user_menu.contents_menu',['user'=>$user])
 
+<?php
+    $spotdatas = explode('->',$plan->point);
+?>
 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-6">
     <div class="panel panel-info">
         <div class="panel-heading text-center">
@@ -37,10 +40,21 @@
               {!! Form::label('describe','概要') !!}
               {!! Form::textarea('describe',$plan->describe,['id'=>'planDescribe','rows'=>'5','class'=>'form-control','placeholder'=>'プラン概要、予算、必需品など']) !!}
           </div>
-          <input type="hidden" value="0" id="planCnt">
           <div class="col-xs-12">
             <button type="button" class="btn btn-danger btn-block" id="planAddButton">スポットを追加</button>
             <div class="list-group" id="planData">
+                @if($spotdatas[0]!=null)
+                @foreach($spotdatas as $key => $spotdata)
+                <?php
+                    $datapart = explode(':',$spotdata);
+                ?>
+                        <div class="list-group-item form-group list-group-item-warning" id="spotData{{$key}}">
+                            <label>スポット{{$key+1}}：<label>
+                            <input value="{{$datapart[0]}}" type="text" name="searchWord[]" class="form-control searchBox" id="search{{$key}}">
+                        </div>
+                        <input value="{{$datapart[1]}},{{$datapart[2]}}" type="hidden" id="latlng{{$key}}">
+                @endforeach
+                @endif
             </div>
           </div>
           <div id="latlngs"></div>
@@ -49,5 +63,17 @@
         </div>
     </div>
 </div>
+</div>
+
+<div class="modal fade" id="saveInfo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="mdoal-body text-center">
+                <div style="vertical-align:middle;height:40px;">
+                    保存しました
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
