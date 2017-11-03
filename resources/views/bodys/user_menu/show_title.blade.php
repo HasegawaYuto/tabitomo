@@ -34,7 +34,7 @@
                 @else
                     @include('parts.favorite_title_button',['title'=>$title])
                 @endif
-                {{$title->title}}
+                {{$title->title!=""?$title->title:'No Title'}}
 
 @if(Auth::user()->id == $user->id)
 <div class="modal fade" id="fixTitle">
