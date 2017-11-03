@@ -489,7 +489,7 @@ $scenes = $scenes
                               }else{
                                 $titleids=User::find($id)->scene()
                                                ->where('publish','public')
-                                               ->lists('title_id');
+                                               ->lists('mylogdetailtitles.title_id');
                                 $query->whereIn('title_id',$titleids);
                               }
                           }else{
