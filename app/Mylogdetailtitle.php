@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Mylogdetailtitle extends Model
 {
     protected $guarded = ['id','created_at','updated_at'];
+    public $incrementing = false;
+    protected $primaryKey = 'title_id';
     public function scene(){
         return $this->hasMany(Mylogdetailscene::class);
     }
