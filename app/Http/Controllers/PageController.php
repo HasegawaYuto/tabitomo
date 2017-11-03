@@ -653,8 +653,26 @@ $scenes = $scenes
         if(\Auth::user()->id != $id){
           return redirect()->back();
         }
-        $data['plan'] = Plandetail::where('title_id',$title_id)->first();
+        $theplan = Plandetail::where('title_id',$title_id)->first();
+        $data['plan'] = $theplan;
+        $spotdatas = [];
+        $tempspotdatas = explode('->',$theplan->point);
+        if(isset($tempspotdatas[0])){
+        foreach($tempspotdatas as $tempspotdata){
+          $tempkey = explode(':',$tempspotdata);
+          if($tempkey[0] != 'hogefugapuri'){
+            $spotdatas[] = $tempspotdata;
+          }
+        }}
+        $data['spotdatas'] = $spotdatas;
         $data['user'] = User::find($id);
         return view('bodys.user_menu.plans_detail',$data);
     } 
+    
+    public function getKoutei($id,$title_id)
+    {
+        $theplan = Plandetail::where('title_id',$title_id)->first();
+        $data['plan'] = $theplan;
+        return view('bodys.pdf_export',$data);
+    }
 }

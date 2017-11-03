@@ -1,6 +1,4 @@
-body {
-    padding-top: 70px;
-}
+
 #planData{
     max-height:70vh;
     overflow-y: scroll;

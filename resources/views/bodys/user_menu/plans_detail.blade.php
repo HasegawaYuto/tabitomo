@@ -5,9 +5,6 @@
 <div class="row">
 @include('bodys.user_menu.contents_menu',['user'=>$user])
 
-<?php
-    $spotdatas = explode('->',$plan->point);
-?>
 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-6">
     <div class="panel panel-info">
         <div class="panel-heading text-center">
@@ -49,7 +46,9 @@
                     $datapart = explode(':',$spotdata);
                 ?>
                         <div class="list-group-item form-group list-group-item-warning" id="spotData{{$key}}">
-                            <label>スポット{{$key+1}}：<label>
+                            <label><button style="display:none;" type="button" class="btn btn-xs btn-danger" id="delSpot{{$key}}">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </button>スポット：<label>
                             <input value="{{$datapart[0]}}" type="text" name="searchWord[]" class="form-control searchBox" id="search{{$key}}">
                         </div>
                         <input value="{{$datapart[1]}},{{$datapart[2]}}" type="hidden" id="latlng{{$key}}">
@@ -59,7 +58,7 @@
           </div>
           <div id="latlngs"></div>
           <div id="planMap"></div>
-          {!! Form::close() !!}
+          {{-- link_to_route('get_pdf', '作表', ['id'=>$user->id,'title_id'=>$plan->title_id],['class'=>'btn btn-block btn-primary']) --}}
         </div>
     </div>
 </div>

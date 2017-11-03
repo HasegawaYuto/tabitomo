@@ -8,7 +8,6 @@
         <title>旅とも｜あなたの旅行のおともに</title>
         <meta name="description" content="楽しみな旅行を成功させるためには、現地の人や実際に行った人の記録が頼りになります。
         旅行者とガイドのマッチング、友だちと旅行の記録をシェア。個人の旅行の行き先も探せる">
-</head>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -42,10 +41,10 @@
         <link rel="stylesheet" type="text/css" href="{{asset('mycss/app.css')}}">
         <script src="{{asset('myjs/app.js')}}"></script>
     </head>
-    <body>
+    <body style="padding-top:70px;">
         @include('commons.navbar')
 
-        <div class="container">
+        <div class="container-fluid">
             @include('commons.error_messages')
 
             @yield('content')

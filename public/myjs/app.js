@@ -17,7 +17,7 @@ $(function(){
             "preserveViewport": false,
         });
         var directionsService = new google.maps.DirectionsService();
-        var Marker = [],Lats = [],Lngs = [],Waypoints = [],resultMap = [],Keys=[];
+        var Marker = [],Lats = [],Lngs = [],Waypoints = [],resultMap = [],Keys=[],line=null;
         var MarkerCnt = $('#planData .list-group-item').length;
         $('#titleStr').change(savePlan);
         $('#firstday0').change(savePlan);
@@ -43,6 +43,8 @@ $(function(){
                     googlemap.fitBounds(bounds);
                 }
                 $('#search'+$i).change(searchPlace);
+                $('#delSpot'+$i).css('display','');
+                $('#delSpot'+$i).click(delSpot);
                 $('#planData').scrollTop($('#planData')[0].scrollHeight);
             }
             drawRoute();
@@ -50,8 +52,9 @@ $(function(){
         $('#planAddButton').click(function(){
             var MarkerCnt = $('#planData .list-group-item').length;
             var spotcnt = MarkerCnt+1;
-            var phase0 = '<label>スポット'+spotcnt+'：<label><input type="text" name="searchWord[]" class="form-control searchBox" id="search'+MarkerCnt+'">';
-            var phase2 = '<div class="list-group-item form-group list-group-item-warning" id="spotData'+MarkerCnt+'">'+phase0+'</div>';
+            var phase0 = '<button style="display:none;" type="button" class="btn btn-xs btn-danger" id="delSpot'+MarkerCnt+'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
+            var phase1 = phase0+'<label>スポット：<label><input type="text" name="searchWord[]" class="form-control searchBox" id="search'+MarkerCnt+'">';
+            var phase2 = '<div class="list-group-item form-group list-group-item-warning" id="spotData'+MarkerCnt+'">'+phase1+'</div>';
             var BMarkerCnt = MarkerCnt-1;
             if(BMarkerCnt in Marker || MarkerCnt == 0){
                 $('#planData').append(phase2);
@@ -91,18 +94,20 @@ $(function(){
 		            position: place.geometry.location,
 		            draggable:true,
 	            });
+	            $('#delSpot'+index).css('display','');
+	            $('#delSpot'+index).on('click',delSpot);
             }
             Keys[index] = key;
             Lats[index] = Marker[index].getPosition().lat();
             Lngs[index] = Marker[index].getPosition().lng();
-            if(1 in Marker){
+            if(Marker.length > 1){
                 var sw = new google.maps.LatLng(Math.max.apply(null,Lats), Math.min.apply(null,Lngs));
                 var ne = new google.maps.LatLng(Math.min.apply(null,Lats), Math.max.apply(null,Lngs));
                 var bounds = new google.maps.LatLngBounds(sw, ne);
                 googlemap.fitBounds(bounds);
             }
-            savePlan();
             drawRoute();
+            savePlan();
         }
         
         function drawRoute(){
@@ -111,6 +116,7 @@ $(function(){
                 var done = 0,requestIndex =0;
                 var $start = null,$end = null;
                 for($i in Marker){
+                    if(Marker[$i]!='hogefugapuri'){
                     if($start == null){
                         $start = Marker[$i];
                     }else if(Waypoints.length == 8 || $i == Marker.length-1){
@@ -138,6 +144,7 @@ $(function(){
                     }else{
                         Waypoints.push({ location: Marker[$i].getPosition(), stopover: true });
                     }
+                    }
                 }
         var sid = setInterval(function(){
             if (requestIndex > done) return;
@@ -155,7 +162,7 @@ $(function(){
                     path = path.concat(_path);
                 }
             }
-        var line = new google.maps.Polyline({
+        line = new google.maps.Polyline({
             map: googlemap,
             strokeColor: "#2196f3", // 線の色
             strokeOpacity: 0.8, // 線の不透明度
@@ -165,15 +172,11 @@ $(function(){
         function deletePath(){
             line.setMap(null);
         }
-        if(Marker.length ==2){
-            $('#search0').off('change.delPath');
-            $('#search1').off('change.delPath');
-            $('#search0').on('change.delPath',deletePath);
-            $('#search1').on('change.delPath',deletePath);
-        }else{
-            var No = Marker.length-1;
-            $('#search'+No).off('change.delPath');
-            $('#search'+No).on('change.delPath',deletePath);
+        for($i=0;$i<$('#planData .list-group-item').length;$i++){
+            $('#search'+$i).off('change.delPath');
+            $('#delSpot'+$i).off('click.delPath');
+            $('#search'+$i).on('change.delPath',deletePath);
+            $('#delSpot'+$i).on('click.delPath',deletePath);
         }
     }, 1000);
 	        }
@@ -236,6 +239,18 @@ $(function(){
     　　　　    　　　  }
                 });
 　          }
+        }
+        
+        function delSpot(){
+            var no = $('#planData button').index(this);
+            $('#planData .list-group-item').eq(no).css('display','none');
+            Marker[no].setMap(null);
+            Marker[no] = 'hogefugapuri';
+            //Lats.splice(no,1);
+            //Lngs.splice(no,1);
+            Keys[no] = 'hogefugapuri';
+            drawRoute();
+            savePlan();
         }
     }
 });

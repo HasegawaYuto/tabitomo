@@ -56,8 +56,7 @@ class PlanController extends Controller
      */
     public function show($id)
     {
-        $data['user'] = User::find($id);
-        return view('bodys.user_menu.plans',$data);
+        //
     }
 
     /**
@@ -94,13 +93,21 @@ class PlanController extends Controller
         //
     }
     
-    public function getPrint($id)
+    public function getPlanSheet($id,$title_id)
     {
-        $data['user']= User::find($id);
-        $pdf = \PDF::loadView('bodys.pdf_export',$data);
-        //return $pdf->download('print.pdf');
-        return view('bodys.pdf_export',$data);
+        $theplan = Plandetail::where('title_id',$title_id)->first();
+        $data['plan'] = $theplan;
+        //if(\File::exists('pdf_export.pdf')){
+        //    \File::delete('pdf_export.pdf');
+        //}
+        $pdf = \PDF::loadView('bodys.pdf_export',$data)
+                    ->setPaper('A4')
+                    ->setOption('encoding', 'utf-8')
+                    ->save('pdf_export.pdf',$overwrite = true);
+        //return view('bodys.pdf_export',$data);
+        return $pdf->download('pdf_export.pdf');
     }
+    
     public function createPlan(Request $request,$id){
         $planids=Plandetail::where('user_id',$id)->lists('title_id');
         if(isset($planids[0])){
@@ -133,7 +140,9 @@ class PlanController extends Controller
             $Lngs = \Input::get('lngs');
             $spots = [];
             foreach($Keys as $key => $keyword){
-                $spots[$key] = $keyword . ':' . $Lats[$key] . ':' . $Lngs[$key];
+                if($keyword != 'hogefugapuri'){
+                    $spots[] = $keyword . ':' . $Lats[$key] . ':' . $Lngs[$key];
+                }
             }
             $spotdata = implode('->',$spots);
         }else{
@@ -149,6 +158,7 @@ class PlanController extends Controller
         $thetitle = Plandetail::where('title_id',$titleid)->first();
         $thetitle->update([
                 'title' => $title,
+                'title_id'=>$titleid,
                 'firstday' => $this->replaceDate($firstday),
                 'lastday' => $this->replaceDate($lastday),
                 'describe' => $describe,
