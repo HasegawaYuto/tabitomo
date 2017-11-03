@@ -484,7 +484,7 @@ $scenes = $scenes
                               if(\Auth::user()->is_followed($id)){
                                 $titleids=User::find($id)->scene()
                                                ->where('publish','<>','private')
-                                               ->lists('title_id');
+                                               ->lists('mylogdetailtitles.title_id');
                                 $query->whereIn('title_id',$titleids);
                               }else{
                                 $titleids=User::find($id)->scene()
