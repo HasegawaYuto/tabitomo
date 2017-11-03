@@ -112,9 +112,9 @@ class PageController extends Controller
                         $titleids = Mylogdetailtitle::where('user_id',$userids)->lists('title_id');
                         $query->whereIn('title_id',$titleids)
                               ->where('publish','<>','private')
-                              ->orWhere('scene_id','~',\Auth::user()->id.'-*-*');
+                              ->orWhere('scene_id','like',\Auth::user()->id.'-%-%');
                     }else{
-                        $query->where('publish','public')->orWhere('scene_id','~',\Auth::user()->id.'-*-*');
+                        $query->where('publish','public')->orWhere('scene_id','like',\Auth::user()->id.'-%-%');
                     }
                 }else{
                     $query->where('publish','public');
