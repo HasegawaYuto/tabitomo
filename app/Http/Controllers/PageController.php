@@ -482,12 +482,12 @@ $scenes = $scenes
       $titles = $user->title()->where(function($query)use($id){
                           if(\Auth::user()->id != $id){
                               if(\Auth::user()->is_followed($id)){
-                                $titleids=$user->scene()
+                                $titleids=User::find($id)->scene()
                                                ->where('publish','<>','private')
                                                ->lists('title_id');
                                 $query->whereIn('title_id',$titleids);
                               }else{
-                                $titleids=$user->scene()
+                                $titleids=User::find($id)->scene()
                                                ->where('publish','public')
                                                ->lists('title_id');
                                 $query->whereIn('title_id',$titleids);
