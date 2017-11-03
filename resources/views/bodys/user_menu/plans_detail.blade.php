@@ -58,7 +58,7 @@
           </div>
           <div id="latlngs"></div>
           <div id="planMap"></div>
-          {{-- link_to_route('get_pdf', '作表', ['id'=>$user->id,'title_id'=>$plan->title_id],['class'=>'btn btn-block btn-primary']) --}}
+          {!! link_to_route('get_pdf', '作表', ['id'=>$user->id,'title_id'=>$plan->title_id],['class'=>'btn btn-block btn-primary']) !!}
         </div>
     </div>
 </div>

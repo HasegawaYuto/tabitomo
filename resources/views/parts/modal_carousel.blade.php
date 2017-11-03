@@ -1,7 +1,7 @@
 <div class="modal fade" id="modal_carousel{{$scene->scene_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel{{$scene->user_id}}-{{$scene->title_id}}-{{$scene->scene_id}}" aria-hidden="true">
     <div class="modal-content" id="modal-carousel-content">
       <div class="modal-header overCut" style="height:50px;">
-          <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button>【{{$title->title}}】{{$scene->scene}}
+          <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal">閉じる</button>【{{$title->title!=""?$title->title:'No Title'}}】{{$scene->scene}}
       </div>
       <div class="modal-body" style="padding:0" id="modal-carousel-body">
         <div id="myCarousel{{$scene->scene_id}}" class="carousel slide carousel-fit" data-ride="carousel">

@@ -103,9 +103,10 @@ class PlanController extends Controller
         $pdf = \PDF::loadView('bodys.pdf_export',$data)
                     ->setPaper('A4')
                     ->setOption('encoding', 'utf-8')
-                    ->save('pdf_export.pdf',$overwrite = true);
+                    ->save($title_id.'.pdf',$overwrite = true);
         //return view('bodys.pdf_export',$data);
-        return $pdf->download('pdf_export.pdf');
+        return $pdf->inline($title_id.'.pdf');
+        //return $pdf->download('pdf_export.pdf');
     }
     
     public function createPlan(Request $request,$id){

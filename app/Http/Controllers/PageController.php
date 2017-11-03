@@ -478,6 +478,7 @@ $scenes = $scenes
 
     public function showUserItems($id){
       $user = User::find($id);
+      $data['user']=$user;
       $titles = $user->title()->where(function($query)use($id){
                           if(\Auth::user()->id != $id){
                               if(\Auth::user()->is_followed($id)){
@@ -521,7 +522,6 @@ $scenes = $scenes
           $data['thumb'][] = $thumbs->random();
           }
       }
-      $data['user']=$user;
       $data['titles']=$titles;
       return view('bodys.user_menu.items',$data);
     }
