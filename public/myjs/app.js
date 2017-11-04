@@ -36,7 +36,7 @@ $(function(){
 	            Keys[$i] = $('#search'+$i).val();
 	            Lats[$i] = parseFloat(latlng[0]);
 	            Lngs[$i] = parseFloat(latlng[1]);
-	            DoVal[$i] = $('#do'+$i).val();
+	            //DoVal[$i] = $('#do'+$i).val();
 	            if(1 in Marker){
                     var sw = new google.maps.LatLng(Math.max.apply(null,Lats), Math.min.apply(null,Lngs));
                     var ne = new google.maps.LatLng(Math.min.apply(null,Lats), Math.max.apply(null,Lngs));
@@ -46,14 +46,14 @@ $(function(){
                 $('#search'+$i).change(searchPlace);
                 $('#delSpot'+$i).css('display','');
                 $('#delSpot'+$i).click(delSpot);
-                $('#do'+$i).change(savePlanDo);
+                //$('#do'+$i).change(savePlanDo);
             }
             drawRoute();
             $('#planData').scrollTop($('#planData')[0].scrollHeight);
         }
         $('#planAddButton').click(function(){
             var MarkerCnt = $('#planData .list-group-item').length;
-            //var spotcnt = MarkerCnt+1;
+            var spotcnt = MarkerCnt+1;
             var phaseDo = '<input type="text" name="do[]" class="form-control doBox" id="do'+MarkerCnt+'" placeholder="【例】9:00、城内見学">';
             var phase0 = '<button style="display:none;" type="button" class="btn btn-xs btn-danger" id="delSpot'+MarkerCnt+'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
             var phase1 = phase0+'<label>スポット</label><input type="text" name="searchWord[]" class="form-control searchBox" id="search'+MarkerCnt+'">';
@@ -99,12 +99,12 @@ $(function(){
 	            });
 	            $('#delSpot'+index).css('display','');
 	            $('#delSpot'+index).on('click',delSpot);
-	            $('#do'+index).change(savePlanDo);
+	            //$('#do'+index).change(savePlanDo);
             }
             Keys[index] = key;
             Lats[index] = Marker[index].getPosition().lat();
             Lngs[index] = Marker[index].getPosition().lng();
-            DoVal[$i] = '';
+            //DoVal[$i] = '';
             if(Marker.length > 1){
                 var sw = new google.maps.LatLng(Math.max.apply(null,Lats), Math.min.apply(null,Lngs));
                 var ne = new google.maps.LatLng(Math.min.apply(null,Lats), Math.max.apply(null,Lngs));
