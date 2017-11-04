@@ -50,7 +50,7 @@
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </button>スポット</label>
                             <input value="{{$datapart[0]}}" type="text" name="searchWord[]" class="form-control searchBox" id="search{{$key}}">
-                            <input value="{{$datapart[3]}}" type="text" name="do[]" class="form-control doBox" id="do{{$key}}" placeholder="【例】9:00、城内見学">
+                            <input value="{{$datapart[3] or ''}}" type="text" name="do[]" class="form-control doBox" id="do{{$key}}" placeholder="【例】9:00、城内見学">
                         </div>
                         <input value="{{$datapart[1]}},{{$datapart[2]}}" type="hidden" id="latlng{{$key}}">
                 @endforeach
