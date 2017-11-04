@@ -56,7 +56,7 @@ $(function(){
             var spotcnt = MarkerCnt+1;
             var phaseDo = '<input type="text" name="do[]" class="form-control doBox" id="do'+MarkerCnt+'" placeholder="【例】9:00、城内見学">';
             var phase0 = '<button style="display:none;" type="button" class="btn btn-xs btn-danger" id="delSpot'+MarkerCnt+'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
-            var phase1 = phase0+'<label>スポット</label><input type="text" name="searchWord[]" class="form-control searchBox" id="search'+MarkerCnt+'">';
+            var phase1 = phase0+'<label>スポット</label><input type="text" name="searchWord[]" class="form-control searchBox" id="search'+MarkerCnt+'" placeholder="【例】名古屋城">';
             var phase2 = '<div class="list-group-item form-group list-group-item-warning" id="spotData'+MarkerCnt+'">'+phase1+phaseDo+'</div>';
             var BMarkerCnt = MarkerCnt-1;
             if(BMarkerCnt in Marker || MarkerCnt == 0){
