@@ -36,7 +36,7 @@ $(function(){
 	            Keys[$i] = $('#search'+$i).val();
 	            Lats[$i] = parseFloat(latlng[0]);
 	            Lngs[$i] = parseFloat(latlng[1]);
-	            //DoVal[$i] = $('#do'+$i).val();
+	            DoVal[$i] = $('#do'+$i).val();
 	            if(1 in Marker){
                     var sw = new google.maps.LatLng(Math.max.apply(null,Lats), Math.min.apply(null,Lngs));
                     var ne = new google.maps.LatLng(Math.min.apply(null,Lats), Math.max.apply(null,Lngs));
@@ -46,7 +46,7 @@ $(function(){
                 $('#search'+$i).change(searchPlace);
                 $('#delSpot'+$i).css('display','');
                 $('#delSpot'+$i).click(delSpot);
-                //$('#do'+$i).change(savePlanDo);
+                $('#do'+$i).change(savePlanDo);
             }
             drawRoute();
             $('#planData').scrollTop($('#planData')[0].scrollHeight);
@@ -99,7 +99,7 @@ $(function(){
 	            });
 	            $('#delSpot'+index).css('display','');
 	            $('#delSpot'+index).on('click',delSpot);
-	            //$('#do'+index).change(savePlanDo);
+	            $('#do'+index).change(savePlanDo);
             }
             Keys[index] = key;
             Lats[index] = Marker[index].getPosition().lat();
