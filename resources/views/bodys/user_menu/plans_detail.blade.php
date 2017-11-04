@@ -43,13 +43,14 @@
                 @if($spotdatas[0]!=null)
                 @foreach($spotdatas as $key => $spotdata)
                 <?php
-                    $datapart = explode(':',$spotdata);
+                    $datapart = explode(':::::',$spotdata);
                 ?>
                         <div class="list-group-item form-group list-group-item-warning" id="spotData{{$key}}">
                             <label><button style="display:none;" type="button" class="btn btn-xs btn-danger" id="delSpot{{$key}}">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                </button>スポット：<label>
+                                </button>スポット</label>
                             <input value="{{$datapart[0]}}" type="text" name="searchWord[]" class="form-control searchBox" id="search{{$key}}">
+                            <input value="{{$datapart[3]}}" type="text" name="do[]" class="form-control doBox" id="do{{$key}}" placeholder="【例】9:00、城内見学">
                         </div>
                         <input value="{{$datapart[1]}},{{$datapart[2]}}" type="hidden" id="latlng{{$key}}">
                 @endforeach
@@ -58,7 +59,7 @@
           </div>
           <div id="latlngs"></div>
           <div id="planMap"></div>
-          {!! link_to_route('get_pdf', '作表', ['id'=>$user->id,'title_id'=>$plan->title_id],['class'=>'btn btn-block btn-primary']) !!}
+          {!! link_to_route('get_pdf', '作表', ['id'=>$user->id,'title_id'=>$plan->title_id],['class'=>'btn btn-block btn-primary','target'=>'_blank']) !!}
         </div>
     </div>
 </div>

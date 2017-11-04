@@ -95,6 +95,7 @@ class PlanController extends Controller
     
     public function getPlanSheet($id,$title_id)
     {
+        $data['user'] = User::find($id);
         $theplan = Plandetail::where('title_id',$title_id)->first();
         $data['plan'] = $theplan;
         //if(\File::exists('pdf_export.pdf')){
@@ -139,10 +140,11 @@ class PlanController extends Controller
             $Keys = \Input::get('keys');
             $Lats = \Input::get('lats');
             $Lngs = \Input::get('lngs');
+            $DoPlan = \Input::get('doplan');
             $spots = [];
             foreach($Keys as $key => $keyword){
                 if($keyword != 'hogefugapuri'){
-                    $spots[] = $keyword . ':' . $Lats[$key] . ':' . $Lngs[$key];
+                    $spots[] = $keyword . ':::::' . $Lats[$key] . ':::::' . $Lngs[$key]. ':::::' . $DoPlan[$key];
                 }
             }
             $spotdata = implode('->',$spots);
