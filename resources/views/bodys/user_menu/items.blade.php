@@ -38,7 +38,7 @@
                 <a href="{{route('show_title',['id'=>$title->user_id,'title_id'=>$title->title_id])}}">
                 <div class="panel panel-primary">
                       <div class="panel-heading">
-                        {{$title->title}}
+                        {{$title->title!=""?$title->title:'No Title'}}
                       </div>
                       <div class="panel-body text-center">
                             <div class="col-xs-12 col-sm-4">
