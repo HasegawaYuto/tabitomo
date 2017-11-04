@@ -104,7 +104,7 @@ $(function(){
             Keys[index] = key;
             Lats[index] = Marker[index].getPosition().lat();
             Lngs[index] = Marker[index].getPosition().lng();
-            //DoVal[$i] = '';
+            DoVal[index] = '';
             if(Marker.length > 1){
                 var sw = new google.maps.LatLng(Math.max.apply(null,Lats), Math.min.apply(null,Lngs));
                 var ne = new google.maps.LatLng(Math.min.apply(null,Lats), Math.max.apply(null,Lngs));

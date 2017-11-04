@@ -144,7 +144,7 @@ class PlanController extends Controller
             $spots = [];
             foreach($Keys as $key => $keyword){
                 if($keyword != 'hogefugapuri'){
-                    $spots[] = $keyword . ':::::' . $Lats[$key] . ':::::' . $Lngs[$key]. ':::::' . 'hogehogehoe';
+                    $spots[] = $keyword . ':::::' . $Lats[$key] . ':::::' . $Lngs[$key]. ':::::' . $DoPlan[$key];
                 }
             }
             $spotdata = implode('->',$spots);
