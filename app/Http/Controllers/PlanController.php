@@ -140,7 +140,7 @@ class PlanController extends Controller
             $Keys = \Input::get('keys');
             $Lats = \Input::get('lats');
             $Lngs = \Input::get('lngs');
-            //$DoPlan = \Input::get('doplan');
+            $DoPlan = \Input::get('doplan');
             $spots = [];
             foreach($Keys as $key => $keyword){
                 if($keyword != 'hogefugapuri'){
