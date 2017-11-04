@@ -42,6 +42,7 @@
         </div>
         <div class="col-xs-6">
             <h5>【道程】</h5>
+            @if($plan->point!="")
             <?php
                 $points = explode('->',$plan->point);
             ?>
@@ -52,6 +53,9 @@
                 <p>{{$place[0]}}</p>
                 <p class="wrap" style="margin-left:20px;">{{$place[3]}}</p>
             @endforeach
+            @else
+                未設定
+            @endif
         </div>
         </div>
     </body>
