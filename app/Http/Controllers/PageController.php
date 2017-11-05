@@ -650,9 +650,6 @@ $scenes = $scenes
     }
     
     public function showPlan($id,$title_id){
-        if(\Auth::user()->id != $id){
-          return redirect()->back();
-        }
         $theplan = Plandetail::where('title_id',$title_id)->first();
         $data['plan'] = $theplan;
         $spotdatas = [];
@@ -668,11 +665,4 @@ $scenes = $scenes
         $data['user'] = User::find($id);
         return view('bodys.user_menu.plans_detail',$data);
     } 
-    
-    public function getKoutei($id,$title_id)
-    {
-        $theplan = Plandetail::where('title_id',$title_id)->first();
-        $data['plan'] = $theplan;
-        return view('bodys.pdf_export',$data);
-    }
 }

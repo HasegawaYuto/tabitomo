@@ -10,32 +10,30 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBQb3VgyoduOCh4x0clSJxw8yuzQvd1Zkw&libraries=places"></script>
 <style>
 .wrap{
     word-wrap: break-word;
 }
 </style>
-
 </head>
     <body>
         <div class="container">
         <h4 class="text-center">{{$plan->title}}</h4>
         <?php
-            function replaceDate($date){
+            function replaceDateRev($date){
                 $datearr = explode('-',$date);
                 return $datearr[0].'年'.(int)$datearr[1].'月'.(int)$datearr[2].'日';
             }
-            //$update = explode('-',$plan->updated_at);
         ?>
-        <p class="text-right">{{replaceDate($plan->updated_at)}}</p>
+        <p class="text-right">{{replaceDateRev($plan->updated_at)}}</p>
         <p class="text-right">{{$user->name}}</p>
+        <div class="row">
         <div class="col-xs-6 wrap">
-            【日時】
+            【旅行日】
             @if($plan->firstday != $plan->lastday)
-                <p>{{replaceDate($plan->firstday)}}～{{replaceDate($plan->lastday)}}</p>
+                <p>{{replaceDateRev($plan->firstday)}}～{{replaceDateRev($plan->lastday)}}</p>
             @else
-                <p>{{replaceDate($plan->firstday)}}</p>
+                <p>{{replaceDateRev($plan->firstday)}}</p>
             @endif
             【諸連絡】
         <p>{{$plan->describe}}</p>
@@ -57,6 +55,9 @@
                 未設定
             @endif
         </div>
+        </div>
+        <div id="QRdiv"></div>
+        <input type="hidden" id="URL" value="{{$URL}}">
         </div>
     </body>
 </html>

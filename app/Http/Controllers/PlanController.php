@@ -93,17 +93,19 @@ class PlanController extends Controller
         //
     }
     
-    public function getPlanSheet($id,$title_id)
+    public function getPlanSheet(Request $request, $id,$title_id)
     {
         $data['user'] = User::find($id);
         $theplan = Plandetail::where('title_id',$title_id)->first();
+        $data['URL'] = $request->linkURL;
         $data['plan'] = $theplan;
-        //if(\File::exists('pdf_export.pdf')){
-        //    \File::delete('pdf_export.pdf');
-        //}
         $pdf = \PDF::loadView('bodys.pdf_export',$data)
                     ->setPaper('A4')
                     ->setOption('encoding', 'utf-8')
+                    ->setOption('enable-javascript', true)
+                    ->setOption('javascript-delay', 2000)
+                    ->setOption('enable-smart-shrinking', true)
+                    ->setOption('no-stop-slow-scripts', true)
                     ->save($title_id.'.pdf',$overwrite = true);
         //return view('bodys.pdf_export',$data);
         return $pdf->inline($title_id.'.pdf');

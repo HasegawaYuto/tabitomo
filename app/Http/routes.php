@@ -72,7 +72,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'user/{id}'], function () {
         Route::post('editplans/{title_id}','PlanController@addSpots')->name('add_spots');
         Route::get('plans/{title_id}','PageController@showPlan')->name('show_plan_detail');
-        Route::get('plansheet/{title_id}', 'PlanController@getPlansheet')->name('get_pdf');
+        Route::post('plansheet/{title_id}', 'PlanController@getPlansheet')->name('get_pdf');
         Route::post('plan/create', 'PlanController@createPlan')->name('make_plan');
         Route::get('plans','PageController@showPlans')->name('show_user_plans');
         Route::post('message/{send_id}/send','MessageController@sendMessage')->name('send_message');

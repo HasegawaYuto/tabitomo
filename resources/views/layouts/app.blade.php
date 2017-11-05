@@ -22,9 +22,10 @@
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBQb3VgyoduOCh4x0clSJxw8yuzQvd1Zkw&libraries=places"></script>
-
+    <!--
         <link rel="stylesheet" href="{{asset('raty/lib/jquery.raty.css')}}">
         <script src="{{asset('raty/lib/jquery.raty.js')}}"></script>
+    -->
 
         <script src="{{asset('lazysizes/lazysizes.min.js')}}" async=""></script>
         <script type="text/javascript" src="{{asset('jquery-qrcode/jquery-qrcode.min.js')}}"></script>

@@ -1,4 +1,4 @@
-<div class="col-sm-4 col-md-3 col-lg-3 hidden-xs ">
+<div class="col-sm-4 col-md-3 col-lg-3 hidden-xs">
 <div class="text-left panel panel-info">
   <div class="panel-heading overCut">
       @if($user->id != Auth::user()->id)
@@ -15,7 +15,7 @@
 </div>
 </div>
 
-<a data-target="#modalSmallMenu" data-toggle="modal" >
+<a href="#modalSmallMenu" data-toggle="modal" >
   <div class="avatarImageSOuter">
     @include('parts.avatar',['user'=>$user,'class'=>'visible-xs avatarImageS'])
   </div>
