@@ -556,8 +556,10 @@ $(function(){///////メッセージ
                       for(i=0;i<jsonsize;i++){
                         var fixi = i+beforeCnt;
                         if(json[i].message!=""){
-                          var timestamp = new Date(json[i].created_at);
-                          timestamp.toString();
+                        　var timestampB = json[i].created_at;
+                        　var timestampR = timestampB.replace(/-/g, '/');
+                          var timestamp = new Date(timestampR);
+                          //timestamp.toString();
                           h[i] = timestamp.getHours();
                           m[i] = timestamp.getMinutes();
                           createtime[i] = h[i] + ':' + ('0' + m[i]).slice(-2);
