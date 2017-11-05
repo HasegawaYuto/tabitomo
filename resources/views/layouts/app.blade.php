@@ -28,7 +28,7 @@
     -->
 
         <script src="{{asset('lazysizes/lazysizes.min.js')}}" async=""></script>
-        <script type="text/javascript" src="{{asset('jquery-qrcode/jquery-qrcode.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('MyQRCode/jquery.MyQRCode.js')}}"></script>
 
         <script>
             document.addEventListener('lazybeforeunveil', function(e){

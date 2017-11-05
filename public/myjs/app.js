@@ -269,9 +269,10 @@ $(function(){
 ///////////////////////////////////////////////////////////
 $(function(){
     if($('#QRdiv').length){
-    $('#QRdiv').qrcode({
-	text: window.location.href,
-	size:50
+    $('#QRdiv').MyQRCode({
+    encoding:'utf-8',
+	content: window.location.href,
+	size:'80x80'
     });
     }
 });
