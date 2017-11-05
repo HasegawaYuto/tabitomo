@@ -5,7 +5,7 @@
       <a href="{{ route('show_user_plans',['id'=>$user->id]) }}" class="list-group-item text-center"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i>マイプラン</a>
       @endif
       <a href="{{ route('show_user_messages',['id'=>$user->id]) }}" class="list-group-item text-center"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>メッセージ
-      @if(\Auth::user()->newMessageHas())
+      @if(\Auth::user()->newMessageHas()&& \Auth::user()->id == $user->id)
         <button class="btn btn-xs btn-danger " type="button">新着</button>
         @endif</a>
       <a href="{{ route('show_user_items',['id'=>$user->id]) }}" class="list-group-item text-center"><i class="fa fa-camera fa-fw" aria-hidden="true"></i>マイログ</a>
